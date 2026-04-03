@@ -9,14 +9,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.Font;
 
 public class V1 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
-	private JTextField textField;
+	private JTextField txtNombre;
 	private JButton btnNewButton;
+	private JLabel lblNewLabel_1;
+	private JTextField txtDNI;
 
 	/**
 	 * Launch the application.
@@ -39,26 +42,41 @@ public class V1 extends JFrame {
 	 */
 	public V1() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 620, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		{
-			lblNewLabel = new JLabel("New label");
-			lblNewLabel.setBounds(10, 20, 44, 12);
+			lblNewLabel = new JLabel("Nombre: ");
+			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblNewLabel.setBounds(10, 15, 81, 22);
 			contentPane.add(lblNewLabel);
 		}
 		{
-			textField = new JTextField();
-			textField.setBounds(64, 17, 96, 18);
-			contentPane.add(textField);
-			textField.setColumns(10);
+			txtNombre = new JTextField();
+			txtNombre.setBounds(70, 19, 96, 18);
+			contentPane.add(txtNombre);
+			txtNombre.setColumns(10);
 		}
 		{
-			btnNewButton = new JButton("New button");
-			btnNewButton.setBounds(10, 42, 84, 20);
+			btnNewButton = new JButton("Adicionar");
+			btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			btnNewButton.setBounds(31, 51, 112, 29);
 			contentPane.add(btnNewButton);
+		}
+		{
+			lblNewLabel_1 = new JLabel("DNI:");
+			lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblNewLabel_1.setBounds(199, 18, 44, 17);
+			contentPane.add(lblNewLabel_1);
+		}
+		{
+			txtDNI = new JTextField();
+			txtDNI.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtDNI.setBounds(242, 17, 96, 18);
+			contentPane.add(txtDNI);
+			txtDNI.setColumns(10);
 		}
 
 	}
