@@ -10,8 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class V1 extends JFrame {
+public class V1 extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -20,6 +22,8 @@ public class V1 extends JFrame {
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_1;
 	private JTextField txtDNI;
+	private JButton btnNewButton_1;
+	private JLabel lblNewLabel_2;
 
 	/**
 	 * Launch the application.
@@ -62,7 +66,7 @@ public class V1 extends JFrame {
 		{
 			btnNewButton = new JButton("Adicionar");
 			btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			btnNewButton.setBounds(31, 51, 112, 29);
+			btnNewButton.setBounds(31, 91, 112, 29);
 			contentPane.add(btnNewButton);
 		}
 		{
@@ -78,6 +82,26 @@ public class V1 extends JFrame {
 			contentPane.add(txtDNI);
 			txtDNI.setColumns(10);
 		}
+		{
+			btnNewButton_1 = new JButton("Eliminar");
+			btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			btnNewButton_1.addActionListener(this);
+			btnNewButton_1.setBounds(166, 91, 112, 28);
+			contentPane.add(btnNewButton_1);
+		}
+		{
+			lblNewLabel_2 = new JLabel("Teléfono");
+			lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblNewLabel_2.setBounds(10, 48, 81, 22);
+			contentPane.add(lblNewLabel_2);
+		}
 
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton_1) {
+			do_btnNewButton_1_actionPerformed(e);
+		}
+	}
+	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 	}
 }
