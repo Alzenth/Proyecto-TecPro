@@ -1,5 +1,6 @@
-2026/04/02-22:25:53.210 41e0 Log #3: 4 ops saved to Table #4 OK
-2026/04/02-22:25:53.215 41e0 Archiving C:\Users\Fabrizio\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/000003.log: OK
-2026/04/02-22:25:53.216 41e0 Table #4: 4 entries OK
-2026/04/02-22:25:53.218 41e0 Archiving C:\Users\Fabrizio\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/MANIFEST-000001: OK
-2026/04/02-22:25:53.223 41e0 **** Repaired leveldb C:\Users\Fabrizio\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database; recovered 1 files; 281 bytes. Some data may have been lost. ****
+2026/04/04-00:27:55.147 5080 Log #6: 1 ops saved to Table #7 OK
+2026/04/04-00:27:55.175 5080 Archiving C:\Users\mayra\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/000006.log: OK
+2026/04/04-00:27:55.175 5080 Table #4: 4 entries OK
+2026/04/04-00:27:55.175 5080 Table #7: 1 entries OK
+2026/04/04-00:27:55.184 5080 Archiving C:\Users\mayra\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/MANIFEST-000001: OK
+2026/04/04-00:27:55.198 5080 **** Repaired leveldb C:\Users\mayra\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database; recovered 2 files; 443 bytes. Some data may have been lost. ****
