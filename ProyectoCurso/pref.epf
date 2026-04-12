@@ -1,0 +1,15 @@
+#Sun Apr 12 02:10:26 PET 2026
+\!/=
+/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.formatterprofiles.version=23
+/instance/org.eclipse.wb.core/Auto-Collapse\ Setting=1
+/instance/org.eclipse.wb.core/design.palette.flyout.width=151
+/instance/org.eclipse.wb.core/design.structure.flyout.width=247
+/instance/org.eclipse.wb.swing/P_APPLY_IN_MAIN=true
+/instance/org.eclipse.wb.swing/codeGeneration.statementId=org.eclipse.wb.core.model.statement.block
+/instance/org.eclipse.wb.swing/codeGeneration.variableId=org.eclipse.wb.core.model.variable.fieldUnique
+/instance/org.eclipse.wb.swing/property.events.codeType=2
+/instance/org.eclipse.wb.swing/property.events.stubCreate=true
+@org.eclipse.jdt.ui=3.37.0.v20260213-1444
+@org.eclipse.wb.core=1.23.0.202602161336
+@org.eclipse.wb.swing=1.11.0.202602130513
+file_export_version=3.0
