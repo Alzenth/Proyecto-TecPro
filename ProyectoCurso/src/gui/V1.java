@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.JTextArea;
 
 public class V1 extends JFrame implements ActionListener {
 
@@ -22,15 +23,16 @@ public class V1 extends JFrame implements ActionListener {
 	private JTextField txtNombre;
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_1;
-	private JTextField txtDNI;
+	private JTextField txtApellido;
 	private JButton btnNewButton_1;
 	private JLabel lblNewLabel_2;
-	private JTextField textField;
+	private JTextField txtTelefono;
 	private JLabel lblNewLabel_3;
 	private JButton btnNewButton_2;
-	private JTextField textField_1;
+	private JTextField txtDNI;
 	private JLabel lblNewLabel_4;
-	private JTextField textField_2;
+	private JTextField txtCorreo;
+	private JTextArea txtS;
 
 	/**
 	 * Launch the application.
@@ -54,7 +56,7 @@ public class V1 extends JFrame implements ActionListener {
 	public V1() {
 		setBackground(Color.PINK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 620, 350);
+		setBounds(100, 100, 620, 400);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.ORANGE);
 		contentPane.setBackground(new Color(0, 255, 255));
@@ -76,6 +78,7 @@ public class V1 extends JFrame implements ActionListener {
 		}
 		{
 			btnNewButton = new JButton("Adicionar");
+			btnNewButton.addActionListener(this);
 			btnNewButton.setForeground(new Color(0, 0, 0));
 			btnNewButton.setBackground(Color.GREEN);
 			btnNewButton.setBounds(10, 91, 112, 29);
@@ -89,12 +92,12 @@ public class V1 extends JFrame implements ActionListener {
 			contentPane.add(lblNewLabel_1);
 		}
 		{
-			txtDNI = new JTextField();
-			txtDNI.setBackground(Color.YELLOW);
-			txtDNI.setBounds(266, 17, 96, 18);
-			txtDNI.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			contentPane.add(txtDNI);
-			txtDNI.setColumns(10);
+			txtApellido = new JTextField();
+			txtApellido.setBackground(Color.YELLOW);
+			txtApellido.setBounds(266, 17, 96, 18);
+			txtApellido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			contentPane.add(txtApellido);
+			txtApellido.setColumns(10);
 		}
 		{
 			btnNewButton_1 = new JButton("Eliminar");
@@ -111,11 +114,11 @@ public class V1 extends JFrame implements ActionListener {
 			contentPane.add(lblNewLabel_2);
 		}
 		
-		textField = new JTextField();
-		textField.setBackground(Color.LIGHT_GRAY);
-		textField.setColumns(10);
-		textField.setBounds(80, 48, 96, 18);
-		contentPane.add(textField);
+		txtTelefono = new JTextField();
+		txtTelefono.setBackground(Color.LIGHT_GRAY);
+		txtTelefono.setColumns(10);
+		txtTelefono.setBounds(80, 48, 96, 18);
+		contentPane.add(txtTelefono);
 		{
 			lblNewLabel_3 = new JLabel("Apellido:");
 			lblNewLabel_3.setFont(new Font("Dubai", Font.BOLD, 14));
@@ -124,18 +127,19 @@ public class V1 extends JFrame implements ActionListener {
 		}
 		{
 			btnNewButton_2 = new JButton("Reportar");
+			btnNewButton_2.addActionListener(this);
 			btnNewButton_2.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
 			btnNewButton_2.setBackground(Color.GREEN);
 			btnNewButton_2.setBounds(132, 91, 112, 28);
 			contentPane.add(btnNewButton_2);
 		}
 		{
-			textField_1 = new JTextField();
-			textField_1.setBackground(Color.LIGHT_GRAY);
-			textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			textField_1.setColumns(10);
-			textField_1.setBounds(266, 51, 96, 18);
-			contentPane.add(textField_1);
+			txtDNI = new JTextField();
+			txtDNI.setBackground(Color.LIGHT_GRAY);
+			txtDNI.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtDNI.setColumns(10);
+			txtDNI.setBounds(266, 51, 96, 18);
+			contentPane.add(txtDNI);
 		}
 		{
 			lblNewLabel_4 = new JLabel("Correo:");
@@ -144,20 +148,62 @@ public class V1 extends JFrame implements ActionListener {
 			contentPane.add(lblNewLabel_4);
 		}
 		{
-			textField_2 = new JTextField();
-			textField_2.setBackground(Color.YELLOW);
-			textField_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			textField_2.setColumns(10);
-			textField_2.setBounds(445, 18, 96, 18);
-			contentPane.add(textField_2);
+			txtCorreo = new JTextField();
+			txtCorreo.setBackground(Color.YELLOW);
+			txtCorreo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtCorreo.setColumns(10);
+			txtCorreo.setBounds(445, 18, 96, 18);
+			contentPane.add(txtCorreo);
 		}
-
+		{
+			txtS = new JTextArea();
+			txtS.setBounds(20, 130, 547, 208);
+			contentPane.add(txtS);
+		}
+		Listado();
 	}
+	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton_2) {
+			do_btnNewButton_2_actionPerformed(e);
+		}
+		if (e.getSource() == btnNewButton) {
+			do_btnNewButton_actionPerformed(e);
+		}
 		if (e.getSource() == btnNewButton_1) {
 			do_btnNewButton_1_actionPerformed(e);
 		}
 	}
+	void Listado() { 
+		Imprimir(" Nombre\t|   Apellido\t|   DNI\t|   Teléfono\t|   Correo");
+		for (int i = 0; i < a.Tamaño(); i++) {
+			Imprimir(a.Obtener(i).getNombre()+"\t| "+a.Obtener(i).getApellido()
+			+"\t| "+a.Obtener(i).getDni()+"\t| "+a.Obtener(i).getNumero()+
+			"\t| "+a.Obtener(i).getCorreo());
+		}
+	}
+	void Imprimir (String s) {
+		txtS.append(s + "\n");
+	}
+	
+	Arreglo a = new Arreglo();
+	
+	
+	
+	
+	
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+		
+		}
+		
+	
+	
+	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
+		
+		
+	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 	}
+	
+	
 }

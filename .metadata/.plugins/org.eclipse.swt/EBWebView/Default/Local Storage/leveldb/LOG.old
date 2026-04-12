@@ -1,3 +1,2 @@
-2026/04/11-22:13:26.948 35ec Reusing MANIFEST C:\Users\Usuario\Desktop\Proyecto TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Local Storage\leveldb/MANIFEST-000001
-2026/04/11-22:13:26.957 35ec Recovering log #3
-2026/04/11-22:13:26.960 35ec Reusing old log C:\Users\Usuario\Desktop\Proyecto TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Local Storage\leveldb/000003.log 
+2026/04/11-23:41:09.367 1e84 Creating DB C:\Users\Fabrizio\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Local Storage\leveldb since it was missing.
+2026/04/11-23:41:09.433 1e84 Reusing MANIFEST C:\Users\Fabrizio\Proyecto-TecPro\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Local Storage\leveldb/MANIFEST-000001
