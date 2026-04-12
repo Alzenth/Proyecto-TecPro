@@ -188,19 +188,15 @@ public class V1 extends JFrame implements ActionListener {
 	
 	Arreglo a = new Arreglo();
 	
-	
-	
-	
-	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
-		
-		}
-		
-	
-	
+        Cliente c = a.Buscar(txtDNI.getText());
+        if(c==null) {
+            Cliente es1=new Cliente(txtNombre.getText(),txtApellido.getText(), txtDNI.getText(), 
+                    txtTelefono.getText(), txtCorreo.getText());
+            a.Adicionar(es1);
+            }
+	}
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
-		
-		
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 	}
