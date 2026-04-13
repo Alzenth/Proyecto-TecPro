@@ -211,6 +211,20 @@ public class V1 extends JFrame implements ActionListener {
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
+		Cliente c = a.Eliminar(txtDNI.getText());
+		if (c!=null) {
+			txtS.setText("");
+			txtS.append("Nombre\tApellido\tDni\tNumero\tCorreo\n");
+			
+			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado ");
+			
+			for (int i = 0; i < a.Tamaño(); i++) {
+			    Cliente cte = a.Obtener(i);
+			    txtS.append(cte.getNombre() + "\t" +cte.getApellido() + "\t" +cte.getDni() + "\t" +
+			    cte.getNumero() + "\t" +cte.getCorreo() + "\n");
+			}
+		}
+		else javax.swing.JOptionPane.showMessageDialog(null, "No se encontró el cliente a eliminar ");
 	}
 	protected void do_btnNewButton_3_actionPerformed(ActionEvent e)  {
 		txtS.setText("");
