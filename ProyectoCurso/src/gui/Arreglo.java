@@ -22,7 +22,9 @@ public class Arreglo {
 	
 	public Cliente Buscar(String dni) {
 		for (int i = 0; i <Tamaño(); i++) {
-			if(Obtener(i).getDni()==dni)return Obtener(i);
+			if (Obtener(i).getDni().equals(dni)) {
+	            return Obtener(i);
+	        }
 		}
 		return null;
 	}

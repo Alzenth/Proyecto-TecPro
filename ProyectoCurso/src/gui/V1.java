@@ -160,10 +160,21 @@ public class V1 extends JFrame implements ActionListener {
 			txtS.setBounds(20, 130, 547, 208);
 			contentPane.add(txtS);
 		}
+		{
+			btnNewButton_3 = new JButton("Buscar");
+			btnNewButton_3.addActionListener(this);
+			btnNewButton_3.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
+			btnNewButton_3.setBackground(Color.GREEN);
+			btnNewButton_3.setBounds(387, 91, 112, 28);
+			contentPane.add(btnNewButton_3);
+		}
 		Listado();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton_3) {
+			do_btnNewButton_3_actionPerformed(e);
+		}
 		if (e.getSource() == btnNewButton_2) {
 			do_btnNewButton_2_actionPerformed(e);
 		}
@@ -187,6 +198,7 @@ public class V1 extends JFrame implements ActionListener {
 	}
 	
 	Arreglo a = new Arreglo();
+	private JButton btnNewButton_3;
 	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
         Cliente c = a.Buscar(txtDNI.getText());
@@ -200,6 +212,24 @@ public class V1 extends JFrame implements ActionListener {
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 	}
+	protected void do_btnNewButton_3_actionPerformed(ActionEvent e)  {
+		txtS.setText("");
+
+	    Cliente c = a.Buscar(txtDNI.getText());
+
+	    if(c != null) {
+	        txtS.append("Nombre\tApellido\tDni\tNumero\tCorreo\n");
+	        txtS.append(c.getNombre()+"\t"+c.getApellido()+"\t"+c.getDni()+
+	                    "\t"+c.getNumero()+"\t"+c.getCorreo());
+
+	        javax.swing.JOptionPane.showMessageDialog(null, "Se encontró el cliente ");
+	    } else {
+	        txtS.setText("Cliente no encontrado ");
+	    }
+	}
+			
+		
 	
+		}
 	
-}
+
