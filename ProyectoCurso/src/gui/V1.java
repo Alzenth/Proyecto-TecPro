@@ -209,6 +209,22 @@ public class V1 extends JFrame implements ActionListener {
             }
 	}
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
+		txtS.setText(""); // limpiar el área
+
+		// Encabezado
+		txtS.append("Nombre\tApellido\tDNI\tTelefono\tCorreo\n");
+
+		// Recorrer todos los clientes
+		for (int i = 0; i < a.Tamaño(); i++) {
+		Cliente c = a.Obtener(i);
+
+		txtS.append(c.getNombre() + "\t" +
+		c.getApellido() + "\t" +
+		c.getDni() + "\t" +
+		c.getNumero() + "\t" +
+		c.getCorreo() + "\n");
+		}
+
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 		Cliente c = a.Eliminar(txtDNI.getText());
