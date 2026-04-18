@@ -157,7 +157,7 @@ public class V1 extends JFrame implements ActionListener {
 		}
 		{
 			txtS = new JTextArea();
-			txtS.setBounds(20, 130, 547, 208);
+			txtS.setBounds(20, 172, 547, 166);
 			contentPane.add(txtS);
 		}
 		{
@@ -165,13 +165,24 @@ public class V1 extends JFrame implements ActionListener {
 			btnNewButton_3.addActionListener(this);
 			btnNewButton_3.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
 			btnNewButton_3.setBackground(Color.GREEN);
-			btnNewButton_3.setBounds(387, 91, 112, 28);
+			btnNewButton_3.setBounds(10, 130, 112, 28);
 			contentPane.add(btnNewButton_3);
+		}
+		{
+			btnNewButton_4 = new JButton("Modificar");
+			btnNewButton_4.addActionListener(this);
+			btnNewButton_4.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
+			btnNewButton_4.setBackground(Color.GREEN);
+			btnNewButton_4.setBounds(132, 129, 112, 28);
+			contentPane.add(btnNewButton_4);
 		}
 		Listado();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton_4) {
+			do_btnNewButton_4_actionPerformed(e);
+		}
 		if (e.getSource() == btnNewButton_3) {
 			do_btnNewButton_3_actionPerformed(e);
 		}
@@ -199,6 +210,7 @@ public class V1 extends JFrame implements ActionListener {
 	
 	Arreglo a = new Arreglo();
 	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
 	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
         Cliente c = a.Buscar(txtDNI.getText());
@@ -257,9 +269,15 @@ public class V1 extends JFrame implements ActionListener {
 	        txtS.setText("Cliente no encontrado ");
 	    }
 	}
-			
-		
-	
+	protected void do_btnNewButton_4_actionPerformed(ActionEvent e) {
+		Cliente c = a.Buscar(txtDNI.getText());
+		if (c != null) {
+			c.setNombre(txtNombre.getText());
+			c.setApellido(txtApellido.getText());
+			c.setCorreo(txtCorreo.getText());;
+			c.setNumero(txtTelefono.getText());
+			}
 		}
+	}
 	
 
