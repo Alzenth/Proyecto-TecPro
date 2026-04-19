@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 public class V1 extends JFrame implements ActionListener {
 
@@ -54,12 +55,12 @@ public class V1 extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public V1() {
-		setBackground(Color.PINK);
+		setBackground(SystemColor.inactiveCaption);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 620, 400);
+		setBounds(100, 100, 880, 499);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.ORANGE);
-		contentPane.setBackground(new Color(0, 255, 255));
+		contentPane.setBackground(SystemColor.inactiveCaption);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -71,8 +72,9 @@ public class V1 extends JFrame implements ActionListener {
 		}
 		{
 			txtNombre = new JTextField();
-			txtNombre.setBackground(Color.YELLOW);
-			txtNombre.setBounds(80, 19, 96, 18);
+			txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			txtNombre.setBackground(SystemColor.activeCaptionBorder);
+			txtNombre.setBounds(80, 15, 110, 22);
 			contentPane.add(txtNombre);
 			txtNombre.setColumns(10);
 		}
@@ -80,103 +82,106 @@ public class V1 extends JFrame implements ActionListener {
 			btnNewButton = new JButton("Adicionar");
 			btnNewButton.addActionListener(this);
 			btnNewButton.setForeground(new Color(0, 0, 0));
-			btnNewButton.setBackground(Color.GREEN);
-			btnNewButton.setBounds(10, 91, 112, 29);
-			btnNewButton.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
+			btnNewButton.setBackground(new Color(204, 153, 0));
+			btnNewButton.setBounds(10, 109, 112, 29);
+			btnNewButton.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
 			contentPane.add(btnNewButton);
 		}
 		{
 			lblNewLabel_1 = new JLabel("DNI:");
-			lblNewLabel_1.setBounds(200, 51, 44, 17);
+			lblNewLabel_1.setBounds(10, 66, 44, 17);
 			lblNewLabel_1.setFont(new Font("Dubai", Font.BOLD, 14));
 			contentPane.add(lblNewLabel_1);
 		}
 		{
 			txtApellido = new JTextField();
-			txtApellido.setBackground(Color.YELLOW);
-			txtApellido.setBounds(266, 17, 96, 18);
-			txtApellido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtApellido.setBackground(SystemColor.activeCaptionBorder);
+			txtApellido.setBounds(296, 15, 110, 22);
+			txtApellido.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			contentPane.add(txtApellido);
 			txtApellido.setColumns(10);
 		}
 		{
 			btnNewButton_1 = new JButton("Eliminar");
-			btnNewButton_1.setBackground(Color.GREEN);
-			btnNewButton_1.setBounds(254, 91, 112, 28);
-			btnNewButton_1.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
+			btnNewButton_1.setBackground(new Color(204, 153, 0));
+			btnNewButton_1.setBounds(551, 109, 112, 28);
+			btnNewButton_1.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
 			btnNewButton_1.addActionListener(this);
 			contentPane.add(btnNewButton_1);
 		}
 		{
 			lblNewLabel_2 = new JLabel("Teléfono:");
-			lblNewLabel_2.setBounds(10, 48, 81, 22);
+			lblNewLabel_2.setBounds(219, 63, 81, 22);
 			lblNewLabel_2.setFont(new Font("Dubai", Font.BOLD, 14));
 			contentPane.add(lblNewLabel_2);
 		}
 		
 		txtTelefono = new JTextField();
-		txtTelefono.setBackground(Color.LIGHT_GRAY);
+		txtTelefono.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtTelefono.setBackground(SystemColor.activeCaptionBorder);
 		txtTelefono.setColumns(10);
-		txtTelefono.setBounds(80, 48, 96, 18);
+		txtTelefono.setBounds(296, 61, 110, 22);
 		contentPane.add(txtTelefono);
 		{
 			lblNewLabel_3 = new JLabel("Apellido:");
 			lblNewLabel_3.setFont(new Font("Dubai", Font.BOLD, 14));
-			lblNewLabel_3.setBounds(200, 15, 81, 22);
+			lblNewLabel_3.setBounds(219, 19, 81, 22);
 			contentPane.add(lblNewLabel_3);
 		}
 		{
 			btnNewButton_2 = new JButton("Reportar");
 			btnNewButton_2.addActionListener(this);
-			btnNewButton_2.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-			btnNewButton_2.setBackground(Color.GREEN);
-			btnNewButton_2.setBounds(132, 91, 112, 28);
+			btnNewButton_2.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
+			btnNewButton_2.setBackground(new Color(204, 153, 0));
+			btnNewButton_2.setBounds(198, 109, 112, 28);
 			contentPane.add(btnNewButton_2);
 		}
 		{
 			txtDNI = new JTextField();
 			txtDNI.setBackground(Color.LIGHT_GRAY);
-			txtDNI.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtDNI.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			txtDNI.setColumns(10);
-			txtDNI.setBounds(266, 51, 96, 18);
+			txtDNI.setBounds(80, 61, 110, 22);
 			contentPane.add(txtDNI);
 		}
 		{
 			lblNewLabel_4 = new JLabel("Correo:");
 			lblNewLabel_4.setFont(new Font("Dubai", Font.BOLD, 14));
-			lblNewLabel_4.setBounds(387, 15, 81, 22);
+			lblNewLabel_4.setBounds(425, 19, 81, 22);
 			contentPane.add(lblNewLabel_4);
 		}
 		{
 			txtCorreo = new JTextField();
-			txtCorreo.setBackground(Color.YELLOW);
-			txtCorreo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtCorreo.setBackground(SystemColor.activeCaptionBorder);
+			txtCorreo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			txtCorreo.setColumns(10);
-			txtCorreo.setBounds(445, 18, 96, 18);
+			txtCorreo.setBounds(490, 16, 296, 23);
 			contentPane.add(txtCorreo);
 		}
 		{
 			txtS = new JTextArea();
-			txtS.setBounds(20, 172, 547, 166);
+			txtS.setFont(new Font("Monospaced", Font.PLAIN, 16));
+			txtS.setBounds(20, 148, 836, 304);
 			contentPane.add(txtS);
 		}
 		{
 			btnNewButton_3 = new JButton("Buscar");
 			btnNewButton_3.addActionListener(this);
-			btnNewButton_3.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-			btnNewButton_3.setBackground(Color.GREEN);
-			btnNewButton_3.setBounds(10, 130, 112, 28);
+			btnNewButton_3.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
+			btnNewButton_3.setBackground(new Color(204, 153, 0));
+			btnNewButton_3.setBounds(383, 109, 112, 28);
 			contentPane.add(btnNewButton_3);
 		}
 		{
 			btnNewButton_4 = new JButton("Modificar");
 			btnNewButton_4.addActionListener(this);
-			btnNewButton_4.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-			btnNewButton_4.setBackground(Color.GREEN);
-			btnNewButton_4.setBounds(132, 129, 112, 28);
+			btnNewButton_4.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
+			btnNewButton_4.setBackground(new Color(204, 153, 0));
+			btnNewButton_4.setBounds(725, 109, 112, 28);
 			contentPane.add(btnNewButton_4);
 		}
-		Listado();
+		Encabezado();
+		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -196,53 +201,53 @@ public class V1 extends JFrame implements ActionListener {
 			do_btnNewButton_1_actionPerformed(e);
 		}
 	}
-	void Listado() { 
-		Imprimir(" Nombre\t|   Apellido\t|   DNI\t|   Teléfono\t|   Correo");
-		for (int i = 0; i < a.Tamaño(); i++) {
-			Imprimir(a.Obtener(i).getNombre()+"\t| "+a.Obtener(i).getApellido()
-			+"\t| "+a.Obtener(i).getDni()+"\t| "+a.Obtener(i).getNumero()+
-			"\t| "+a.Obtener(i).getCorreo());
-		}
+	void Encabezado() {
+		txtS.append("     Nombre\t|   Apellido\t|   DNI\t   |   Teléfono    |\t     Correo\n");
 	}
-	void Imprimir (String s) {
-		txtS.append(s + "\n");
-	}
+	 
 	
 	Arreglo a = new Arreglo();
 	private JButton btnNewButton_3;
 	private JButton btnNewButton_4;
 	
-	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {//BOTON ADICIONAR
         Cliente c = a.Buscar(txtDNI.getText());
         if(c==null) {
             Cliente es1=new Cliente(txtNombre.getText(),txtApellido.getText(), txtDNI.getText(), 
                     txtTelefono.getText(), txtCorreo.getText());
+            
             a.Adicionar(es1);
             }
+        
+        txtNombre.setText("");
+		txtApellido.setText("");
+		txtDNI.setText("");
+		txtTelefono.setText("");
+		txtCorreo.setText("");
 	}
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
 		txtS.setText(""); // limpiar el área
-
-		// Encabezado
-		txtS.append("Nombre\tApellido\tDNI\tTelefono\tCorreo\n");
+		Encabezado();
 
 		// Recorrer todos los clientes
 		for (int i = 0; i < a.Tamaño(); i++) {
 		Cliente c = a.Obtener(i);
 
-		txtS.append(c.getNombre() + "\t" +
-		c.getApellido() + "\t" +
-		c.getDni() + "\t" +
-		c.getNumero() + "\t" +
+		txtS.append("  " +c.getNombre() + "\t|   " +
+		c.getApellido() + "\t|" +
+		c.getDni() + "  |   " +
+		c.getNumero() + "   |   " +
 		c.getCorreo() + "\n");
 		}
+		
+		
 
 	}
-	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
+	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) { //BOTON ELIMINAR
 		Cliente c = a.Eliminar(txtDNI.getText());
 		if (c!=null) {
 			txtS.setText("");
-			txtS.append("Nombre\tApellido\tDni\tNumero\tCorreo\n");
+			Encabezado();
 			
 			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado ");
 			
@@ -256,11 +261,12 @@ public class V1 extends JFrame implements ActionListener {
 	}
 	protected void do_btnNewButton_3_actionPerformed(ActionEvent e)  {
 		txtS.setText("");
+		Encabezado();
 
 	    Cliente c = a.Buscar(txtDNI.getText());
 
 	    if(c != null) {
-	        txtS.append("Nombre\tApellido\tDni\tNumero\tCorreo\n");
+	        
 	        txtS.append(c.getNombre()+"\t"+c.getApellido()+"\t"+c.getDni()+
 	                    "\t"+c.getNumero()+"\t"+c.getCorreo());
 

@@ -6,7 +6,7 @@ public class Arreglo {
 	private ArrayList<Cliente> c;
 	public Arreglo() {
 		c = new ArrayList<Cliente>();
-		Adicionar(new Cliente("Luis", "Salazar", "98765432", "987456123", "luissalazar@gmail.com"));
+		
 		
 	}
 	
