@@ -14,5 +14,7 @@ public void Adicionar(Producto x) {
 	public int Tamaño() {
 		return p.size();
 	}
-
+	public Producto Obtener(int i) {
+	    return p.get(i);
+	}
 }

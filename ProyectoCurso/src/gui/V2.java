@@ -13,17 +13,25 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class V2 extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
-	private JButton btnStock;
 	private JButton btnAgregarProducto;
 	private JLabel lblMenu;
-	private JButton btnEditarProductos;
 	private JTextArea textArea;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JLabel lblNewLabel;
+	private JLabel lblConsultaElStock;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_1;
+	private JTextField textField_3;
+	private ArregloProducto ap = new ArregloProducto();
 
 	/**
 	 * Launch the application.
@@ -58,50 +66,116 @@ public class V2 extends JFrame implements ActionListener {
 			contentPane.add(panel);
 			panel.setLayout(null);
 			{
-				btnStock = new JButton("Verificar stock");
-				btnStock.addActionListener(this);
-				btnStock.setForeground(Color.BLACK);
-				btnStock.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
-				btnStock.setBackground(new Color(204, 153, 0));
-				btnStock.setBounds(0, 124, 160, 29);
-				panel.add(btnStock);
-			}
-			{
-				btnAgregarProducto = new JButton("Agregar producto");
+				btnAgregarProducto = new JButton("Registrar producto");
+				btnAgregarProducto.addActionListener(this);
 				btnAgregarProducto.setForeground(Color.BLACK);
-				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
-				btnAgregarProducto.setBackground(new Color(204, 153, 0));
-				btnAgregarProducto.setBounds(0, 71, 160, 29);
+				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
+				btnAgregarProducto.setBounds(33, 216, 145, 22);
 				panel.add(btnAgregarProducto);
 			}
 			{
-				lblMenu = new JLabel("Menu");
-				lblMenu.setFont(new Font("Dubai", Font.BOLD, 24));
-				lblMenu.setBounds(0, 11, 81, 22);
+				lblMenu = new JLabel("Menú: Registro de productos");
+				lblMenu.setFont(new Font("Dubai", Font.BOLD, 14));
+				lblMenu.setBounds(0, 0, 219, 22);
 				panel.add(lblMenu);
 			}
 			{
-				btnEditarProductos = new JButton("Editar productos");
-				btnEditarProductos.setForeground(Color.BLACK);
-				btnEditarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
-				btnEditarProductos.setBackground(new Color(204, 153, 0));
-				btnEditarProductos.setBounds(0, 177, 160, 29);
-				panel.add(btnEditarProductos);
+				textArea = new JTextArea();
+				textArea.setBackground(Color.WHITE);
+				textArea.setBounds(232, 23, 192, 227);
+				panel.add(textArea);
 			}
 			{
-				textArea = new JTextArea();
-				textArea.setBackground(Color.LIGHT_GRAY);
-				textArea.setBounds(210, 23, 214, 227);
-				panel.add(textArea);
+				textField = new JTextField();
+				textField.setBounds(99, 49, 101, 20);
+				panel.add(textField);
+				textField.setColumns(10);
+			}
+			{
+				textField_1 = new JTextField();
+				textField_1.setBounds(99, 89, 101, 20);
+				panel.add(textField_1);
+				textField_1.setColumns(10);
+			}
+			{
+				textField_2 = new JTextField();
+				textField_2.setBounds(99, 128, 101, 20);
+				panel.add(textField_2);
+				textField_2.setColumns(10);
+			}
+			{
+				lblNewLabel = new JLabel("ID Producto:");
+				lblNewLabel.setBounds(0, 52, 89, 14);
+				panel.add(lblNewLabel);
+			}
+			{
+				lblConsultaElStock = new JLabel("Nombre Producto:");
+				lblConsultaElStock.setBounds(0, 88, 89, 14);
+				panel.add(lblConsultaElStock);
+			}
+			{
+				lblNewLabel_2 = new JLabel("Stock  Producto:");
+				lblNewLabel_2.setBounds(0, 131, 89, 14);
+				panel.add(lblNewLabel_2);
+			}
+			{
+				lblNewLabel_1 = new JLabel("Precio Producto:");
+				lblNewLabel_1.setBounds(0, 178, 89, 14);
+				panel.add(lblNewLabel_1);
+			}
+			{
+				textField_3 = new JTextField();
+				textField_3.setColumns(10);
+				textField_3.setBounds(99, 175, 101, 20);
+				panel.add(textField_3);
 			}
 		}
 
 	}
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnStock) {
-			do_btnStock_actionPerformed(e);
+		if (e.getSource() == btnAgregarProducto) {
+			do_btnAgregarProducto_actionPerformed(e);
 		}
 	}
-	protected void do_btnStock_actionPerformed(ActionEvent e) {
+	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
+		try {
+			String id = textField.getText();    
+	        String nom = textField_1.getText();   
+	        int stock = Integer.parseInt(textField_2.getText()); 
+	        double precio = Double.parseDouble(textField_3.getText()); 
+
+	        
+	        Producto nuevo = new Producto(id, nom, stock, precio);
+
+	        ap.Adicionar(nuevo);
+	        listar();
+	        
+	        javax.swing.JOptionPane.showMessageDialog(this, "¡Producto registrado correctament!");
+
+	        textField.setText("");
+	        textField_1.setText("");
+	        textField_2.setText("");
+	        textField_3.setText("");
+	        textField.requestFocus();
+		}catch (Exception ex) {
+			javax.swing.JOptionPane.showMessageDialog(this, "Error: Revisa que Stock y Precio esten bien");
+		}
+	}void listar() {
+		
+	    textArea.setText(""); 
+	    for (int i = 0; i < ap.Tamaño(); i++) {
+	        Producto p = ap.Obtener(i); 
+	        imprimir("ID: " + p.getId_prod());
+	        imprimir("NOMBRE: " + p.getNombre_prod());
+	        imprimir("STOCK: " + p.getStock_prod());
+	        imprimir("PRECIO: S/. " + p.getPrecio_prod());
+	        imprimir("-----------------------------------------");
+	    }
 	}
+	void imprimir(String s) {
+	    textArea.append(s + "\n");
+	}
+	
+	
 }
