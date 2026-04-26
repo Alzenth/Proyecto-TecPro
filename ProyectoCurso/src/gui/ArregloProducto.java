@@ -17,4 +17,14 @@ public void Adicionar(Producto x) {
 	public Producto Obtener(int i) {
 	    return p.get(i);
 	}
+	public Producto Eliminar(String dni) {
+		for (int i = 0; i <Tamaño(); i++) {
+			if (Obtener(i).getId_prod().equals(dni)) {
+				Producto e=Obtener(i);
+	            p.remove(i);
+	            return e;
+	        }
+		}
+		return null;
+	}
 }

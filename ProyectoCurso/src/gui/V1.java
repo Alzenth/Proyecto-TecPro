@@ -23,14 +23,14 @@ public class V1 extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JTextField txtNombre;
-	private JButton btnNewButton;
+	private JButton btnAdicionar;
 	private JLabel lblNewLabel_1;
 	private JTextField txtApellido;
-	private JButton btnNewButton_1;
+	private JButton btnEliminar;
 	private JLabel lblNewLabel_2;
 	private JTextField txtTelefono;
 	private JLabel lblNewLabel_3;
-	private JButton btnNewButton_2;
+	private JButton btnReportar;
 	private JTextField txtDNI;
 	private JLabel lblNewLabel_4;
 	private JTextField txtCorreo;
@@ -81,13 +81,13 @@ public class V1 extends JFrame implements ActionListener {
 			txtNombre.setColumns(10);
 		}
 		{
-			btnNewButton = new JButton("Adicionar");
-			btnNewButton.addActionListener(this);
-			btnNewButton.setForeground(new Color(255, 255, 255));
-			btnNewButton.setBackground(new Color(37, 99, 235));
-			btnNewButton.setBounds(10, 109, 112, 29);
-			btnNewButton.setFont(new Font("Segoe UI", Font.BOLD, 16));
-			contentPane.add(btnNewButton);
+			btnAdicionar = new JButton("Adicionar");
+			btnAdicionar.addActionListener(this);
+			btnAdicionar.setForeground(new Color(255, 255, 255));
+			btnAdicionar.setBackground(new Color(37, 99, 235));
+			btnAdicionar.setBounds(10, 109, 112, 29);
+			btnAdicionar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+			contentPane.add(btnAdicionar);
 		}
 		{
 			lblNewLabel_1 = new JLabel("DNI:");
@@ -105,13 +105,13 @@ public class V1 extends JFrame implements ActionListener {
 			txtApellido.setColumns(10);
 		}
 		{
-			btnNewButton_1 = new JButton("Eliminar");
-			btnNewButton_1.setForeground(new Color(255, 255, 255));
-			btnNewButton_1.setBackground(new Color(220, 38, 38));
-			btnNewButton_1.setBounds(551, 109, 112, 28);
-			btnNewButton_1.setFont(new Font("Segoe UI", Font.BOLD, 16));
-			btnNewButton_1.addActionListener(this);
-			contentPane.add(btnNewButton_1);
+			btnEliminar = new JButton("Eliminar");
+			btnEliminar.setForeground(new Color(255, 255, 255));
+			btnEliminar.setBackground(new Color(220, 38, 38));
+			btnEliminar.setBounds(551, 109, 112, 28);
+			btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+			btnEliminar.addActionListener(this);
+			contentPane.add(btnEliminar);
 		}
 		{
 			lblNewLabel_2 = new JLabel("Teléfono:");
@@ -135,12 +135,12 @@ public class V1 extends JFrame implements ActionListener {
 			contentPane.add(lblNewLabel_3);
 		}
 		{
-			btnNewButton_2 = new JButton("Reportar");
-			btnNewButton_2.addActionListener(this);
-			btnNewButton_2.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
-			btnNewButton_2.setBackground(new Color(229, 231, 235));
-			btnNewButton_2.setBounds(198, 109, 112, 28);
-			contentPane.add(btnNewButton_2);
+			btnReportar = new JButton("Reportar");
+			btnReportar.addActionListener(this);
+			btnReportar.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
+			btnReportar.setBackground(new Color(229, 231, 235));
+			btnReportar.setBounds(198, 109, 112, 28);
+			contentPane.add(btnReportar);
 		}
 		{
 			txtDNI = new JTextField();
@@ -172,40 +172,40 @@ public class V1 extends JFrame implements ActionListener {
 			contentPane.add(txtS);
 		}
 		{
-			btnNewButton_3 = new JButton("Buscar");
-			btnNewButton_3.addActionListener(this);
-			btnNewButton_3.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
-			btnNewButton_3.setBackground(new Color(229, 231, 235));
-			btnNewButton_3.setBounds(383, 109, 112, 28);
-			contentPane.add(btnNewButton_3);
+			btnBuscar = new JButton("Buscar");
+			btnBuscar.addActionListener(this);
+			btnBuscar.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 16));
+			btnBuscar.setBackground(new Color(229, 231, 235));
+			btnBuscar.setBounds(383, 109, 112, 28);
+			contentPane.add(btnBuscar);
 		}
 		{
-			btnNewButton_4 = new JButton("Modificar");
-			btnNewButton_4.setForeground(new Color(255, 255, 255));
-			btnNewButton_4.addActionListener(this);
-			btnNewButton_4.setFont(new Font("Segoe UI", Font.BOLD, 14));
-			btnNewButton_4.setBackground(new Color(37, 99, 235));
-			btnNewButton_4.setBounds(725, 109, 112, 28);
-			contentPane.add(btnNewButton_4);
+			btnModificar = new JButton("Modificar");
+			btnModificar.setForeground(new Color(255, 255, 255));
+			btnModificar.addActionListener(this);
+			btnModificar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+			btnModificar.setBackground(new Color(37, 99, 235));
+			btnModificar.setBounds(725, 109, 112, 28);
+			contentPane.add(btnModificar);
 		}
 		Encabezado();
 		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnNewButton_4) {
+		if (e.getSource() == btnModificar) {
 			do_btnNewButton_4_actionPerformed(e);
 		}
-		if (e.getSource() == btnNewButton_3) {
+		if (e.getSource() == btnBuscar) {
 			do_btnNewButton_3_actionPerformed(e);
 		}
-		if (e.getSource() == btnNewButton_2) {
+		if (e.getSource() == btnReportar) {
 			do_btnNewButton_2_actionPerformed(e);
 		}
-		if (e.getSource() == btnNewButton) {
+		if (e.getSource() == btnAdicionar) {
 			do_btnNewButton_actionPerformed(e);
 		}
-		if (e.getSource() == btnNewButton_1) {
+		if (e.getSource() == btnEliminar) {
 			do_btnNewButton_1_actionPerformed(e);
 		}
 	}
@@ -214,9 +214,9 @@ public class V1 extends JFrame implements ActionListener {
 	}
 	 
 	
-	Arreglo a = new Arreglo();
-	private JButton btnNewButton_3;
-	private JButton btnNewButton_4;
+	ArregloCliente a = new ArregloCliente();
+	private JButton btnBuscar;
+	private JButton btnModificar;
 	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {//BOTON ADICIONAR
 		try {

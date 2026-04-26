@@ -3,11 +3,13 @@ package gui;
 public class Producto {
 	private String id_prod;
 	private String nombre_prod;
+	private String categoria_prod;
 	private int stock_prod;
 	private double precio_prod;
-	public Producto(String id_prod, String nombre_prod, int stock_prod, double precio_prod) {
+	public Producto(String id_prod, String nombre_prod, String categoria_prod, int stock_prod, double precio_prod) {
 		this.id_prod = id_prod;
 		this.nombre_prod = nombre_prod;
+		this.categoria_prod = categoria_prod;
 		this.stock_prod = stock_prod;
 		this.precio_prod = precio_prod;
 	}
@@ -23,6 +25,12 @@ public class Producto {
 	public void setNombre_prod(String nombre_prod) {
 		this.nombre_prod = nombre_prod;
 	}
+	public String getCategoria_prod() {
+		return categoria_prod;
+	}
+	public void setCategoria_prod(String categoria_prod) {
+		this.categoria_prod = categoria_prod;
+	}
 	public int getStock_prod() {
 		return stock_prod;
 	}
@@ -34,5 +42,5 @@ public class Producto {
 	}
 	public void setPrecio_prod(double precio_prod) {
 		this.precio_prod = precio_prod;
-	}
+	}	
 }

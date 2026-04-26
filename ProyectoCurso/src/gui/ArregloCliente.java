@@ -2,9 +2,9 @@ package gui;
 
 import java.util.ArrayList;
 
-public class Arreglo {
+public class ArregloCliente {
 	private ArrayList<Cliente> c;
-	public Arreglo() {
+	public ArregloCliente() {
 		c = new ArrayList<Cliente>();
 		
 		
