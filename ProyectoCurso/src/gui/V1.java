@@ -167,6 +167,7 @@ public class V1 extends JFrame implements ActionListener {
 		}
 		{
 			txtS = new JTextArea();
+			txtS.setEditable(false);
 			txtS.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 			txtS.setBounds(20, 148, 836, 304);
 			contentPane.add(txtS);
@@ -219,6 +220,15 @@ public class V1 extends JFrame implements ActionListener {
 	private JButton btnModificar;
 	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {//BOTON ADICIONAR
+		if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() ||
+		        txtDNI.getText().isEmpty() || txtTelefono.getText().isEmpty() ||
+		        txtCorreo.getText().isEmpty()) {
+
+		        JOptionPane.showMessageDialog(null, "Complete todos los campos");
+		        limpiartxt();
+		        return;
+		    }
+		
 		try {
 		
         Cliente c = a.Buscar(txtDNI.getText());
@@ -228,12 +238,11 @@ public class V1 extends JFrame implements ActionListener {
             
             a.Adicionar(es1);
             }
+        else
+		{
+			JOptionPane.showMessageDialog(null, "EL CLIENTE YA ESTA REGISTRADO");}
         
-        txtNombre.setText("");
-		txtApellido.setText("");
-		txtDNI.setText("");
-		txtTelefono.setText("");
-		txtCorreo.setText("");
+        limpiartxt();
 		
 		} catch (Exception ex) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado", "Error",JOptionPane.ERROR_MESSAGE);
@@ -248,11 +257,7 @@ public class V1 extends JFrame implements ActionListener {
 			for (int i = 0; i < a.Tamaño(); i++) {
 				Cliente c = a.Obtener(i);
 		
-				txtS.append("  " +c.getNombre() + "\t|   " +
-						c.getApellido() + "\t|" +
-						c.getDni() + "  |   " +
-						c.getNumero() + "   |   " +
-						c.getCorreo() + "\n");
+				imprimir(c);
 		}
 		} catch (Exception ex) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -293,6 +298,7 @@ public class V1 extends JFrame implements ActionListener {
 	        javax.swing.JOptionPane.showMessageDialog(null, "Se encontró el cliente ");
 	    } else {
 	    	javax.swing.JOptionPane.showMessageDialog(null, "Cliente no encontrado ");
+	    	
 	    }
 	}
 	protected void do_btnNewButton_4_actionPerformed(ActionEvent e) {
@@ -303,7 +309,28 @@ public class V1 extends JFrame implements ActionListener {
 			c.setCorreo(txtCorreo.getText());;
 			c.setNumero(txtTelefono.getText());
 			}
+		else javax.swing.JOptionPane.showMessageDialog(null, "No se encontró el cliente a modificar ");
+		}
+	//Sobrecarga de métodos
+	void imprimir(String s) {
+	    txtS.append(s + "\n");
+	}
+	void imprimir(Cliente cte) {
+		try {
+		 txtS.append(cte.getNombre() + "\t" +cte.getApellido() + "\t" +cte.getDni() + "\t" +
+				    cte.getNumero() + "\t" +cte.getCorreo() + "\n");
+		}catch (Exception ex) {
+			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado", "Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	void limpiartxt() 
+	{
+		txtNombre.setText("");
+		txtApellido.setText("");
+		txtDNI.setText("");
+		txtCorreo.setText("");
+		txtTelefono.setText("");
+	}
+}
 	
 
