@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 
 import javax.swing.ComboBoxModel;
@@ -183,7 +185,7 @@ public class V2 extends JFrame implements ActionListener {
 	        ap.Adicionar(nuevo);
 	        listar();
 	        
-	        javax.swing.JOptionPane.showMessageDialog(this, "¡Producto registrado correctament!");
+	        javax.swing.JOptionPane.showMessageDialog(this, "¡Producto registrado correctamente!");
 
 	        txtIdProducto.setText("");
 	        txtNombreProducto.setText("");
@@ -218,6 +220,26 @@ public class V2 extends JFrame implements ActionListener {
 	void MensajeEmergente(String s) {
 		javax.swing.JOptionPane.showMessageDialog(this, s);
 	}
+	
+
+	
 	protected void do_btnRemoverProducto_actionPerformed(ActionEvent e) {
+		try {
+			String id=txtIdProducto.getText().trim();
+			if (id.isEmpty())
+				MensajeEmergente("¡Inserte el id del producto a eliminar!");
+			else {
+				Producto pro=ap.Eliminar(id);
+				if (pro!=null) {
+					listar();
+					MensajeEmergente("¡Producto eliminado correctamente!");
+					txtIdProducto.setText("");
+					txtIdProducto.requestFocus();
+					}
+				else MensajeEmergente("¡No se encontro el producto!");
+				}
+			}catch (Exception ex) {
+				MensajeEmergente("Error al eliminar producto!");
+			}
+		}
 	}
-}
