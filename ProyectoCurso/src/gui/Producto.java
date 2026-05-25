@@ -5,13 +5,31 @@ public class Producto {
 	private String nombre_prod;
 	private String categoria_prod;
 	private int stock_prod;
+	private String fechaP_prod;
+	private String fechaV_prod;
+	
+	
+	public String getFechaP_prod() {
+		return fechaP_prod;
+	}
+	public void setFechaP_prod(String fechaP_prod) {
+		this.fechaP_prod = fechaP_prod;
+	}
+	public String getFechaV_prod() {
+		return fechaV_prod;
+	}
+	public void setFechaV_prod(String fechaV_prod) {
+		this.fechaV_prod = fechaV_prod;
+	}
 	private double precio_prod;
-	public Producto(String id_prod, String nombre_prod, String categoria_prod, int stock_prod, double precio_prod) {
+	public Producto(String id_prod, String nombre_prod, String categoria_prod, int stock_prod, double precio_prod,String fechaP_prod,String fechaV_prod ) {
 		this.id_prod = id_prod;
 		this.nombre_prod = nombre_prod;
 		this.categoria_prod = categoria_prod;
 		this.stock_prod = stock_prod;
 		this.precio_prod = precio_prod;
+	    this.fechaP_prod = fechaP_prod;
+		this.fechaV_prod = fechaV_prod;
 	}
 	public String getId_prod() {
 		return id_prod;

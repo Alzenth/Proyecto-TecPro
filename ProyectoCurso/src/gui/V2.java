@@ -73,7 +73,7 @@ public class V2 extends JFrame implements ActionListener {
 	 */
 	public V2() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 645, 447);
+		setBounds(100, 100, 808, 469);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,7 +81,7 @@ public class V2 extends JFrame implements ActionListener {
 		{
 			panel = new JPanel();
 			panel.setBackground(SystemColor.inactiveCaption);
-			panel.setBounds(0, 0, 631, 410);
+			panel.setBounds(0, 0, 792, 430);
 			contentPane.add(panel);
 			panel.setLayout(null);
 			{
@@ -90,7 +90,7 @@ public class V2 extends JFrame implements ActionListener {
 				btnAgregarProducto.setForeground(Color.BLACK);
 				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
-				btnAgregarProducto.setBounds(33, 259, 145, 22);
+				btnAgregarProducto.setBounds(33, 308, 145, 22);
 				panel.add(btnAgregarProducto);
 			}
 			{
@@ -103,61 +103,61 @@ public class V2 extends JFrame implements ActionListener {
 				txtS = new JTextArea();
 				txtS.setEditable(false);
 				txtS.setBackground(Color.WHITE);
-				txtS.setBounds(232, 23, 389, 377);
+				txtS.setBounds(322, 23, 460, 396);
 				panel.add(txtS);
 			}
 			{
 				txtIdProducto = new JTextField();
-				txtIdProducto.setBounds(118, 48, 101, 20);
+				txtIdProducto.setBounds(155, 48, 101, 20);
 				panel.add(txtIdProducto);
 				txtIdProducto.setColumns(10);
 			}
 			{
 				txtNombreProducto = new JTextField();
-				txtNombreProducto.setBounds(118, 88, 101, 20);
+				txtNombreProducto.setBounds(155, 84, 101, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
 			}
 			{
 				txtStockProducto = new JTextField();
-				txtStockProducto.setBounds(118, 170, 101, 20);
+				txtStockProducto.setBounds(155, 170, 101, 20);
 				panel.add(txtStockProducto);
 				txtStockProducto.setColumns(10);
 			}
 			{
 				lblNewLabel = new JLabel("ID Producto:");
-				lblNewLabel.setBounds(19, 51, 89, 14);
+				lblNewLabel.setBounds(19, 51, 111, 14);
 				panel.add(lblNewLabel);
 			}
 			{
 				lblConsultaElStock = new JLabel("Nombre Producto:");
-				lblConsultaElStock.setBounds(19, 87, 89, 14);
+				lblConsultaElStock.setBounds(19, 87, 111, 14);
 				panel.add(lblConsultaElStock);
 			}
 			{
 				lblNewLabel_2 = new JLabel("Stock  Producto:");
-				lblNewLabel_2.setBounds(19, 173, 89, 14);
+				lblNewLabel_2.setBounds(19, 173, 111, 14);
 				panel.add(lblNewLabel_2);
 			}
 			{
 				lblNewLabel_1 = new JLabel("Precio Producto:");
-				lblNewLabel_1.setBounds(19, 220, 89, 14);
+				lblNewLabel_1.setBounds(19, 220, 111, 14);
 				panel.add(lblNewLabel_1);
 			}
 			{
 				txtPrecioProducto = new JTextField();
 				txtPrecioProducto.setColumns(10);
-				txtPrecioProducto.setBounds(118, 217, 101, 20);
+				txtPrecioProducto.setBounds(155, 217, 101, 20);
 				panel.add(txtPrecioProducto);
 			}
 			{
 				cbBoxCategoria = new JComboBox();
-				cbBoxCategoria.setBounds(118, 130, 101, 20);
+				cbBoxCategoria.setBounds(155, 130, 101, 20);
 				panel.add(cbBoxCategoria);
 			}
 			{
 				lblNewLabel_3 = new JLabel("Categoría Producto");
-				lblNewLabel_3.setBounds(19, 133, 89, 14);
+				lblNewLabel_3.setBounds(19, 133, 111, 14);
 				panel.add(lblNewLabel_3);
 			}
 			{
@@ -166,7 +166,7 @@ public class V2 extends JFrame implements ActionListener {
 				btnRemoverProducto.setForeground(Color.BLACK);
 				btnRemoverProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnRemoverProducto.setBackground(Color.LIGHT_GRAY);
-				btnRemoverProducto.setBounds(33, 291, 145, 22);
+				btnRemoverProducto.setBounds(33, 341, 145, 22);
 				panel.add(btnRemoverProducto);				
 			}
 		}
@@ -174,19 +174,41 @@ public class V2 extends JFrame implements ActionListener {
 			    "N/A", "Cat1", "Cat2", "Cat3", "Cat4"
 			}));
 		
-		btnCargarProductos = new JButton("Cagar Productos");
+		btnCargarProductos = new JButton("Cargar Productos");
 		btnCargarProductos.addActionListener(this);
 		btnCargarProductos.setBackground(Color.LIGHT_GRAY);
 		btnCargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
-		btnCargarProductos.setBounds(33, 353, 145, 20);
+		btnCargarProductos.setBounds(33, 399, 145, 20);
 		panel.add(btnCargarProductos);
 		
 		btnDescargarProductos = new JButton("Descargar Productos");
 		btnDescargarProductos.addActionListener(this);
 		btnDescargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 		btnDescargarProductos.setBackground(Color.LIGHT_GRAY);
-		btnDescargarProductos.setBounds(33, 323, 145, 20);
+		btnDescargarProductos.setBounds(33, 371, 145, 20);
 		panel.add(btnDescargarProductos);
+		{
+			lblNewLabel_4 = new JLabel("Fecha Produccion:");
+			lblNewLabel_4.setBounds(19, 255, 111, 14);
+			panel.add(lblNewLabel_4);
+		}
+		{
+			lblNewLabel_5 =new JLabel("Fecha Vencimiento:");
+			lblNewLabel_5.setBounds(19, 283, 111, 14);
+			panel.add(lblNewLabel_5);
+		}
+		{
+			txtFechaProduccion = new JTextField();
+			txtFechaProduccion.setBounds(155, 248, 101, 20);
+			panel.add(txtFechaProduccion);
+			txtFechaProduccion.setColumns(10);
+		}
+		{
+			txtFechaVencimiento = new JTextField();
+			txtFechaVencimiento.setColumns(10);
+			txtFechaVencimiento.setBounds(155, 280, 101, 20);
+			panel.add(txtFechaVencimiento);
+		}
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnDescargarProductos) {
@@ -204,6 +226,10 @@ public class V2 extends JFrame implements ActionListener {
 	}
 	
 	ArregloProducto listado = new ArregloProducto();
+	private JLabel lblNewLabel_4;
+	private JLabel lblNewLabel_5;
+	private JTextField txtFechaProduccion;
+	private JTextField txtFechaVencimiento;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
@@ -211,10 +237,12 @@ public class V2 extends JFrame implements ActionListener {
 	        String nom = txtNombreProducto.getText();   
 	        String cat = cbBoxCategoria.getSelectedItem().toString();
 	        int stock = Integer.parseInt(txtStockProducto.getText()); 
+	        String fechaP=txtFechaProduccion.getText();
+	        String fechaV=txtFechaVencimiento.getText();
 	        double precio = Double.parseDouble(txtPrecioProducto.getText()); 
 
 	        
-	        Producto nuevo = new Producto(id, nom, cat, stock, precio);
+	        Producto nuevo = new Producto(id, nom, cat, stock, precio,fechaP,fechaV);
 
 	        ap.Adicionar(nuevo);
 	        listar();
@@ -226,7 +254,14 @@ public class V2 extends JFrame implements ActionListener {
 	        cbBoxCategoria.setSelectedItem("N/A");
 	        txtStockProducto.setText("");
 	        txtPrecioProducto.setText("");
+	        txtFechaProduccion.setText("");
+	        txtFechaVencimiento.setText("");
 	        txtIdProducto.requestFocus();
+	        
+	        if(stock <= 5){
+	            JOptionPane.showMessageDialog(null,
+	                "⚠ Queda poco stock del producto: " + id );}
+	       
 	        }catch (Exception ex) {
 			MensajeEmergente("Error: Revisa los campos");
 			}
@@ -241,6 +276,8 @@ public class V2 extends JFrame implements ActionListener {
 		    imprimir("CATEGORÍA: " + p.getCategoria_prod());
 		    imprimir("STOCK: " + p.getStock_prod());
 		    imprimir("PRECIO: S/. " + p.getPrecio_prod());
+		    imprimir("FECHA PRODUCCION:  " + p.getFechaP_prod());
+		    imprimir("FECHA VENCIMIENTO:  " + p.getFechaV_prod());
 		    imprimir("----------------------");
 		}	
 	void listar() {
@@ -293,14 +330,16 @@ public class V2 extends JFrame implements ActionListener {
 				while ((linea = lector.readLine()) != null) {
 					String[] datos = linea.split(",");
 					
-					if (datos.length == 5) {
+					if (datos.length == 7) {
 						String id = datos[0];
 						String nombre = datos[1];
 						String categoria = datos[2];
 						int stock = Integer.parseInt(datos[3]);
 						double precio = Double.parseDouble(datos[4]);
+						String fechaP = datos[5];
+						String fechaV = datos[6];
 						
-						Producto p = new Producto(id, nombre, categoria, stock, precio);
+						Producto p = new Producto(id, nombre, categoria, stock, precio,fechaP,fechaV);
 						ap.Adicionar(p);
 					}
 					
@@ -348,7 +387,12 @@ public class V2 extends JFrame implements ActionListener {
 					           p.getNombre_prod() + "," + 
 					           p.getCategoria_prod() + "," + 
 					           p.getStock_prod() + "," + 
+					           p.getFechaP_prod() + "," + 
+					           p.getFechaV_prod() + "," + 
 					           p.getPrecio_prod());
+					
+					           
+					
 				}
 				imprimidor.close();
 				MensajeEmergente("¡Productos guardados exitosamente en \n" + archivo.getName() +  "!");
@@ -361,7 +405,4 @@ public class V2 extends JFrame implements ActionListener {
 		
 		
 	}
-	
-	
-	
 	}
