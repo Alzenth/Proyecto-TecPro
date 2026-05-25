@@ -20,6 +20,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 
 public class V2 extends JFrame implements ActionListener {
 
@@ -41,6 +49,8 @@ public class V2 extends JFrame implements ActionListener {
 	private JComboBox cbBoxCategoria;
 	private JLabel lblNewLabel_3;
 	private JButton btnRemoverProducto;
+	private JButton btnCargarProductos;
+	private JButton btnDescargarProductos;
 
 	/**
 	 * Launch the application.
@@ -86,67 +96,68 @@ public class V2 extends JFrame implements ActionListener {
 			{
 				lblMenu = new JLabel("Menú: Registro de productos");
 				lblMenu.setFont(new Font("Dubai", Font.BOLD, 14));
-				lblMenu.setBounds(0, 0, 219, 22);
+				lblMenu.setBounds(10, 0, 219, 22);
 				panel.add(lblMenu);
 			}
 			{
 				txtS = new JTextArea();
+				txtS.setEditable(false);
 				txtS.setBackground(Color.WHITE);
 				txtS.setBounds(232, 23, 389, 377);
 				panel.add(txtS);
 			}
 			{
 				txtIdProducto = new JTextField();
-				txtIdProducto.setBounds(99, 49, 101, 20);
+				txtIdProducto.setBounds(118, 48, 101, 20);
 				panel.add(txtIdProducto);
 				txtIdProducto.setColumns(10);
 			}
 			{
 				txtNombreProducto = new JTextField();
-				txtNombreProducto.setBounds(99, 89, 101, 20);
+				txtNombreProducto.setBounds(118, 88, 101, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
 			}
 			{
 				txtStockProducto = new JTextField();
-				txtStockProducto.setBounds(99, 171, 101, 20);
+				txtStockProducto.setBounds(118, 170, 101, 20);
 				panel.add(txtStockProducto);
 				txtStockProducto.setColumns(10);
 			}
 			{
 				lblNewLabel = new JLabel("ID Producto:");
-				lblNewLabel.setBounds(0, 52, 89, 14);
+				lblNewLabel.setBounds(19, 51, 89, 14);
 				panel.add(lblNewLabel);
 			}
 			{
 				lblConsultaElStock = new JLabel("Nombre Producto:");
-				lblConsultaElStock.setBounds(0, 88, 89, 14);
+				lblConsultaElStock.setBounds(19, 87, 89, 14);
 				panel.add(lblConsultaElStock);
 			}
 			{
 				lblNewLabel_2 = new JLabel("Stock  Producto:");
-				lblNewLabel_2.setBounds(0, 174, 89, 14);
+				lblNewLabel_2.setBounds(19, 173, 89, 14);
 				panel.add(lblNewLabel_2);
 			}
 			{
 				lblNewLabel_1 = new JLabel("Precio Producto:");
-				lblNewLabel_1.setBounds(0, 221, 89, 14);
+				lblNewLabel_1.setBounds(19, 220, 89, 14);
 				panel.add(lblNewLabel_1);
 			}
 			{
 				txtPrecioProducto = new JTextField();
 				txtPrecioProducto.setColumns(10);
-				txtPrecioProducto.setBounds(99, 218, 101, 20);
+				txtPrecioProducto.setBounds(118, 217, 101, 20);
 				panel.add(txtPrecioProducto);
 			}
 			{
 				cbBoxCategoria = new JComboBox();
-				cbBoxCategoria.setBounds(99, 131, 101, 20);
+				cbBoxCategoria.setBounds(118, 130, 101, 20);
 				panel.add(cbBoxCategoria);
 			}
 			{
 				lblNewLabel_3 = new JLabel("Categoría Producto");
-				lblNewLabel_3.setBounds(0, 134, 89, 14);
+				lblNewLabel_3.setBounds(19, 133, 89, 14);
 				panel.add(lblNewLabel_3);
 			}
 			{
@@ -162,8 +173,28 @@ public class V2 extends JFrame implements ActionListener {
 		cbBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[] {
 			    "N/A", "Cat1", "Cat2", "Cat3", "Cat4"
 			}));
+		
+		btnCargarProductos = new JButton("Cagar Productos");
+		btnCargarProductos.addActionListener(this);
+		btnCargarProductos.setBackground(Color.LIGHT_GRAY);
+		btnCargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+		btnCargarProductos.setBounds(33, 353, 145, 20);
+		panel.add(btnCargarProductos);
+		
+		btnDescargarProductos = new JButton("Descargar Productos");
+		btnDescargarProductos.addActionListener(this);
+		btnDescargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+		btnDescargarProductos.setBackground(Color.LIGHT_GRAY);
+		btnDescargarProductos.setBounds(33, 323, 145, 20);
+		panel.add(btnDescargarProductos);
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnDescargarProductos) {
+			do_btnDescargarProductos_actionPerformed(e);
+		}
+		if (e.getSource() == btnCargarProductos) {
+			do_btnCargarProductos_actionPerformed(e);
+		}
 		if (e.getSource() == btnRemoverProducto) {
 			do_btnRemoverProducto_actionPerformed(e);
 		}
@@ -171,6 +202,9 @@ public class V2 extends JFrame implements ActionListener {
 			do_btnAgregarProducto_actionPerformed(e);
 		}
 	}
+	
+	ArregloProducto listado = new ArregloProducto();
+	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
 			String id = txtIdProducto.getText();    
@@ -242,4 +276,92 @@ public class V2 extends JFrame implements ActionListener {
 				MensajeEmergente("Error al eliminar producto!");
 			}
 		}
+	protected void do_btnCargarProductos_actionPerformed(ActionEvent e) {
+		
+		try {
+			
+			JFileChooser archivo_elegido = new JFileChooser();
+			archivo_elegido.setDialogTitle("Seleccionar archivo de productos");
+			int seleccionado = archivo_elegido.showOpenDialog(this);
+			if (seleccionado == JFileChooser.APPROVE_OPTION) {
+				File archivo = archivo_elegido.getSelectedFile();
+				BufferedReader lector = new BufferedReader(new FileReader(archivo));
+				String linea;
+				
+				ap = new ArregloProducto();
+				
+				while ((linea = lector.readLine()) != null) {
+					String[] datos = linea.split(",");
+					
+					if (datos.length == 5) {
+						String id = datos[0];
+						String nombre = datos[1];
+						String categoria = datos[2];
+						int stock = Integer.parseInt(datos[3]);
+						double precio = Double.parseDouble(datos[4]);
+						
+						Producto p = new Producto(id, nombre, categoria, stock, precio);
+						ap.Adicionar(p);
+					}
+					
+					
+				}
+				lector.close();
+				
+				listar();
+				MensajeEmergente("¡Productos cargados exitosamente!");
+			
+			}
+			
+		
+		}catch (Exception ex) {
+			MensajeEmergente("Error al cargar los productos,su archivo debe ser de formato texto intente nuevamente!");
+		}
+		
+	}
+	
+
+	protected void do_btnDescargarProductos_actionPerformed(ActionEvent e) {
+		
+		if (ap.Tamaño() == 0) {
+			MensajeEmergente("¡El inventario está vacío! No hay productos para descargar.");
+			return;
+		}
+		try {
+			JFileChooser archivo_elegido = new JFileChooser();
+			archivo_elegido.setDialogTitle("Guardar inventario de productos");
+			int seleccionado = archivo_elegido.showSaveDialog(this);
+			
+			if (seleccionado == JFileChooser.APPROVE_OPTION) {
+				File archivo = archivo_elegido.getSelectedFile();
+				
+				if (!archivo.getName().toLowerCase().endsWith(".txt")) {
+					archivo = new File(archivo.getAbsolutePath() + ".txt");
+					
+				}
+				
+				PrintWriter imprimidor = new PrintWriter(new FileWriter(archivo));
+				
+				for (int i =0;i < ap.Tamaño(); i++) {
+					Producto p = ap.Obtener(i);
+					imprimidor.println(p.getId_prod() + "," + 
+					           p.getNombre_prod() + "," + 
+					           p.getCategoria_prod() + "," + 
+					           p.getStock_prod() + "," + 
+					           p.getPrecio_prod());
+				}
+				imprimidor.close();
+				MensajeEmergente("¡Productos guardados exitosamente en \n" + archivo.getName() +  "!");
+			}
+			
+		}catch (Exception ex) {
+			//MensajeEmergente("Error al cargar los productos!");
+			MensajeEmergente("Error al descargar los productos: "+ex.getMessage());
+		}
+		
+		
+	}
+	
+	
+	
 	}
