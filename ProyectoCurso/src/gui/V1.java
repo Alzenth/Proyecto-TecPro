@@ -219,35 +219,58 @@ public class V1 extends JFrame implements ActionListener {
 	private JButton btnBuscar;
 	private JButton btnModificar;
 	
-	protected void do_btnNewButton_actionPerformed(ActionEvent e) {//BOTON ADICIONAR
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() ||
-		        txtDNI.getText().isEmpty() || txtTelefono.getText().isEmpty() ||
-		        txtCorreo.getText().isEmpty()) {
+	            txtDNI.getText().isEmpty() || txtTelefono.getText().isEmpty() ||
+	            txtCorreo.getText().isEmpty()) {
 
-		        JOptionPane.showMessageDialog(null, "Complete todos los campos");
-		        limpiartxt();
-		        return;
-		    }
-		
-		try {
-		
-        Cliente c = a.Buscar(txtDNI.getText());
-        if(c==null) {
-            Cliente es1=new Cliente(txtNombre.getText(),txtApellido.getText(), txtDNI.getText(), 
-                    txtTelefono.getText(), txtCorreo.getText());
-            
-            a.Adicionar(es1);
-            }
-        else
-		{
-			JOptionPane.showMessageDialog(null, "EL CLIENTE YA ESTA REGISTRADO");}
-        
-        limpiartxt();
-		
-		} catch (Exception ex) {
-			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado", "Error",JOptionPane.ERROR_MESSAGE);
-		}
+	            JOptionPane.showMessageDialog(null, "Complete todos los campos");
+	            limpiartxt();
+	            return;
+	        }
+	    
+	    try {
+	    
+	        Cliente c = a.Buscar(txtDNI.getText());
+	        if(c == null) {
+	            Cliente es1 = new Cliente(txtNombre.getText(), txtApellido.getText(), txtDNI.getText(), 
+	                                txtTelefono.getText(), txtCorreo.getText());
+	            
+	            a.Adicionar(es1);
+	          
+	            String nombreCompleto = txtNombre.getText().trim();
+	            String primerNombre = nombreCompleto.split(" ")[0]; 
+	            
+	            // 
+	            txtS.setText(""); 
+	            txtS.append("=========================================================================\n");
+	            txtS.append("                  ¡BIENVENIDO(A) A LA TIENDA DE POSTRES!                 \n");
+	            txtS.append("=========================================================================\n\n");
+	            txtS.append("  Holi " + primerNombre + ", tu cuenta ha sido validada e iniciaste sesión correctamente.\n\n");
+	            txtS.append("=========================================================================\n");
+	            
+	        
+	            int respuesta = JOptionPane.showConfirmDialog(null, 
+	                "¿Deseas ir al catálogo de postres ahora mismo, " + primerNombre + "?", 
+	                "Acceso Rápido a Góndola", 
+	                JOptionPane.YES_NO_OPTION, 
+	                JOptionPane.INFORMATION_MESSAGE);
+	            
+	            if (respuesta == JOptionPane.YES_OPTION) {
+	                JOptionPane.showMessageDialog(null, "Redirigiendo a la Góndola de Postres... ¡Disfruta tu elección!");
+	            }
+	            
+	        } else {
+	            JOptionPane.showMessageDialog(null, "EL CLIENTE YA ESTA REGISTRADO");
+	        }
+	        
+	        limpiartxt();
+	    
+	    } catch (Exception ex) {
+	        javax.swing.JOptionPane.showMessageDialog(null, "Ocurrió un error en el registro", "Error", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+	
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
 		try {
 			txtS.setText(""); // limpiar el área

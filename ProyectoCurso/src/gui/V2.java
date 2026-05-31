@@ -117,6 +117,12 @@ public class V2 extends JFrame implements ActionListener {
 				txtNombreProducto.setBounds(155, 84, 101, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
+				txtNombreProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyReleased(java.awt.event.KeyEvent evt) {
+						calcularPrecioPorTamañoYTopping();
+					}
+				});
+			}
 			}
 			{
 				txtStockProducto = new JTextField();
@@ -169,10 +175,18 @@ public class V2 extends JFrame implements ActionListener {
 				btnRemoverProducto.setBounds(33, 341, 145, 22);
 				panel.add(btnRemoverProducto);				
 			}
+			
+	
+
+	cbBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[] {
+		"Seleccione Tamaño", "Personal", "Familiar"
+	}));
+	
+	cbBoxCategoria.addActionListener(new java.awt.event.ActionListener() {
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			calcularPrecioPorTamañoYTopping();
 		}
-		cbBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[] {
-			    "N/A", "Cat1", "Cat2", "Cat3", "Cat4"
-			}));
+	});	    
 		
 		btnCargarProductos = new JButton("Cargar Productos");
 		btnCargarProductos.addActionListener(this);
@@ -405,4 +419,42 @@ public class V2 extends JFrame implements ActionListener {
 		
 		
 	}
+	
+		void calcularPrecioPorTamañoYTopping() {
+			String tamaño = cbBoxCategoria.getSelectedItem().toString();
+			double precioBase = 0.0;
+			double costoToppings = 0.0;
+			
+			
+			if (tamaño.equals("Personal")) {
+				precioBase = 15.00;
+			} else if (tamaño.equals("Familiar")) {
+				precioBase = 35.00;
+			}
+			
+			
+			if (!txtNombreProducto.getText().trim().isEmpty()) {
+				costoToppings = 4.50; 
+			}
+			
+			double precioFinal = precioBase + costoToppings;
+			
+			if (precioFinal > 0) {
+				txtPrecioProducto.setText(String.valueOf(precioFinal));
+				
+				txtS.setText("");
+				txtS.append("=====================================\n");
+				txtS.append("       DETALLE DE POSTRE ARMADO      \n");
+				txtS.append("=====================================\n");
+				txtS.append(" Tamaño elegido: " + tamaño + " (S/. " + precioBase + ")\n");
+				if (costoToppings > 0) {
+					txtS.append(" Toppings Extras: Activado (S/. " + costoToppings + ")\n");
+				}
+				txtS.append("-------------------------------------\n");
+				txtS.append(" PRECIO TOTAL ACTUALIZADO: S/. " + precioFinal + "\n");
+				txtS.append("=====================================\n");
+			} else {
+				txtPrecioProducto.setText("");
+			}
+		}
 	}
