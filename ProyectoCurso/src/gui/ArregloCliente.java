@@ -29,14 +29,15 @@ public class ArregloCliente {
 		}
 		return null;
 	}
-	public Cliente Buscar(String dni) {
+	public Cliente Buscar(String dato) {
 		for (int i = 0; i <Tamaño(); i++) {
-			if (Obtener(i).getDni().equals(dni)) {
+			if (Obtener(i).getDni().equals(dato)) {
 	            return Obtener(i);
 	        }
 		}
 		return null;
 	}
+
 }
 
 

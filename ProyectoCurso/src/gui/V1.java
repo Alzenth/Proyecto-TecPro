@@ -58,7 +58,7 @@ public class V1 extends JFrame implements ActionListener {
 	public V1() {
 		setBackground(SystemColor.inactiveCaption);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 880, 499);
+		setBounds(100, 100, 1046, 499);
 		contentPane = new JPanel();
 		contentPane.setForeground(new Color(243, 244, 246));
 		contentPane.setBackground(new Color(243, 244, 246));
@@ -169,7 +169,7 @@ public class V1 extends JFrame implements ActionListener {
 			txtS = new JTextArea();
 			txtS.setEditable(false);
 			txtS.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-			txtS.setBounds(20, 148, 836, 304);
+			txtS.setBounds(20, 148, 989, 304);
 			contentPane.add(txtS);
 		}
 		{
@@ -189,11 +189,23 @@ public class V1 extends JFrame implements ActionListener {
 			btnModificar.setBounds(725, 109, 112, 28);
 			contentPane.add(btnModificar);
 		}
+		{
+			btnModificarHorario = new JButton("Modificar Horario");
+			btnModificarHorario.addActionListener(this);
+			btnModificarHorario.setForeground(Color.WHITE);
+			btnModificarHorario.setFont(new Font("Segoe UI", Font.BOLD, 14));
+			btnModificarHorario.setBackground(new Color(37, 99, 235));
+			btnModificarHorario.setBounds(845, 109, 165, 28);
+			contentPane.add(btnModificarHorario);
+		}
 		Encabezado();
 		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnModificarHorario) {
+			do_btnModificarHorario_actionPerformed(e);
+		}
 		if (e.getSource() == btnModificar) {
 			do_btnNewButton_4_actionPerformed(e);
 		}
@@ -233,7 +245,7 @@ public class V1 extends JFrame implements ActionListener {
 	    
 	        Cliente c = a.Buscar(txtDNI.getText());
 	        if(c == null) {
-	            Cliente es1 = new Cliente(txtNombre.getText(), txtApellido.getText(), txtDNI.getText(), 
+	            Cliente es1 = new Cliente(txtDNI.getText(),txtNombre.getText(), txtNombre.getText(),txtApellido.getText(), txtDNI.getText(), 
 	                                txtTelefono.getText(), txtCorreo.getText());
 	            
 	            a.Adicionar(es1);
@@ -249,7 +261,14 @@ public class V1 extends JFrame implements ActionListener {
 	            txtS.append("  Holi " + primerNombre + ", tu cuenta ha sido validada e iniciaste sesión correctamente.\n\n");
 	            txtS.append("=========================================================================\n");
 	            
-	        
+	            JOptionPane.showMessageDialog(
+	            	    null,
+	            	    "Horario de Atención\n\n" +
+	            	    "Hora de Ingreso: " + horaIngreso +
+	            	    "\nHora de cierre: " + horaSalida);
+	            
+	            
+	            
 	            int respuesta = JOptionPane.showConfirmDialog(null, 
 	                "¿Deseas ir al catálogo de postres ahora mismo, " + primerNombre + "?", 
 	                "Acceso Rápido a Góndola", 
@@ -353,6 +372,15 @@ public class V1 extends JFrame implements ActionListener {
 		txtDNI.setText("");
 		txtCorreo.setText("");
 		txtTelefono.setText("");
+	}
+	public static String horaIngreso = "08:00";
+	public static String horaSalida = "18:00";
+	private JButton btnModificarHorario;
+	
+	protected void do_btnModificarHorario_actionPerformed(ActionEvent e) {
+		Vmodihorario ventana = new Vmodihorario();
+		ventana.setVisible(true);
+		
 	}
 }
 	

@@ -1,12 +1,15 @@
 package gui;
 
-public class Cliente {
+public class Cliente extends Usuario{
 	private String nombre;
 	private String apellido;
 	private String dni;
 	private String numero;
 	private String correo;
-	public Cliente(String nombre, String apellido, String dni, String numero, String correo) { 
+	
+	public Cliente(String usuario, String contraseña, String nombre, String apellido, String dni, String numero,
+			String correo) {
+		super(usuario, contraseña);
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
@@ -43,10 +46,5 @@ public class Cliente {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	
-	
-	
-	
-	
 
 }
