@@ -1,4 +1,4 @@
-package gui;
+package Constructores;
 
 public class Cliente extends Usuario{
 	private String nombre;
@@ -46,5 +46,7 @@ public class Cliente extends Usuario{
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+	
+	
 
 }

@@ -1,4 +1,4 @@
-package gui;
+package Constructores;
 
 public class Empleado extends Usuario{
 	private String nombre, apellido, cargo, telefono, correo;

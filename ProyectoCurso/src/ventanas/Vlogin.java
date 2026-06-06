@@ -6,11 +6,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.ArregloCliente;
-import gui.ArregloEmpleado;
-import gui.Cliente;
-import gui.Empleado;
-import gui.V2;
+import Clases.ArregloCliente;
+import Clases.ArregloEmpleado;
+import Constructores.Cliente;
+import Constructores.Empleado;
+import admin.VGestionProductos;
+import cliente.Vbienvenida;
+import cliente.Vcatalogo;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -301,6 +303,9 @@ public class Vlogin extends JFrame implements ActionListener {
 		
 		String usuario = txtusuario.getText();
 	    String contr = txtcontra.getText();
+	    
+	    
+	    
 
 	    if (txtusuario.getText().isEmpty()||txtcontra.getText().isEmpty())
 	    {
@@ -312,10 +317,18 @@ public class Vlogin extends JFrame implements ActionListener {
 	        Cliente cli = c.Buscar(usuario);
 
 	        if (cli != null && cli.getContraseña().equals(contr)) {
-
-	            Vcliente vc = new Vcliente(cli.getNombre());
+	        		Vcatalogo cat = new Vcatalogo();
+	        		cat.setLocationRelativeTo(null);
+	        		cat.setVisible(true);
+	        		this.dispose();
+	        		
+	        		
+	        		
+	        		
+	            Vbienvenida vc = new Vbienvenida(cli.getNombre());
+	            vc.setLocationRelativeTo(this);
 	            vc.setVisible(true);
-	            dispose();
+	            
 	            return;
 	        }
 
@@ -323,7 +336,7 @@ public class Vlogin extends JFrame implements ActionListener {
 
 	        if (emp != null && emp.getContraseña().equals(contr)) {
 
-	            V2 ve = new V2();
+	            VGestionProductos ve = new VGestionProductos();
 	            ve.setVisible(true);
 	            dispose();
 	            return;

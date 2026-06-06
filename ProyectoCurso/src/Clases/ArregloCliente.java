@@ -1,6 +1,8 @@
-package gui;
+package Clases;
 
 import java.util.ArrayList;
+import Constructores.Cliente;
+
 
 public class ArregloCliente {
 	private ArrayList<Cliente> c;

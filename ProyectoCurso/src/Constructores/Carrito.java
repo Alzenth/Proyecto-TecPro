@@ -1,4 +1,4 @@
-package gui;
+package Constructores;
 
 public class Carrito {
 	private int dni, id_cliente;

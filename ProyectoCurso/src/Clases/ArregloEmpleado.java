@@ -1,6 +1,10 @@
-package gui;
+package Clases;
+
 
 import java.util.ArrayList;
+import Constructores.Empleado;
+
+
 
 public class ArregloEmpleado {
 	Empleado admin=new Empleado("Admin","12345678","pepe","perez","dueño","909090909","pepepez@gmail.com");

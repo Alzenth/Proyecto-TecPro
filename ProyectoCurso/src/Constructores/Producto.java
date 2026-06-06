@@ -1,4 +1,4 @@
-package gui;
+package Constructores;
 
 public class Producto {
 	private String id_prod;

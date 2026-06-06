@@ -1,10 +1,14 @@
-package gui;
+package admin;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Clases.ArregloProducto;
+import Constructores.Producto;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -29,7 +33,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-public class V2 extends JFrame implements ActionListener {
+public class VGestionProductos extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -59,7 +63,7 @@ public class V2 extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					V2 frame = new V2();
+					VGestionProductos frame = new VGestionProductos();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -71,9 +75,9 @@ public class V2 extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public V2() {
+	public VGestionProductos() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 808, 469);
+		setBounds(100, 100, 808, 506);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,7 +85,7 @@ public class V2 extends JFrame implements ActionListener {
 		{
 			panel = new JPanel();
 			panel.setBackground(SystemColor.inactiveCaption);
-			panel.setBounds(0, 0, 792, 430);
+			panel.setBounds(0, 0, 792, 469);
 			contentPane.add(panel);
 			panel.setLayout(null);
 			{
@@ -90,11 +94,11 @@ public class V2 extends JFrame implements ActionListener {
 				btnAgregarProducto.setForeground(Color.BLACK);
 				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
-				btnAgregarProducto.setBounds(33, 308, 145, 22);
+				btnAgregarProducto.setBounds(65, 307, 145, 22);
 				panel.add(btnAgregarProducto);
 			}
 			{
-				lblMenu = new JLabel("Menú: Registro de productos");
+				lblMenu = new JLabel("Menú: Gestión de productos");
 				lblMenu.setFont(new Font("Dubai", Font.BOLD, 14));
 				lblMenu.setBounds(10, 0, 219, 22);
 				panel.add(lblMenu);
@@ -172,7 +176,7 @@ public class V2 extends JFrame implements ActionListener {
 				btnRemoverProducto.setForeground(Color.BLACK);
 				btnRemoverProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnRemoverProducto.setBackground(Color.LIGHT_GRAY);
-				btnRemoverProducto.setBounds(33, 341, 145, 22);
+				btnRemoverProducto.setBounds(65, 339, 145, 22);
 				panel.add(btnRemoverProducto);				
 			}
 			
@@ -192,14 +196,14 @@ public class V2 extends JFrame implements ActionListener {
 		btnCargarProductos.addActionListener(this);
 		btnCargarProductos.setBackground(Color.LIGHT_GRAY);
 		btnCargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
-		btnCargarProductos.setBounds(33, 399, 145, 20);
+		btnCargarProductos.setBounds(65, 399, 145, 20);
 		panel.add(btnCargarProductos);
 		
 		btnDescargarProductos = new JButton("Descargar Productos");
 		btnDescargarProductos.addActionListener(this);
 		btnDescargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 		btnDescargarProductos.setBackground(Color.LIGHT_GRAY);
-		btnDescargarProductos.setBounds(33, 371, 145, 20);
+		btnDescargarProductos.setBounds(65, 369, 145, 20);
 		panel.add(btnDescargarProductos);
 		{
 			lblNewLabel_4 = new JLabel("Fecha Produccion:");
@@ -223,8 +227,20 @@ public class V2 extends JFrame implements ActionListener {
 			txtFechaVencimiento.setBounds(155, 280, 101, 20);
 			panel.add(txtFechaVencimiento);
 		}
+		{
+			btnNewButton = new JButton("Regresar");
+			btnNewButton.addActionListener(this);
+			btnNewButton.setForeground(Color.WHITE);
+			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+			btnNewButton.setBackground(Color.RED);
+			btnNewButton.setBounds(636, 429, 146, 23);
+			panel.add(btnNewButton);
+		}
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton) {
+			do_btnNewButton_actionPerformed(e);
+		}
 		if (e.getSource() == btnDescargarProductos) {
 			do_btnDescargarProductos_actionPerformed(e);
 		}
@@ -244,6 +260,7 @@ public class V2 extends JFrame implements ActionListener {
 	private JLabel lblNewLabel_5;
 	private JTextField txtFechaProduccion;
 	private JTextField txtFechaVencimiento;
+	private JButton btnNewButton;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
@@ -457,4 +474,12 @@ public class V2 extends JFrame implements ActionListener {
 				txtPrecioProducto.setText("");
 			}
 		}
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+		VOpcion opcion  = new VOpcion();
+		opcion.setLocationRelativeTo(null); 
+		opcion.setVisible(true);
+		dispose();
+	}
+	
+	
 	}

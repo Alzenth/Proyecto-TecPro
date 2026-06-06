@@ -1,4 +1,4 @@
-package gui;
+package Constructores;
 
 public class Usuario {
 	private String usuario;

@@ -1,6 +1,7 @@
-package gui;
+package Clases;
 
 import java.util.ArrayList;
+import Constructores.Producto;
 
 public class ArregloProducto {
 	private ArrayList<Producto> p;

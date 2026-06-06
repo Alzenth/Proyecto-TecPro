@@ -1,6 +1,8 @@
-package gui;
+package Clases;
+
 
 import java.awt.BorderLayout;
+import Constructores.Producto;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
