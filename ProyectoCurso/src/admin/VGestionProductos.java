@@ -94,7 +94,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				btnAgregarProducto.setForeground(Color.BLACK);
 				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
-				btnAgregarProducto.setBounds(65, 307, 145, 22);
+				btnAgregarProducto.setBounds(65, 307, 145, 20);
 				panel.add(btnAgregarProducto);
 			}
 			{
@@ -118,7 +118,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			}
 			{
 				txtNombreProducto = new JTextField();
-				txtNombreProducto.setBounds(155, 84, 101, 20);
+				txtNombreProducto.setBounds(155, 69, 101, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
 				txtNombreProducto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -130,7 +130,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			}
 			{
 				txtStockProducto = new JTextField();
-				txtStockProducto.setBounds(155, 170, 101, 20);
+				txtStockProducto.setBounds(155, 190, 101, 20);
 				panel.add(txtStockProducto);
 				txtStockProducto.setColumns(10);
 			}
@@ -141,12 +141,12 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			}
 			{
 				lblConsultaElStock = new JLabel("Nombre Producto:");
-				lblConsultaElStock.setBounds(19, 87, 111, 14);
+				lblConsultaElStock.setBounds(19, 72, 111, 14);
 				panel.add(lblConsultaElStock);
 			}
 			{
 				lblNewLabel_2 = new JLabel("Stock  Producto:");
-				lblNewLabel_2.setBounds(19, 173, 111, 14);
+				lblNewLabel_2.setBounds(19, 193, 111, 14);
 				panel.add(lblNewLabel_2);
 			}
 			{
@@ -162,12 +162,12 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			}
 			{
 				cbBoxCategoria = new JComboBox();
-				cbBoxCategoria.setBounds(155, 130, 101, 20);
+				cbBoxCategoria.setBounds(155, 93, 101, 20);
 				panel.add(cbBoxCategoria);
 			}
 			{
-				lblNewLabel_3 = new JLabel("Categoría Producto");
-				lblNewLabel_3.setBounds(19, 133, 111, 14);
+				lblNewLabel_3 = new JLabel("Categoría Producto:");
+				lblNewLabel_3.setBounds(19, 96, 111, 14);
 				panel.add(lblNewLabel_3);
 			}
 			{
@@ -176,7 +176,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				btnRemoverProducto.setForeground(Color.BLACK);
 				btnRemoverProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnRemoverProducto.setBackground(Color.LIGHT_GRAY);
-				btnRemoverProducto.setBounds(65, 339, 145, 22);
+				btnRemoverProducto.setBounds(65, 339, 145, 20);
 				panel.add(btnRemoverProducto);				
 			}
 			
@@ -206,7 +206,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		btnDescargarProductos.setBounds(65, 369, 145, 20);
 		panel.add(btnDescargarProductos);
 		{
-			lblNewLabel_4 = new JLabel("Fecha Produccion:");
+			lblNewLabel_4 = new JLabel("Fecha Producción:");
 			lblNewLabel_4.setBounds(19, 255, 111, 14);
 			panel.add(lblNewLabel_4);
 		}
@@ -236,6 +236,17 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			btnNewButton.setBounds(636, 429, 146, 23);
 			panel.add(btnNewButton);
 		}
+		{
+			lblNewLabel_6 = new JLabel("Descripción Producto:");
+			lblNewLabel_6.setBounds(19, 126, 111, 14);
+			panel.add(lblNewLabel_6);
+		}
+		{
+			txtDescripcionProducto = new JTextField();
+			txtDescripcionProducto.setColumns(10);
+			txtDescripcionProducto.setBounds(155, 123, 101, 57);
+			panel.add(txtDescripcionProducto);
+		}
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNewButton) {
@@ -261,19 +272,23 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	private JTextField txtFechaProduccion;
 	private JTextField txtFechaVencimiento;
 	private JButton btnNewButton;
+	private JLabel lblNewLabel_6;
+	private JTextField txtDescripcionProducto;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
 			String id = txtIdProducto.getText();    
 	        String nom = txtNombreProducto.getText();   
 	        String cat = cbBoxCategoria.getSelectedItem().toString();
+	        String desc = txtDescripcionProducto.getText();   
+
 	        int stock = Integer.parseInt(txtStockProducto.getText()); 
 	        String fechaP=txtFechaProduccion.getText();
 	        String fechaV=txtFechaVencimiento.getText();
 	        double precio = Double.parseDouble(txtPrecioProducto.getText()); 
 
 	        
-	        Producto nuevo = new Producto(id, nom, cat, stock, precio,fechaP,fechaV);
+	        Producto nuevo = new Producto(id, nom, cat, desc, stock, precio,fechaP,fechaV);
 
 	        ap.Adicionar(nuevo);
 	        listar();
@@ -361,16 +376,17 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				while ((linea = lector.readLine()) != null) {
 					String[] datos = linea.split(",");
 					
-					if (datos.length == 7) {
+					if (datos.length == 8) {
 						String id = datos[0];
 						String nombre = datos[1];
 						String categoria = datos[2];
-						int stock = Integer.parseInt(datos[3]);
-						double precio = Double.parseDouble(datos[4]);
-						String fechaP = datos[5];
-						String fechaV = datos[6];
+						String desc = datos[3];
+						int stock = Integer.parseInt(datos[4]);
+						double precio = Double.parseDouble(datos[5]);
+						String fechaP = datos[6];
+						String fechaV = datos[7];
 						
-						Producto p = new Producto(id, nombre, categoria, stock, precio,fechaP,fechaV);
+						Producto p = new Producto(id, nombre, categoria, desc, stock, precio, fechaP, fechaV);
 						ap.Adicionar(p);
 					}
 					
@@ -417,6 +433,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 					imprimidor.println(p.getId_prod() + "," + 
 					           p.getNombre_prod() + "," + 
 					           p.getCategoria_prod() + "," + 
+					           p.getDescripcion_prod() + "," + 
 					           p.getStock_prod() + "," + 
 					           p.getFechaP_prod() + "," + 
 					           p.getFechaV_prod() + "," + 
@@ -480,6 +497,4 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		opcion.setVisible(true);
 		dispose();
 	}
-	
-	
 	}

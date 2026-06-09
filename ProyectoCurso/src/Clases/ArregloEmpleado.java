@@ -7,7 +7,7 @@ import Constructores.Empleado;
 
 
 public class ArregloEmpleado {
-	Empleado admin=new Empleado("Admin","12345678","pepe","perez","dueño","909090909","pepepez@gmail.com");
+	Empleado admin=new Empleado("Admin","12345678","pepe","perez","909090909","pepepez@gmail.com", true);
 	private ArrayList<Empleado> e;
 	public ArregloEmpleado() {
 		e = new ArrayList<Empleado>();
