@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import Conexion.ConexionBD;
+import conexion.ConexionBD;
 
 import java.awt.event.ActionEvent;
 
@@ -164,7 +164,7 @@ public class VRegistro extends JFrame implements ActionListener{
 		return;
 	}
 
-	Clases.ArregloCliente c=new Clases.ArregloCliente();
+	clases.ArregloCliente c=new clases.ArregloCliente();
 	private JButton btnNewButton_2;
 	
 	

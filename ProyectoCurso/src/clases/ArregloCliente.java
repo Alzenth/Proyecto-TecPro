@@ -1,7 +1,8 @@
-package Clases;
+package clases;
 
 import java.util.ArrayList;
-import Constructores.Cliente;
+
+import constructores.Cliente;
 
 
 public class ArregloCliente {

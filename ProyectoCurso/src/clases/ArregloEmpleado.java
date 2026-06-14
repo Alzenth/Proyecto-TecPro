@@ -1,8 +1,9 @@
-package Clases;
+package clases;
 
 
 import java.util.ArrayList;
-import Constructores.Empleado;
+
+import constructores.Empleado;
 
 
 

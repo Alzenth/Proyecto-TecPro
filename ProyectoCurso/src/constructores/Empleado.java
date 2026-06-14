@@ -1,4 +1,4 @@
-package Constructores;
+package constructores;
 
 public class Empleado extends Usuario{
 	private String nombre, apellido, telefono, correo;

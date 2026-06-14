@@ -1,7 +1,7 @@
-package Clases;
+package clases;
 
-import Constructores.Carrito;
-import Constructores.Cliente;
+import constructores.Carrito;
+import constructores.Cliente;
 
 public class Intermediario {
 	

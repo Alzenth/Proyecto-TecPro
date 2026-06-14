@@ -1,4 +1,4 @@
-package Constructores;
+package constructores;
 
 public class Lote {
 

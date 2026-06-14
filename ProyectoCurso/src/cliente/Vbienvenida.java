@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Clases.Intermediario;
+import clases.Intermediario;
 
 import javax.swing.JLabel;
 import java.awt.Font;

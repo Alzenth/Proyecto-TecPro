@@ -6,11 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Conexion.ConexionBD;
-import Constructores.Cliente;
-import Constructores.Empleado;
 import admin.VOpcion;
 import cliente.Vcatalogo;
+import conexion.ConexionBD;
+import constructores.Cliente;
+import constructores.Empleado;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -101,8 +101,8 @@ public class Vlogin extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel);
 
 	}
-	Clases.ArregloCliente c = new Clases.ArregloCliente();
-	Clases.ArregloEmpleado em=new Clases.ArregloEmpleado();
+	clases.ArregloCliente c = new clases.ArregloCliente();
+	clases.ArregloEmpleado em=new clases.ArregloEmpleado();
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnIngresar) {
 			do_btnIngresar_actionPerformed(e);

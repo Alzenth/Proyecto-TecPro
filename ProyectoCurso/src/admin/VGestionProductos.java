@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Clases.ArregloProducto;
-import Constructores.Producto;
+import clases.ArregloProducto;
+import constructores.Producto;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

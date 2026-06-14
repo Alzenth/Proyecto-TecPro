@@ -1,7 +1,8 @@
-package Clases;
+package clases;
 
 import java.util.ArrayList;
-import Constructores.Producto;
+
+import constructores.Producto;
 
 public class ArregloProducto {
 	private ArrayList<Producto> p;

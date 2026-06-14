@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Clases.ArregloCliente;
-import Constructores.Cliente;
+import clases.ArregloCliente;
+import constructores.Cliente;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

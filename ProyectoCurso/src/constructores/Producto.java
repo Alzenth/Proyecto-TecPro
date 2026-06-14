@@ -1,4 +1,4 @@
-package Constructores;
+package constructores;
 
 public class Producto {
 	private String id_prod;
