@@ -3,6 +3,9 @@ package ventanas;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import Conexion.ConexionBD;
 
 import java.awt.event.ActionEvent;
 
@@ -95,7 +100,7 @@ public class VRegistro extends JFrame implements ActionListener{
 		contentPane.add(lbldni);
 		
 		txtcorreo = new JTextField();
-		txtcorreo.setBounds(129, 176, 174, 20);
+		txtcorreo.setBounds(129, 200, 174, 20);
 		contentPane.add(txtcorreo);
 		txtcorreo.setColumns(10);
 		
@@ -108,7 +113,7 @@ public class VRegistro extends JFrame implements ActionListener{
 		contentPane.add(lbltele);
 		
 		txttele = new JTextField();
-		txttele.setBounds(129, 200, 174, 20);
+		txttele.setBounds(129, 176, 174, 20);
 		contentPane.add(txttele);
 		txttele.setColumns(10);
 		
@@ -161,31 +166,87 @@ public class VRegistro extends JFrame implements ActionListener{
 
 	Clases.ArregloCliente c=new Clases.ArregloCliente();
 	private JButton btnNewButton_2;
+	
+	
+	
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
-		String nom=txtnombre.getText();
-		String ape=txtapellido.getText();
-		String dni=txtdni.getText();
-		String tel=txttele.getText();
-		String cor=txtcorreo.getText();
-		String contra=txtcont2.getText();
-		
-		if (txtnombre.getText().isEmpty() || txtapellido.getText().isEmpty() || txtdni.getText().isEmpty() ||txttele.getText().isEmpty() ||
-			txtcorreo.getText().isEmpty() ||txtcont2.getText().isEmpty()) 
-		{
-			JOptionPane.showMessageDialog(null,"Complete todos los campos");
-		}
-		else if (dni.length() != 8) {JOptionPane.showMessageDialog(null,"El DNI debe tener 8 dígitos");}
-		else if (verificardni(dni)==true) {JOptionPane.showMessageDialog(null,"El DNI solo debe contener números");}
-		else if (tel.length() != 9) {JOptionPane.showMessageDialog(null,"El teléfono debe tener 9 dígitos");}
-		else if (verificartelef(tel)==true) {JOptionPane.showMessageDialog(null,"El teléfono solo debe contener números");}		
-		else if(contra.length() < 6) {
-		    JOptionPane.showMessageDialog(null,"La contraseña debe tener al menos 6 caracteres");
-		}
-		else {
-		Constructores.Cliente sec=new Constructores.Cliente(dni,contra,nom,ape,dni,tel,cor);
-		c.Adicionar(sec);
-		JOptionPane.showMessageDialog(null,"Su cuenta ha sido creada correctamente \nUsuario: "+dni);
-		}
+	    
+	    String nom = txtnombre.getText().trim();
+	    String ape = txtapellido.getText().trim();
+	    String dniTexto = txtdni.getText().trim();
+	    String tel = txttele.getText().trim();
+	    String cor = txtcorreo.getText().trim();
+	    String contra = txtcont2.getText().trim();
+
+
+	    if (nom.isEmpty() || ape.isEmpty() || dniTexto.isEmpty() || tel.isEmpty() || cor.isEmpty() || contra.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Complete todos los campos", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+	        return; 
+	    } 
+	    else if (dniTexto.length() != 8) {
+	        JOptionPane.showMessageDialog(this, "El DNI debe tener 8 dígitos", "Error de Formato", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    } 
+	    else if (verificardni(dniTexto)) {
+	        JOptionPane.showMessageDialog(this, "El DNI solo debe contener números", "Error de Formato", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    } 
+	    else if (tel.length() != 9) {
+	        JOptionPane.showMessageDialog(this, "El teléfono debe tener 9 dígitos", "Error de Formato", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    } 
+	    else if (verificartelef(tel)) {
+	        JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números", "Error de Formato", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    } 
+	    else if (contra.length() < 8) {
+	        JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres", "Seguridad", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+	    
+	    
+	    int dni = Integer.parseInt(dniTexto);
+	    
+	    
+	    ConexionBD db = new ConexionBD();
+	    Connection conectar = db.conectar();
+	    
+	    if (conectar != null) {
+	        try {
+	            String sql = "INSERT INTO CLIENTE (NOMBRES, APELLIDOS, EMAIL, CONTRASEÑA, DNI, FECHA_NACIMIENTO, TELEFONO) "
+	                       + "VALUES (?, ?, ?, ?, ?, '2000-01-01', ?)";
+	            PreparedStatement plantilla= conectar.prepareStatement(sql);
+	            
+	            plantilla.setString(1, nom);
+	            plantilla.setString(2, ape);
+	            plantilla.setString(3, cor);
+	            plantilla.setString(4, contra);
+	            plantilla.setInt(5, dni);
+	            plantilla.setString(6, tel);
+	            
+	            int filas_Afectadas = plantilla.executeUpdate();
+	            
+	            if (filas_Afectadas > 0) {
+	                JOptionPane.showMessageDialog(this, "¡Cuenta creada exitosamente!\nTu usuario es: " + dni, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+	                
+	                
+	                txtnombre.setText("");
+	                txtapellido.setText("");
+	                txtcorreo.setText("");
+	                txtcont2.setText("");
+	                txttele.setText("");
+	                txtdni.setText("");
+	            }
+	            
+	            plantilla.close();
+	            conectar.close();
+	            
+	        } catch (SQLException ex) {
+	            JOptionPane.showMessageDialog(this, "Error al registrar en la BD: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "No se pudo conectar a la base de datos.", "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNewButton_1) {
