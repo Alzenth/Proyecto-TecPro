@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import arraylist.ArrayProducto;
 import clases.ArregloProducto;
 import constructores.Producto;
 
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 
 public class VGestionProductos extends JFrame implements ActionListener {
@@ -107,7 +109,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				txtS = new JTextArea();
 				txtS.setEditable(false);
 				txtS.setBackground(Color.WHITE);
-				txtS.setBounds(322, 23, 460, 396);
+				txtS.setBounds(322, 23, 396, 396);
 				panel.add(txtS);
 			}
 			{
@@ -121,11 +123,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				txtNombreProducto.setBounds(155, 69, 101, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
-				txtNombreProducto.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyReleased(java.awt.event.KeyEvent evt) {
-						calcularPrecioPorTamañoYTopping();
-					}
-				});
+
 			}
 			}
 			{
@@ -182,13 +180,11 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			
 	
 
-	cbBoxCategoria.setModel(new DefaultComboBoxModel<>(new String[] {
-		"Seleccione Tamaño", "Personal", "Familiar"
-	}));
+	cbBoxCategoria.setModel(new DefaultComboBoxModel(new String[] {"Seleccione una categoría", "Chocotejas", "Cuchareables"}));
 	
 	cbBoxCategoria.addActionListener(new java.awt.event.ActionListener() {
 		public void actionPerformed(java.awt.event.ActionEvent e) {
-			calcularPrecioPorTamañoYTopping();
+			
 		}
 	});	    
 		
@@ -283,13 +279,22 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	        String desc = txtDescripcionProducto.getText();   
 
 	        int stock = Integer.parseInt(txtStockProducto.getText()); 
-	        String fechaP=txtFechaProduccion.getText();
-	        String fechaV=txtFechaVencimiento.getText();
 	        double precio = Double.parseDouble(txtPrecioProducto.getText()); 
-
 	        
-	        Producto nuevo = new Producto(id, nom, cat, desc, stock, precio,fechaP,fechaV);
-
+	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+	        formatoFecha.setLenient(false);
+	        
+	        java.util.Date utilFechaP = formatoFecha.parse(txtFechaProduccion.getText());
+	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
+	        
+	        java.sql.Date fechaP = new java.sql.Date(utilFechaP.getTime());
+	        java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
+	        
+	        Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, fechaP, fechaV );
+	        
+	        ArrayProducto bdProducto = new ArrayProducto();
+            bdProducto.Insertar(nuevo);
+	        
 	        ap.Adicionar(nuevo);
 	        listar();
 	        
@@ -297,7 +302,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 
 	        txtIdProducto.setText("");
 	        txtNombreProducto.setText("");
-	        cbBoxCategoria.setSelectedItem("N/A");
+	        cbBoxCategoria.setSelectedItem(0);
 	        txtStockProducto.setText("");
 	        txtPrecioProducto.setText("");
 	        txtFechaProduccion.setText("");
@@ -374,24 +379,28 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				ap = new ArregloProducto();
 				
 				while ((linea = lector.readLine()) != null) {
-					String[] datos = linea.split(",");
-					
-					if (datos.length == 8) {
-						String id = datos[0];
-						String nombre = datos[1];
-						String categoria = datos[2];
-						String desc = datos[3];
-						int stock = Integer.parseInt(datos[4]);
-						double precio = Double.parseDouble(datos[5]);
-						String fechaP = datos[6];
-						String fechaV = datos[7];
-						
-						Producto p = new Producto(id, nombre, categoria, desc, stock, precio, fechaP, fechaV);
-						ap.Adicionar(p);
-					}
-					
-					
-				}
+                    String[] datos = linea.split(",");
+
+                    if (datos.length == 8) {
+                        String id = datos[0];
+                        String nombre = datos[1];
+                        String categoria = datos[2];
+                        String desc = datos[3];
+                        int stock = Integer.parseInt(datos[4]);
+                        double precio = Double.parseDouble(datos[5]);
+                        
+                        
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd"); // Ajustar según como se guarde
+                        java.util.Date utilFechaP = formatoFecha.parse(datos[6]);
+                        java.util.Date utilFechaV = formatoFecha.parse(datos[7]);
+                        
+                        java.sql.Date fechaP = new java.sql.Date(utilFechaP.getTime());
+                        java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
+
+                        Producto p = new Producto(id, nombre, categoria, desc, stock, precio, fechaP,fechaV);
+                        ap.Adicionar(p);
+                    }
+                }
 				lector.close();
 				
 				listar();
@@ -435,9 +444,10 @@ public class VGestionProductos extends JFrame implements ActionListener {
 					           p.getCategoria_prod() + "," + 
 					           p.getDescripcion_prod() + "," + 
 					           p.getStock_prod() + "," + 
+					           p.getPrecio_prod()+ ","+
 					           p.getFechaP_prod() + "," + 
-					           p.getFechaV_prod() + "," + 
-					           p.getPrecio_prod());
+					           p.getFechaV_prod() 
+					           );
 					
 					           
 					
@@ -454,43 +464,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		
 	}
 	
-		void calcularPrecioPorTamañoYTopping() {
-			String tamaño = cbBoxCategoria.getSelectedItem().toString();
-			double precioBase = 0.0;
-			double costoToppings = 0.0;
-			
-			
-			if (tamaño.equals("Personal")) {
-				precioBase = 15.00;
-			} else if (tamaño.equals("Familiar")) {
-				precioBase = 35.00;
-			}
-			
-			
-			if (!txtNombreProducto.getText().trim().isEmpty()) {
-				costoToppings = 4.50; 
-			}
-			
-			double precioFinal = precioBase + costoToppings;
-			
-			if (precioFinal > 0) {
-				txtPrecioProducto.setText(String.valueOf(precioFinal));
-				
-				txtS.setText("");
-				txtS.append("=====================================\n");
-				txtS.append("       DETALLE DE POSTRE ARMADO      \n");
-				txtS.append("=====================================\n");
-				txtS.append(" Tamaño elegido: " + tamaño + " (S/. " + precioBase + ")\n");
-				if (costoToppings > 0) {
-					txtS.append(" Toppings Extras: Activado (S/. " + costoToppings + ")\n");
-				}
-				txtS.append("-------------------------------------\n");
-				txtS.append(" PRECIO TOTAL ACTUALIZADO: S/. " + precioFinal + "\n");
-				txtS.append("=====================================\n");
-			} else {
-				txtPrecioProducto.setText("");
-			}
-		}
+		
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		VOpcion opcion  = new VOpcion();
 		opcion.setLocationRelativeTo(null); 
