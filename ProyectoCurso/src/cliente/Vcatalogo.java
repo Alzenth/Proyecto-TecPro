@@ -11,6 +11,11 @@ import ventanas.Vlogin;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import java.awt.Font;
 
 public class Vcatalogo extends JFrame implements ActionListener {
 
@@ -18,6 +23,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -41,7 +47,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
 	 */
 	public Vcatalogo() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 400);
+		setBounds(100, 100, 627, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -49,7 +55,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
 		{
 			btnNewButton = new JButton("Ir a Carrito");
 			btnNewButton.addActionListener(this);
-			btnNewButton.setBounds(392, 333, 84, 20);
+			btnNewButton.setBounds(475, 333, 111, 20);
 			contentPane.add(btnNewButton);
 		}
 		{
@@ -58,6 +64,30 @@ public class Vcatalogo extends JFrame implements ActionListener {
 			btnNewButton_1.setBounds(21, 333, 111, 20);
 			contentPane.add(btnNewButton_1);
 		}
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(21, 130, 563, 161);
+		contentPane.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		
+		JLabel lblNewLabel = new JLabel("Categoria");
+		lblNewLabel.setBounds(10, 75, 83, 14);
+		contentPane.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(97, 71, 67, 22);
+		contentPane.add(comboBox);
+		
+		JLabel lblNewLabel_1 = new JLabel("CATALOGO");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel_1.setBounds(243, 0, 101, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Seleccione un tipo de producto");
+		lblNewLabel_2.setBounds(10, 38, 154, 14);
+		contentPane.add(lblNewLabel_2);
 
 	}
 	public void actionPerformed(ActionEvent e) {

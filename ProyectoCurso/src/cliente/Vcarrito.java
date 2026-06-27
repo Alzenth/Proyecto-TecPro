@@ -36,7 +36,7 @@ public class Vcarrito extends JFrame implements ActionListener {
 	 */
 	public Vcarrito() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 711, 422);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,9 +44,13 @@ public class Vcarrito extends JFrame implements ActionListener {
 		{
 			btnNewButton = new JButton("Volver al Catálogo");
 			btnNewButton.addActionListener(this);
-			btnNewButton.setBounds(278, 222, 128, 20);
+			btnNewButton.setBounds(557, 352, 128, 20);
 			contentPane.add(btnNewButton);
 		}
+		
+		JButton btnNewButton_1 = new JButton("Comprar");
+		btnNewButton_1.setBounds(10, 351, 89, 23);
+		contentPane.add(btnNewButton_1);
 
 	}
 
