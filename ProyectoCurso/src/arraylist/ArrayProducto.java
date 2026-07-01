@@ -105,7 +105,7 @@ public void Editar(Producto pro) {
 		csta.setDouble(6, pro.getPrecio_prod());
 		csta.setDate(7, pro.getFechaP_prod());
 		csta.setDate(8, pro.getFechaV_prod());
-		
+		csta.executeUpdate();
 		
 	} catch (Exception e) {
 		System.out.println("ERROR" + e);
