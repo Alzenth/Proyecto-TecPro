@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import arraylist.ArrayProducto;
 import clases.ArregloProducto;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.List;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -32,17 +34,23 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.IOException;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class VGestionProductos extends JFrame implements ActionListener {
+public class VGestionProductos extends JFrame implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
 	private JButton btnAgregarProducto;
 	private JLabel lblMenu;
-	private JTextArea txtS;
 	private JTextField txtIdProducto;
 	private JTextField txtNombreProducto;
 	private JTextField txtStockProducto;
@@ -79,7 +87,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	 */
 	public VGestionProductos() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 808, 506);
+		setBounds(100, 100, 1110, 465);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -87,7 +95,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		{
 			panel = new JPanel();
 			panel.setBackground(SystemColor.inactiveCaption);
-			panel.setBounds(0, 0, 792, 469);
+			panel.setBounds(0, 0, 1096, 428);
 			contentPane.add(panel);
 			panel.setLayout(null);
 			{
@@ -96,7 +104,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				btnAgregarProducto.setForeground(Color.BLACK);
 				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
-				btnAgregarProducto.setBounds(65, 307, 145, 20);
+				btnAgregarProducto.setBounds(65, 310, 145, 20);
 				panel.add(btnAgregarProducto);
 			}
 			{
@@ -104,13 +112,6 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				lblMenu.setFont(new Font("Dubai", Font.BOLD, 14));
 				lblMenu.setBounds(10, 0, 219, 22);
 				panel.add(lblMenu);
-			}
-			{
-				txtS = new JTextArea();
-				txtS.setEditable(false);
-				txtS.setBackground(Color.WHITE);
-				txtS.setBounds(322, 23, 396, 396);
-				panel.add(txtS);
 			}
 			{
 				txtIdProducto = new JTextField();
@@ -174,7 +175,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 				btnRemoverProducto.setForeground(Color.BLACK);
 				btnRemoverProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnRemoverProducto.setBackground(Color.LIGHT_GRAY);
-				btnRemoverProducto.setBounds(65, 339, 145, 20);
+				btnRemoverProducto.setBounds(65, 340, 145, 20);
 				panel.add(btnRemoverProducto);				
 			}
 			
@@ -185,6 +186,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	cbBoxCategoria.addActionListener(new java.awt.event.ActionListener() {
 		public void actionPerformed(java.awt.event.ActionEvent e) {
 			
+			
 		}
 	});	    
 		
@@ -192,14 +194,14 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		btnCargarProductos.addActionListener(this);
 		btnCargarProductos.setBackground(Color.LIGHT_GRAY);
 		btnCargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
-		btnCargarProductos.setBounds(65, 399, 145, 20);
+		btnCargarProductos.setBounds(680, 397, 145, 20);
 		panel.add(btnCargarProductos);
 		
 		btnDescargarProductos = new JButton("Descargar Productos");
 		btnDescargarProductos.addActionListener(this);
 		btnDescargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 		btnDescargarProductos.setBackground(Color.LIGHT_GRAY);
-		btnDescargarProductos.setBounds(65, 369, 145, 20);
+		btnDescargarProductos.setBounds(484, 397, 145, 20);
 		panel.add(btnDescargarProductos);
 		{
 			lblNewLabel_4 = new JLabel("Fecha Producción:");
@@ -229,7 +231,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			btnNewButton.setForeground(Color.WHITE);
 			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 			btnNewButton.setBackground(Color.RED);
-			btnNewButton.setBounds(636, 429, 146, 23);
+			btnNewButton.setBounds(940, 396, 146, 23);
 			panel.add(btnNewButton);
 		}
 		{
@@ -243,8 +245,44 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			txtDescripcionProducto.setBounds(155, 123, 101, 57);
 			panel.add(txtDescripcionProducto);
 		}
+		{
+			scrollPane = new JScrollPane();
+			scrollPane.addMouseListener(this);
+			scrollPane.setBounds(272, 24, 814, 356);
+			panel.add(scrollPane);
+			{
+				tbTable = new JTable();
+				tbTable.addMouseListener(this);
+				scrollPane.setViewportView(tbTable);
+			}
+		}
+		{
+			btnModificarProducto = new JButton("Modificar producto");
+			btnModificarProducto.addActionListener(this);
+			btnModificarProducto.setForeground(Color.BLACK);
+			btnModificarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+			btnModificarProducto.setBackground(Color.LIGHT_GRAY);
+			btnModificarProducto.setBounds(65, 370, 145, 20);
+			panel.add(btnModificarProducto);
+		}
+		{
+			btnConsultarProducto = new JButton("Consultar producto");
+			btnConsultarProducto.addActionListener(this);
+			btnConsultarProducto.setForeground(Color.BLACK);
+			btnConsultarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+			btnConsultarProducto.setBackground(Color.LIGHT_GRAY);
+			btnConsultarProducto.setBounds(65, 400, 145, 20);
+			panel.add(btnConsultarProducto);
+		}
+		Listar("");
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnModificarProducto) {
+			do_btnModificarProducto_actionPerformed(e);
+		}
+		if (e.getSource() == btnConsultarProducto) {
+			do_btnConsultarProducto_actionPerformed(e);
+		}
 		if (e.getSource() == btnNewButton) {
 			do_btnNewButton_actionPerformed(e);
 		}
@@ -270,9 +308,14 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_6;
 	private JTextField txtDescripcionProducto;
+	private JScrollPane scrollPane;
+	private JTable tbTable;
+	private JButton btnModificarProducto;
+	private JButton btnConsultarProducto;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
+			
 			String id = txtIdProducto.getText();    
 	        String nom = txtNombreProducto.getText();   
 	        String cat = cbBoxCategoria.getSelectedItem().toString();
@@ -287,83 +330,120 @@ public class VGestionProductos extends JFrame implements ActionListener {
 	        java.util.Date utilFechaP = formatoFecha.parse(txtFechaProduccion.getText());
 	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
 	        
-	        java.sql.Date fechaP = new java.sql.Date(utilFechaP.getTime());
-	        java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
+	        Date fechaP = new Date(utilFechaP.getTime());
+	        Date fechaV = new Date(utilFechaV.getTime());
 	        
-	        Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, fechaP, fechaV );
 	        
-	        ArrayProducto bdProducto = new ArrayProducto();
-            bdProducto.Insertar(nuevo);
 	        
-	        ap.Adicionar(nuevo);
-	        listar();
-	        
-	        javax.swing.JOptionPane.showMessageDialog(this, "¡Producto registrado correctamente!");
+	        if (!cat.equals("Seleccione una categoría")) {
+	        	if (stock >=0) {
+	        		if(precio >= 0) {
+	        			Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, fechaP, fechaV );
+				        
+				        ArrayProducto bdProducto = new ArrayProducto();
+			            bdProducto.Insertar(nuevo);
+				        
+				        ap.Adicionar(nuevo);
+				        Listar("");
+				        
+				        
+				       
 
-	        txtIdProducto.setText("");
-	        txtNombreProducto.setText("");
-	        cbBoxCategoria.setSelectedItem(0);
-	        txtStockProducto.setText("");
-	        txtPrecioProducto.setText("");
-	        txtFechaProduccion.setText("");
-	        txtFechaVencimiento.setText("");
-	        txtIdProducto.requestFocus();
+				        txtIdProducto.setText("");
+				        txtNombreProducto.setText("");
+				        cbBoxCategoria.setSelectedItem(0);
+				        cbBoxCategoria.setSelectedItem("");
+				        txtStockProducto.setText("");
+				        txtDescripcionProducto.setText("");
+				        txtPrecioProducto.setText("");
+				        txtFechaProduccion.setText("");
+				        txtFechaVencimiento.setText("");
+				        txtIdProducto.requestFocus();
+				        
+				        if(stock <= 5){
+				            JOptionPane.showMessageDialog(null,"Queda poco stock del producto: " + id );
+				            }
+				        JOptionPane.showMessageDialog(this, "¡Producto registrado correctamente!");
+				        
+	        		}else MensajeEmergente("Ingrese un precio valido");
+	        		
+	        	}else MensajeEmergente("Debe ingresar un Stock válido");
+	        	
+	        	
+	        } else MensajeEmergente("Seleccione una categoría válida");
 	        
-	        if(stock <= 5){
-	            JOptionPane.showMessageDialog(null,
-	                "⚠ Queda poco stock del producto: " + id );}
-	       
+	        
 	        }catch (Exception ex) {
 			MensajeEmergente("Error: Revisa los campos");
 			}
 	}
-	//sobrecarga de métodos
-		void imprimir(String s) {
-		    txtS.append(s + "\n");
-		}
-		void imprimir(Producto p) {
-		    imprimir("ID: " + p.getId_prod());
-		    imprimir("NOMBRE: " + p.getNombre_prod());
-		    imprimir("CATEGORÍA: " + p.getCategoria_prod());
-		    imprimir("STOCK: " + p.getStock_prod());
-		    imprimir("PRECIO: S/. " + p.getPrecio_prod());
-		    imprimir("FECHA PRODUCCION:  " + p.getFechaP_prod());
-		    imprimir("FECHA VENCIMIENTO:  " + p.getFechaV_prod());
-		    imprimir("----------------------");
-		}	
-	void listar() {
-		
-	    txtS.setText(""); 
-	    for (int i = 0; i < ap.Tamaño(); i++) {
-	        imprimir(ap.Obtener(i));
-	        }
-	}
+
+	
 	
 	void MensajeEmergente(String s) {
-		javax.swing.JOptionPane.showMessageDialog(this, s);
+		JOptionPane.showMessageDialog(this, s);
 	}
 	
 
 	
 	protected void do_btnRemoverProducto_actionPerformed(ActionEvent e) {
 		try {
-			String id=txtIdProducto.getText().trim();
-			if (id.isEmpty())
-				MensajeEmergente("¡Inserte el id del producto a eliminar!");
-			else {
-				Producto pro=ap.Eliminar(id);
-				if (pro!=null) {
-					listar();
-					MensajeEmergente("¡Producto eliminado correctamente!");
-					txtIdProducto.setText("");
-					txtIdProducto.requestFocus();
-					}
-				else MensajeEmergente("¡No se encontro el producto!");
-				}
+			ArrayProducto eli = new ArrayProducto();
+			eli.Eliminar(txtIdProducto.getText());
+			Listar("");
 			}catch (Exception ex) {
 				MensajeEmergente("Error al eliminar producto!");
 			}
 		}
+	
+	public void Listar(String cod) {
+		DefaultTableModel modelo = new DefaultTableModel();
+		ArrayProducto pro = new ArrayProducto();
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+		if (cod.length() == 0) 
+			lista = pro.Listar_Productos();
+		else 
+			lista= pro.Consultar_Producto(cod);
+		
+		modelo.setRowCount(lista.size());
+		Iterator it = lista.iterator();
+		modelo.addColumn("Código");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Categoría");
+		modelo.addColumn("Descripción");	
+		modelo.addColumn("Stock");
+		modelo.addColumn("Precio");
+		modelo.addColumn("Fecha de Producción");
+		modelo.addColumn("Fecha de Expiración");
+		int i=0;
+		while (it.hasNext()) {
+			Object obj = it.next();
+			Producto prod= (Producto)obj;
+			modelo.setValueAt(prod.getId_prod(), i, 0);
+			modelo.setValueAt(prod.getNombre_prod(), i, 1);
+			modelo.setValueAt(prod.getCategoria_prod(), i, 2);
+			modelo.setValueAt(prod.getDescripcion_prod(), i, 3);
+			modelo.setValueAt(prod.getStock_prod(), i, 4);
+			modelo.setValueAt(prod.getPrecio_prod(), i, 5);
+			modelo.setValueAt(prod.getFechaP_prod(), i, 6);
+			modelo.setValueAt(prod.getFechaV_prod(), i, 7);
+			
+			i++;
+			
+		}
+		tbTable.setModel(modelo);
+		
+		tbTable.getColumnModel().getColumn(0).setPreferredWidth(50);  
+	    tbTable.getColumnModel().getColumn(1).setPreferredWidth(160);  
+	    tbTable.getColumnModel().getColumn(2).setPreferredWidth(90);   
+	    tbTable.getColumnModel().getColumn(3).setPreferredWidth(220); 
+	    tbTable.getColumnModel().getColumn(4).setPreferredWidth(50);   
+	    tbTable.getColumnModel().getColumn(5).setPreferredWidth(50);  
+	    tbTable.getColumnModel().getColumn(6).setPreferredWidth(100); 
+	    tbTable.getColumnModel().getColumn(7).setPreferredWidth(100); 
+	}
+	
+	
 	protected void do_btnCargarProductos_actionPerformed(ActionEvent e) {
 		
 		try {
@@ -403,7 +483,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
                 }
 				lector.close();
 				
-				listar();
+				
 				MensajeEmergente("¡Productos cargados exitosamente!");
 			
 			}
@@ -457,7 +537,7 @@ public class VGestionProductos extends JFrame implements ActionListener {
 			}
 			
 		}catch (Exception ex) {
-			//MensajeEmergente("Error al cargar los productos!");
+			
 			MensajeEmergente("Error al descargar los productos: "+ex.getMessage());
 		}
 		
@@ -471,4 +551,173 @@ public class VGestionProductos extends JFrame implements ActionListener {
 		opcion.setVisible(true);
 		dispose();
 	}
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == tbTable) {
+			do_tbTable_mouseClicked(e);
+		}
+		if (e.getSource() == scrollPane) {
+			do_scrollPane_mouseClicked(e);
+		}
 	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	protected void do_scrollPane_mouseClicked(MouseEvent e) {
+		
+		
+	}
+	protected void do_btnConsultarProducto_actionPerformed(ActionEvent e) {
+	    
+	    String id = txtIdProducto.getText().trim();
+	    String categoria = cbBoxCategoria.getSelectedItem().toString();
+
+	    
+	    ArrayProducto bd = new ArrayProducto();
+	    ArrayList<Producto> lista = new ArrayList<Producto>();
+
+	    
+	    if (!id.isEmpty()) {
+	        
+	        lista = bd.Consultar_Producto(id);
+	        
+	        if (lista.isEmpty()) {
+	            MensajeEmergente("No se encontró ningún producto con el ID: " + id);
+	        }
+	    } 
+	    else if (!categoria.equals("Seleccione una categoría")) {
+	        
+	        lista = bd.Listador_Categoria(categoria);
+	    } 
+	    else {
+	        
+	        lista = bd.Listar_Productos();
+	    }
+
+	    
+	    DefaultTableModel modelo = new DefaultTableModel();
+	    modelo.setRowCount(lista.size());
+	    
+	    modelo.addColumn("Código");
+	    modelo.addColumn("Nombre");
+	    modelo.addColumn("Categoría");
+	    modelo.addColumn("Descripción");    
+	    modelo.addColumn("Stock");
+	    modelo.addColumn("Precio");
+	    modelo.addColumn("Fecha de Producción");
+	    modelo.addColumn("Fecha de Expiración");
+
+	    int i = 0;
+	    for (Producto prod : lista) {
+	        modelo.setValueAt(prod.getId_prod(), i, 0);
+	        modelo.setValueAt(prod.getNombre_prod(), i, 1);
+	        modelo.setValueAt(prod.getCategoria_prod(), i, 2);
+	        modelo.setValueAt(prod.getDescripcion_prod(), i, 3);
+	        modelo.setValueAt(prod.getStock_prod(), i, 4);
+	        modelo.setValueAt(prod.getPrecio_prod(), i, 5);
+	        modelo.setValueAt(prod.getFechaP_prod(), i, 6);
+	        modelo.setValueAt(prod.getFechaV_prod(), i, 7);
+	        i++;
+	    }
+	    
+	    tbTable.setModel(modelo);
+	}
+	protected void do_tbTable_mouseClicked(MouseEvent e) {
+
+		int fila =tbTable.getSelectedRow();
+		
+		txtIdProducto.setText(String.valueOf(tbTable.getValueAt(fila, 0)));
+		txtNombreProducto.setText(String.valueOf(tbTable.getValueAt(fila, 1)));
+		cbBoxCategoria.setSelectedItem((String.valueOf(tbTable.getValueAt(fila, 2))));
+		txtDescripcionProducto.setText(String.valueOf(tbTable.getValueAt(fila, 3)));
+		txtStockProducto.setText(String.valueOf(tbTable.getValueAt(fila, 4)));
+		txtPrecioProducto.setText(String.valueOf(tbTable.getValueAt(fila, 5)));
+		txtFechaProduccion.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
+		txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 7)));
+		
+		try {
+			SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd");
+			
+			String fechaPStr = String.valueOf(tbTable.getValueAt(fila, 6));
+			String fechaVStr = String.valueOf(tbTable.getValueAt(fila, 7));
+			
+			
+			if (fechaPStr.contains("-")) {
+				txtFechaProduccion.setText(formatoSalida.format(formatoEntrada.parse(fechaPStr)));
+			} else {
+				
+				txtFechaProduccion.setText(fechaPStr);
+			}
+			
+			
+			if (fechaVStr.contains("-")) {
+				txtFechaVencimiento.setText(formatoSalida.format(formatoEntrada.parse(fechaVStr)));
+			} else {
+				txtFechaVencimiento.setText(fechaVStr);
+			}
+			
+		} catch (Exception ex) {
+			
+			txtFechaProduccion.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
+			txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 7)));
+		}
+		
+		
+		
+		
+	}
+	protected void do_btnModificarProducto_actionPerformed(ActionEvent e) {
+		try {
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+			formatoFecha.setLenient(false); 
+
+			
+			java.util.Date utilFechaP = formatoFecha.parse(txtFechaProduccion.getText());
+			java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
+
+			
+			java.sql.Date fechaP = new java.sql.Date(utilFechaP.getTime());
+			java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
+			
+			Producto pro = new Producto(
+					txtIdProducto.getText(),
+					txtNombreProducto.getText(), 
+					cbBoxCategoria.getSelectedItem().toString(), 
+					txtDescripcionProducto.getText(),
+					Integer.parseInt(txtStockProducto.getText()),
+					Double.parseDouble(txtPrecioProducto.getText()),
+					fechaP, fechaV
+					);
+			
+			
+				ArrayProducto m = new ArrayProducto();
+				m.Editar(pro);
+				Listar("");
+			
+			
+			if (cbBoxCategoria.getSelectedItem().toString().equals("Seleccione una categoría")) {
+				MensajeEmergente("Por favor, seleccione una categoría válida.");
+				return; 
+			}
+			if (Integer.parseInt(txtStockProducto.getText()) <= 0) {
+				MensajeEmergente("Debe ingresar un Stock válido.");
+				return;
+			}
+			if (Double.parseDouble(txtPrecioProducto.getText())< 0) {
+				MensajeEmergente("Ingrese un precio válido.");
+				return;
+			}
+        		
+			MensajeEmergente("¡Producto modificado correctamente!");
+
+			
+		} catch (Exception e2) {
+			MensajeEmergente("Sucedio un error"  + e2 + "\nIntentelo nuevamente");
+		}
+	}
+}

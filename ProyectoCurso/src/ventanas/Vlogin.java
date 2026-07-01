@@ -24,13 +24,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class Vlogin extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtusuario;
-	private JTextField txtcontra;
 	private JButton btnRegis;
 
 	/**
@@ -64,18 +64,13 @@ public class Vlogin extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 		
 		txtusuario = new JTextField();
-		txtusuario.setBounds(224, 99, 86, 20);
+		txtusuario.setBounds(224, 99, 97, 20);
 		contentPane.add(txtusuario);
 		txtusuario.setColumns(10);
 		
 		lblUsuario = new JLabel("Usuario");
 		lblUsuario.setBounds(134, 102, 68, 14);
 		contentPane.add(lblUsuario);
-		
-		txtcontra = new JTextField();
-		txtcontra.setBounds(224, 130, 86, 20);
-		contentPane.add(txtcontra);
-		txtcontra.setColumns(10);
 		
 		lblContra = new JLabel("Contraseña");
 		lblContra.setBounds(134, 133, 68, 14);
@@ -99,10 +94,16 @@ public class Vlogin extends JFrame implements ActionListener {
 		JLabel lblNewLabel = new JLabel("¿No tienes cuenta?");
 		lblNewLabel.setBounds(175, 205, 110, 14); 
 		contentPane.add(lblNewLabel);
+		{
+			txtPassWord = new JPasswordField();
+			txtPassWord.setBounds(224, 129, 96, 20);
+			contentPane.add(txtPassWord);
+		}
 
 	}
 	clases.ArregloCliente c = new clases.ArregloCliente();
 	clases.ArregloEmpleado em=new clases.ArregloEmpleado();
+	private JPasswordField txtPassWord;
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnIngresar) {
 			do_btnIngresar_actionPerformed(e);
@@ -120,7 +121,10 @@ public class Vlogin extends JFrame implements ActionListener {
 	protected void do_btnIngresar_actionPerformed(ActionEvent e) {
 		
 		String usuario = txtusuario.getText();
-	    String contr = txtcontra.getText();
+		char[] password = txtPassWord.getPassword();
+		String contr = new String(password);
+	    
+	    
 	    
 	    
 	    
@@ -235,6 +239,4 @@ public class Vlogin extends JFrame implements ActionListener {
 	    
 	    
 		}
-		
-	
 }

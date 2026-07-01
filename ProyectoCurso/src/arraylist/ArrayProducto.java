@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+
 import conexion.ConexionBD;
 import constructores.Producto;
 
@@ -38,6 +39,28 @@ public ArrayList<Producto> Agregar_Producto(){
 	return lista;
 }
 
+public ArrayList<Producto> Listar_Productos(){
+	ArrayList<Producto> listado=new ArrayList<Producto>();
+	try {
+		CallableStatement csta=db.conectar().prepareCall("{Call SP_Listar_Productos()}");
+		ResultSet ra=csta.executeQuery();
+		Producto pro;
+		while(ra.next()) {
+			pro=new Producto(ra.getString(1), 
+                    ra.getString(2), 
+                    ra.getString(3), 
+                    ra.getString(4), 
+                    ra.getInt(5),
+                    ra.getDouble(6),
+                    ra.getDate(7), 
+                    ra.getDate(8));
+			listado.add(pro);
+		}
+	} catch (Exception e) {}
+	return listado;
+}
+
+
 public void Insertar(Producto pro) {
 	try {
 		Connection cnx=db.conectar();
@@ -53,12 +76,98 @@ public void Insertar(Producto pro) {
 		
 		
 		csta.executeUpdate();
-		System.out.println("Producto insertado en BD correctamente.");
+		
 	} catch (Exception e) {
 		System.out.println("ERROR" +e);
 	}
-}	
+}
+
+public void Eliminar(String cod) {
+	try {
+		Connection cnx=db.conectar();
+		CallableStatement csta=cnx.prepareCall("{CALL SP_Eliminar_Producto(?)}");
+		csta.setString(1, cod);
+		csta.executeUpdate();
+	} catch (Exception e) {
+		System.out.println("ERROR" +e);
+	}
+}
+
+public void Editar(Producto pro) {
+	try {
+		Connection cnx =db.conectar();
+		CallableStatement csta = cnx.prepareCall("{CALL SP_Editar_Producto(?,?,?,?,?,?,?,?)}");
+		csta.setString(1, pro.getId_prod());
+		csta.setString(2, pro.getNombre_prod());
+		csta.setString(3, pro.getCategoria_prod());
+		csta.setString(4, pro.getDescripcion_prod());
+		csta.setInt(5, pro.getStock_prod());
+		csta.setDouble(6, pro.getPrecio_prod());
+		csta.setDate(7, pro.getFechaP_prod());
+		csta.setDate(8, pro.getFechaV_prod());
+		
+		
+	} catch (Exception e) {
+		System.out.println("ERROR" + e);
+	}
+}
+
+public ArrayList<Producto> Consultar_Producto(String cod){
+	ArrayList<Producto> listado = new ArrayList<Producto>();
+	try {
+		Connection cnx = db.conectar();
+		CallableStatement csta = cnx.prepareCall("{CALL SP_Consultar_Producto(?)}");
+		csta.setString(1, cod);
+		ResultSet ra = csta.executeQuery();
+		Producto pro;
+		while(ra.next()) {
+			pro = new Producto(ra.getString(1), 
+                    ra.getString(2), 
+                    ra.getString(3), 
+                    ra.getString(4), 
+                    ra.getInt(5),
+                    ra.getDouble(6),
+                    ra.getDate(7), 
+                    ra.getDate(8));
+			listado.add(pro);
+		}
+	} catch (Exception e) {
+		System.out.println("ERROR" +e);
+	}
+	return listado;
 	
-	
+}
+
+public ArrayList<Producto> Listador_Categoria(String cat) {
+    ArrayList<Producto> lista = new ArrayList<Producto>();
+    try {
+        Connection cnx = db.conectar();
+        CallableStatement csta = cnx.prepareCall("{CALL SP_BuscaPorCategoria(?)}");
+        
+        csta.setString(1, cat); 
+        
+        ResultSet ra = csta.executeQuery();
+        Producto pro;
+        
+        while (ra.next()) {
+            pro = new Producto(
+                ra.getString(1),  
+                ra.getString(2),  
+                ra.getString(3), 
+                ra.getString(4),  
+                ra.getInt(5),     
+                ra.getDouble(6),   
+                ra.getDate(7),   
+                ra.getDate(8)
+            );
+            lista.add(pro);
+        }
+    } catch (Exception e) {
+        System.out.println("Error al filtrar por categoría: " + e);
+    }
+    return lista;
+}
+
+
 
 }
