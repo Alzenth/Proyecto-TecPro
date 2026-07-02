@@ -167,7 +167,30 @@ public ArrayList<Producto> Listador_Categoria(String cat) {
     }
     return lista;
 }
-
+public ArrayList<Producto> ListarPorCatalogo(String cat) {
+    ArrayList<Producto> lista = new ArrayList<Producto>();
+    try {
+        Connection cnx = db.conectar();
+        CallableStatement csta = cnx.prepareCall("{CALL SP_Producto_Catalogo(?)}");
+        csta.setString(1, cat); 
+        
+        ResultSet ra = csta.executeQuery();
+        Producto pro;
+        
+        while (ra.next()) {
+            
+            pro = new Producto();
+            pro.setNombre_prod(ra.getString("NOMBRE"));
+            pro.setDescripcion_prod(ra.getString("DESCRIPCION"));
+            pro.setPrecio_prod(ra.getDouble("PRECIO"));
+            
+            lista.add(pro);
+        }
+    } catch (Exception e) {
+        System.out.println("Error al cargar catálogo: " + e);
+    }
+    return lista;
+}
 
 
 }

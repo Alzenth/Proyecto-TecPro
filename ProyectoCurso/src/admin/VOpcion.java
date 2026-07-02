@@ -21,7 +21,6 @@ public class VOpcion extends JDialog implements ActionListener {
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnNewButton;
 	private JButton btnGestionProductos;
-	private JButton btnGestionPersonal;
 	private JButton btnGestionPedidos;
 
 	/**
@@ -50,14 +49,8 @@ public class VOpcion extends JDialog implements ActionListener {
 		{
 			btnGestionProductos = new JButton("Gestión de Productos");
 			btnGestionProductos.addActionListener(this);
-			btnGestionProductos.setBounds(58, 27, 182, 33);
+			btnGestionProductos.setBounds(58, 38, 182, 33);
 			contentPanel.add(btnGestionProductos);
-		}
-		{
-			btnGestionPersonal = new JButton("Gestión de Personal");
-			btnGestionPersonal.addActionListener(this);
-			btnGestionPersonal.setBounds(58, 70, 182, 33);
-			contentPanel.add(btnGestionPersonal);
 		}
 		{
 			btnNewButton = new JButton("Cerrar Sesión");
@@ -71,7 +64,7 @@ public class VOpcion extends JDialog implements ActionListener {
 		{
 			btnGestionPedidos = new JButton("Gestión de Pedidos");
 			btnGestionPedidos.addActionListener(this);
-			btnGestionPedidos.setBounds(58, 118, 182, 41);
+			btnGestionPedidos.setBounds(58, 95, 182, 41);
 			contentPanel.add(btnGestionPedidos);
 		}
 	}
@@ -79,9 +72,6 @@ public class VOpcion extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnGestionPedidos) {
 			do_btnGestionPedidos_actionPerformed(e);
-		}
-		if (e.getSource() == btnGestionPersonal) {
-			do_btnGestionPersonal_actionPerformed(e);
 		}
 		if (e.getSource() == btnGestionProductos) {
 			do_btnGestionProductos_actionPerformed(e);
@@ -103,15 +93,6 @@ public class VOpcion extends JDialog implements ActionListener {
 		VGestionProductos gPro = new VGestionProductos();
 		gPro.setLocationRelativeTo(null); 
 		gPro.setVisible(true);
-	    
-	    
-	    this.dispose();
-	}
-	protected void do_btnGestionPersonal_actionPerformed(ActionEvent e) {
-		
-		VGestionPersonal gPerso = new VGestionPersonal();
-		gPerso.setLocationRelativeTo(null); 
-		gPerso.setVisible(true);
 	    
 	    
 	    this.dispose();

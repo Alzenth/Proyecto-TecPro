@@ -25,6 +25,11 @@ public class Producto {
 		this.fechaP_prod = fechaP_prod;
 		this.fechaV_prod = fechaV_prod;
 	}
+	
+	public Producto() {
+       
+    }
+	
 	public String getId_prod() {
 		return id_prod;
 	}
