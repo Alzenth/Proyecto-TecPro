@@ -779,7 +779,37 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		}
 	}
 	protected void do_btnCargarImagen_actionPerformed(ActionEvent e) {
-		
-		
+	    
+	    if(txtIdProducto.getText().trim().isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Seleccione o ingrese un ID de producto primero.");
+	        return;
+	    }
+
+	    JFileChooser chooser = new JFileChooser();
+	    chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (PNG, JPG, JPEG)", "png", "jpg", "jpeg"));
+	    int opcion = chooser.showOpenDialog(this);
+
+	    if(opcion == JFileChooser.APPROVE_OPTION){
+	        try {
+	            File origen = chooser.getSelectedFile();
+	            File carpeta = new File("imagenes"); 
+
+	            if(!carpeta.exists()) {
+	                carpeta.mkdir();
+	            }
+
+	            String id = txtIdProducto.getText().trim();
+	            
+	            String extension = origen.getName().substring(origen.getName().lastIndexOf(".")).toLowerCase();
+
+	            File destino = new File(carpeta, id + extension);
+	            
+	            Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	            
+	            JOptionPane.showMessageDialog(this, "¡Imagen guardada correctamente para el producto " + id + "!");
+	        } catch(Exception ex){
+	            JOptionPane.showMessageDialog(this, "Error al guardar la imagen: " + ex.getMessage());
+	        }
+	    }
 	}
 }

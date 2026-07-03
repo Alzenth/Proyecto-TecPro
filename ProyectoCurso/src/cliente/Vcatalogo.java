@@ -118,11 +118,13 @@ public class Vcatalogo extends JFrame implements ActionListener {
         
         
         for (Producto p : lista) {
-            panel.add(new TarjetaProducto(
-                p.getNombre_prod(), 
-                p.getDescripcion_prod(), 
-                "S/ " + p.getPrecio_prod()
-            ));
+        	panel.add(new TarjetaProducto(
+        	        p.getId_prod(),
+        	        p.getNombre_prod(),
+        	        p.getDescripcion_prod(),
+        	        "S/ "+p.getPrecio_prod()
+
+        	));
         }
         
         panel.revalidate();
