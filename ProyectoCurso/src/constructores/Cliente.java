@@ -1,32 +1,35 @@
 package constructores;
 
-public class Cliente extends Usuario{
-	private String nombre;
-	private String apellido;
-	private String dni;
-	private String numero;
-	private String correo;
+public class Cliente{
 	
-	public Cliente(String usuario, String contraseña, String nombre, String apellido, String dni, String numero,
-			String correo) {
-		super(usuario, contraseña);
-		this.nombre = nombre;
-		this.apellido = apellido;
+	private String nombres;
+	private String apellidos;
+	private String dni;
+	private String contraseña;
+	private String correo;
+	private String numero;
+	public Cliente( String nombres, String apellidos, String dni, String contraseña, String correo,
+			String numero) {
+		
+		this.nombres = nombres;
+		this.apellidos = apellidos;
 		this.dni = dni;
-		this.numero = numero;
+		this.contraseña = contraseña;
 		this.correo = correo;
+		this.numero = numero;
 	}
-	public String getNombre() {
-		return nombre;
+	
+	public String getNombres() {
+		return nombres;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
 	}
-	public String getApellido() {
-		return apellido;
+	public String getApellidos() {
+		return apellidos;
 	}
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 	public String getDni() {
 		return dni;
@@ -34,11 +37,11 @@ public class Cliente extends Usuario{
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	public String getNumero() {
-		return numero;
+	public String getContraseña() {
+		return contraseña;
 	}
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
 	}
 	public String getCorreo() {
 		return correo;
@@ -46,6 +49,14 @@ public class Cliente extends Usuario{
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+	public String getNumero() {
+		return numero;
+	}
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+	
+	
 	
 	
 

@@ -39,7 +39,7 @@ public ArrayList<Producto> Agregar_Producto(){
 	return lista;
 }
 
-public ArrayList<Producto> Listar_Productos(){
+public ArrayList<Producto> Listar_Productos_En_Tabla(){
 	ArrayList<Producto> listado=new ArrayList<Producto>();
 	try {
 		CallableStatement csta=db.conectar().prepareCall("{Call SP_Listar_Productos()}");

@@ -15,9 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import arraylist.ArrayCliente;
 import conexion.ConexionBD;
+import constructores.Cliente;
 
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class VRegistro extends JFrame implements ActionListener{
 
@@ -55,7 +58,6 @@ public class VRegistro extends JFrame implements ActionListener{
 	private JLabel lbltele;
 	private JTextField txttele;
 	private JLabel lblcontra2;
-	private JTextField txtcont2;
 	private JButton btnNewButton_1;
 	private JButton btnNewButton;
 	
@@ -72,8 +74,8 @@ public class VRegistro extends JFrame implements ActionListener{
 		lblcrea.setFont(new Font("Tahoma", Font.PLAIN, 32));
 		contentPane.add(lblcrea);
 		
-		lblnombra = new JLabel("Nombre");
-		lblnombra.setBounds(50, 101, 46, 14);
+		lblnombra = new JLabel("Nombres:");
+		lblnombra.setBounds(50, 101, 69, 14);
 		contentPane.add(lblnombra);
 		
 		txtnombre = new JTextField();
@@ -86,8 +88,8 @@ public class VRegistro extends JFrame implements ActionListener{
 		contentPane.add(txtapellido);
 		txtapellido.setColumns(10);
 		
-		lblapellido = new JLabel("Apellido");
-		lblapellido.setBounds(50, 127, 54, 14);
+		lblapellido = new JLabel("Apellidos:");
+		lblapellido.setBounds(50, 127, 65, 14);
 		contentPane.add(lblapellido);
 		
 		txtdni = new JTextField();
@@ -96,7 +98,7 @@ public class VRegistro extends JFrame implements ActionListener{
 		txtdni.setColumns(10);
 		
 		lbldni = new JLabel("Dni");
-		lbldni.setBounds(60, 152, 25, 14);
+		lbldni.setBounds(50, 151, 34, 14);
 		contentPane.add(lbldni);
 		
 		txtcorreo = new JTextField();
@@ -105,7 +107,7 @@ public class VRegistro extends JFrame implements ActionListener{
 		txtcorreo.setColumns(10);
 		
 		lblcorreo = new JLabel("Correo");
-		lblcorreo.setBounds(60, 203, 46, 14);
+		lblcorreo.setBounds(50, 202, 46, 14);
 		contentPane.add(lblcorreo);
 		
 		lbltele = new JLabel("Teléfono");
@@ -121,11 +123,6 @@ public class VRegistro extends JFrame implements ActionListener{
 		lblcontra2.setBounds(50, 227, 79, 14);
 		contentPane.add(lblcontra2);
 		
-		txtcont2 = new JTextField();
-		txtcont2.setBounds(129, 224, 174, 20);
-		contentPane.add(txtcont2);
-		txtcont2.setColumns(10);
-		
 		JLabel lblNewLabel = new JLabel("¿Tienes cuenta?");
 		lblNewLabel.setBounds(176, 313, 114, 14);
 		contentPane.add(lblNewLabel);
@@ -140,6 +137,11 @@ public class VRegistro extends JFrame implements ActionListener{
 		btnNewButton_2.addActionListener(this);
 		btnNewButton_2.setBounds(156, 255, 122, 35);
 		contentPane.add(btnNewButton_2);
+		{
+			txtPassWord = new JPasswordField();
+			txtPassWord.setBounds(129, 225, 174, 18);
+			contentPane.add(txtPassWord);
+		}
 	}
 	public boolean verificardni(String dni) {
 		for(int i = 0; i < dni.length(); i++) {
@@ -166,87 +168,48 @@ public class VRegistro extends JFrame implements ActionListener{
 
 	clases.ArregloCliente c=new clases.ArregloCliente();
 	private JButton btnNewButton_2;
+	private JPasswordField txtPassWord;
 	
 	
 	
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
+	    try {
 	    
 	    String nom = txtnombre.getText().trim();
 	    String ape = txtapellido.getText().trim();
-	    String dniTexto = txtdni.getText().trim();
+	    String dni = txtdni.getText().trim();
 	    String tel = txttele.getText().trim();
 	    String cor = txtcorreo.getText().trim();
-	    String contra = txtcont2.getText().trim();
+	    char[] password = txtPassWord.getPassword();
+		String contr = new String(password);
 
-
-	    if (nom.isEmpty() || ape.isEmpty() || dniTexto.isEmpty() || tel.isEmpty() || cor.isEmpty() || contra.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "Complete todos los campos", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-	        return; 
-	    } 
-	    else if (dniTexto.length() != 8) {
-	        JOptionPane.showMessageDialog(this, "El DNI debe tener 8 dígitos", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-	        return;
-	    } 
-	    else if (verificardni(dniTexto)) {
-	        JOptionPane.showMessageDialog(this, "El DNI solo debe contener números", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-	        return;
-	    } 
-	    else if (tel.length() != 9) {
-	        JOptionPane.showMessageDialog(this, "El teléfono debe tener 9 dígitos", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-	        return;
-	    } 
-	    else if (verificartelef(tel)) {
-	        JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-	        return;
-	    } 
-	    else if (contra.length() < 8) {
-	        JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres", "Seguridad", JOptionPane.WARNING_MESSAGE);
-	        return;
-	    }
+		if (dni.length() == 8) {
+			if (tel.length() == 9) {
+				if (contr.length() == 8) {
+					
+					Cliente cli = new Cliente( nom,ape , dni,contr,cor, tel);
+			        
+			        ArrayCliente bdCliente = new ArrayCliente();
+			        bdCliente.Insertar(cli);
+			        
+			        JOptionPane.showMessageDialog(this, "¡Usted se registro correctamente!");
+			        Vlogin ventanaLogin = new Vlogin();
+			        ventanaLogin.setLocationRelativeTo(null); 
+			        ventanaLogin.setVisible(true);
+			        this.dispose();
+			        
+				} else MensajeEmergente("¡Ingrese una contraseña válida de 8 dígitos!");
+			} else MensajeEmergente("¡Ingrese un número telefónico válido!");
+		} else MensajeEmergente("¡Ingrese un dni válido!");
 	    
-	    
-	    int dni = Integer.parseInt(dniTexto);
-	    
-	    
-	    ConexionBD db = new ConexionBD();
-	    Connection conectar = db.conectar();
-	    
-	    if (conectar != null) {
-	        try {
-	            String sql = "INSERT INTO CLIENTE (NOMBRES, APELLIDOS, EMAIL, CONTRASEÑA, DNI, FECHA_NACIMIENTO, TELEFONO) "
-	                       + "VALUES (?, ?, ?, ?, ?, '2000-01-01', ?)";
-	            PreparedStatement plantilla= conectar.prepareStatement(sql);
-	            
-	            plantilla.setString(1, nom);
-	            plantilla.setString(2, ape);
-	            plantilla.setString(3, cor);
-	            plantilla.setString(4, contra);
-	            plantilla.setInt(5, dni);
-	            plantilla.setString(6, tel);
-	            
-	            int filas_Afectadas = plantilla.executeUpdate();
-	            
-	            if (filas_Afectadas > 0) {
-	                JOptionPane.showMessageDialog(this, "¡Cuenta creada exitosamente!\nTu usuario es: " + dni, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
-	                
-	                
-	                txtnombre.setText("");
-	                txtapellido.setText("");
-	                txtcorreo.setText("");
-	                txtcont2.setText("");
-	                txttele.setText("");
-	                txtdni.setText("");
-	            }
-	            
-	            plantilla.close();
-	            conectar.close();
-	            
-	        } catch (SQLException ex) {
-	            JOptionPane.showMessageDialog(this, "Error al registrar en la BD: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
-	        }
-	    } else {
-	        JOptionPane.showMessageDialog(this, "No se pudo conectar a la base de datos.", "Error de Conexión", JOptionPane.ERROR_MESSAGE);
-	    }
+		
+	 }catch (Exception ex) {
+			MensajeEmergente("Error: Revisa los campos");
+			}
+	}
+	
+	void MensajeEmergente(String s) {
+		JOptionPane.showMessageDialog(this, s);
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNewButton_1) {

@@ -114,8 +114,10 @@ public class Vlogin extends JFrame implements ActionListener {
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 		VRegistro vr= new VRegistro();
+		
 		vr.setVisible(true);
 		dispose();
+		
 		return;
 	}
 	protected void do_btnIngresar_actionPerformed(ActionEvent e) {
@@ -123,10 +125,6 @@ public class Vlogin extends JFrame implements ActionListener {
 		String usuario = txtusuario.getText();
 		char[] password = txtPassWord.getPassword();
 		String contr = new String(password);
-	    
-	    
-	    
-	    
 	    
 	    if (usuario.isEmpty() || contr.isEmpty()) {
 	        JOptionPane.showMessageDialog(this, "¡Todos los campos deben estar llenos!", "Campos Vacíos", JOptionPane.WARNING_MESSAGE);

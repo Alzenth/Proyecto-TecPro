@@ -28,9 +28,11 @@ public class Vbienvenida extends JDialog implements ActionListener {
 	Intermediario i = new Intermediario();
 	private JButton okButton;
 	
+	
 	public static void main(String[] args) {
 		try {
-			Vbienvenida dialog = new Vbienvenida(Intermediario.cliente_actual.getNombre());
+			
+			Vbienvenida dialog = new Vbienvenida(Intermediario.cliente_actual.getNombres());
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 			

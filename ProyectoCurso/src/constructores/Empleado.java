@@ -1,11 +1,11 @@
 package constructores;
 
-public class Empleado extends Usuario{
+public class Empleado {
 	private String nombre, apellido, telefono, correo;
 	private Boolean esAdministrador;
 	public Empleado(String usuario, String contraseña, String nombre, String apellido, String telefono, String correo,
 			Boolean esAdministrador) {
-		super(usuario, contraseña);
+		
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.telefono = telefono;

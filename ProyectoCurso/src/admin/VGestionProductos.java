@@ -43,6 +43,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class VGestionProductos extends JFrame implements ActionListener, MouseListener {
 
@@ -87,7 +90,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	 */
 	public VGestionProductos() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1110, 465);
+		setBounds(100, 100, 1140, 582);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -95,7 +98,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		{
 			panel = new JPanel();
 			panel.setBackground(SystemColor.inactiveCaption);
-			panel.setBounds(0, 0, 1096, 428);
+			panel.setBounds(0, 0, 1126, 545);
 			contentPane.add(panel);
 			panel.setLayout(null);
 			{
@@ -104,24 +107,26 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 				btnAgregarProducto.setForeground(Color.BLACK);
 				btnAgregarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnAgregarProducto.setBackground(Color.LIGHT_GRAY);
-				btnAgregarProducto.setBounds(65, 310, 145, 20);
+				btnAgregarProducto.setBounds(949, 19, 145, 20);
 				panel.add(btnAgregarProducto);
 			}
 			{
 				lblMenu = new JLabel("Menú: Gestión de productos");
-				lblMenu.setFont(new Font("Dubai", Font.BOLD, 14));
-				lblMenu.setBounds(10, 0, 219, 22);
+				lblMenu.setFont(new Font("Segoe UI", Font.BOLD, 16));
+				lblMenu.setBounds(10, 0, 267, 29);
 				panel.add(lblMenu);
 			}
 			{
 				txtIdProducto = new JTextField();
-				txtIdProducto.setBounds(155, 48, 101, 20);
+				txtIdProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				txtIdProducto.setBounds(156, 35, 121, 20);
 				panel.add(txtIdProducto);
 				txtIdProducto.setColumns(10);
 			}
 			{
 				txtNombreProducto = new JTextField();
-				txtNombreProducto.setBounds(155, 69, 101, 20);
+				txtNombreProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				txtNombreProducto.setBounds(156, 65, 121, 20);
 				panel.add(txtNombreProducto);
 				txtNombreProducto.setColumns(10);
 
@@ -129,44 +134,52 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			}
 			{
 				txtStockProducto = new JTextField();
-				txtStockProducto.setBounds(155, 190, 101, 20);
+				txtStockProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				txtStockProducto.setBounds(810, 19, 101, 20);
 				panel.add(txtStockProducto);
 				txtStockProducto.setColumns(10);
 			}
 			{
 				lblNewLabel = new JLabel("ID Producto:");
-				lblNewLabel.setBounds(19, 51, 111, 14);
+				lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				lblNewLabel.setBounds(20, 38, 111, 14);
 				panel.add(lblNewLabel);
 			}
 			{
 				lblConsultaElStock = new JLabel("Nombre Producto:");
-				lblConsultaElStock.setBounds(19, 72, 111, 14);
+				lblConsultaElStock.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				lblConsultaElStock.setBounds(20, 68, 126, 14);
 				panel.add(lblConsultaElStock);
 			}
 			{
 				lblNewLabel_2 = new JLabel("Stock  Producto:");
-				lblNewLabel_2.setBounds(19, 193, 111, 14);
+				lblNewLabel_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				lblNewLabel_2.setBounds(674, 22, 237, 14);
 				panel.add(lblNewLabel_2);
 			}
 			{
 				lblNewLabel_1 = new JLabel("Precio Producto:");
-				lblNewLabel_1.setBounds(19, 220, 111, 14);
+				lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				lblNewLabel_1.setBounds(674, 49, 111, 14);
 				panel.add(lblNewLabel_1);
 			}
 			{
 				txtPrecioProducto = new JTextField();
+				txtPrecioProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 				txtPrecioProducto.setColumns(10);
-				txtPrecioProducto.setBounds(155, 217, 101, 20);
+				txtPrecioProducto.setBounds(810, 46, 101, 20);
 				panel.add(txtPrecioProducto);
 			}
 			{
 				cbBoxCategoria = new JComboBox();
-				cbBoxCategoria.setBounds(155, 93, 101, 20);
+				cbBoxCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				cbBoxCategoria.setBounds(156, 99, 121, 20);
 				panel.add(cbBoxCategoria);
 			}
 			{
 				lblNewLabel_3 = new JLabel("Categoría Producto:");
-				lblNewLabel_3.setBounds(19, 96, 111, 14);
+				lblNewLabel_3.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				lblNewLabel_3.setBounds(20, 102, 126, 14);
 				panel.add(lblNewLabel_3);
 			}
 			{
@@ -175,7 +188,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 				btnRemoverProducto.setForeground(Color.BLACK);
 				btnRemoverProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 				btnRemoverProducto.setBackground(Color.LIGHT_GRAY);
-				btnRemoverProducto.setBounds(65, 340, 145, 20);
+				btnRemoverProducto.setBounds(949, 49, 145, 20);
 				panel.add(btnRemoverProducto);				
 			}
 			
@@ -194,35 +207,39 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		btnCargarProductos.addActionListener(this);
 		btnCargarProductos.setBackground(Color.LIGHT_GRAY);
 		btnCargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
-		btnCargarProductos.setBounds(680, 397, 145, 20);
+		btnCargarProductos.setBounds(210, 499, 145, 20);
 		panel.add(btnCargarProductos);
 		
 		btnDescargarProductos = new JButton("Descargar Productos");
 		btnDescargarProductos.addActionListener(this);
 		btnDescargarProductos.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 		btnDescargarProductos.setBackground(Color.LIGHT_GRAY);
-		btnDescargarProductos.setBounds(484, 397, 145, 20);
+		btnDescargarProductos.setBounds(30, 499, 145, 20);
 		panel.add(btnDescargarProductos);
 		{
 			lblNewLabel_4 = new JLabel("Fecha Producción:");
-			lblNewLabel_4.setBounds(19, 255, 111, 14);
+			lblNewLabel_4.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			lblNewLabel_4.setBounds(674, 80, 111, 14);
 			panel.add(lblNewLabel_4);
 		}
 		{
 			lblNewLabel_5 =new JLabel("Fecha Vencimiento:");
-			lblNewLabel_5.setBounds(19, 283, 111, 14);
+			lblNewLabel_5.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			lblNewLabel_5.setBounds(674, 112, 111, 14);
 			panel.add(lblNewLabel_5);
 		}
 		{
 			txtFechaProduccion = new JTextField();
-			txtFechaProduccion.setBounds(155, 248, 101, 20);
+			txtFechaProduccion.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			txtFechaProduccion.setBounds(810, 77, 101, 20);
 			panel.add(txtFechaProduccion);
 			txtFechaProduccion.setColumns(10);
 		}
 		{
 			txtFechaVencimiento = new JTextField();
+			txtFechaVencimiento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 			txtFechaVencimiento.setColumns(10);
-			txtFechaVencimiento.setBounds(155, 280, 101, 20);
+			txtFechaVencimiento.setBounds(810, 109, 101, 20);
 			panel.add(txtFechaVencimiento);
 		}
 		{
@@ -231,24 +248,31 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnNewButton.setForeground(Color.WHITE);
 			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 			btnNewButton.setBackground(Color.RED);
-			btnNewButton.setBounds(940, 396, 146, 23);
+			btnNewButton.setBounds(934, 498, 146, 23);
 			panel.add(btnNewButton);
 		}
 		{
 			lblNewLabel_6 = new JLabel("Descripción Producto:");
-			lblNewLabel_6.setBounds(19, 126, 111, 14);
+			lblNewLabel_6.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			lblNewLabel_6.setBounds(322, 22, 126, 14);
 			panel.add(lblNewLabel_6);
 		}
 		{
-			txtDescripcionProducto = new JTextField();
-			txtDescripcionProducto.setColumns(10);
-			txtDescripcionProducto.setBounds(155, 123, 101, 57);
-			panel.add(txtDescripcionProducto);
+			
+			txtDescripcionProducto = new JTextArea();
+			txtDescripcionProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			txtDescripcionProducto.setLineWrap(true); 
+			txtDescripcionProducto.setWrapStyleWord(true);
+
+			
+			JScrollPane scrollDescripcion = new JScrollPane(txtDescripcionProducto);
+			scrollDescripcion.setBounds(322, 47, 296, 72);
+			panel.add(scrollDescripcion);
 		}
 		{
 			scrollPane = new JScrollPane();
 			scrollPane.addMouseListener(this);
-			scrollPane.setBounds(272, 24, 814, 356);
+			scrollPane.setBounds(20, 139, 1096, 343);
 			panel.add(scrollPane);
 			{
 				tbTable = new JTable();
@@ -262,7 +286,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnModificarProducto.setForeground(Color.BLACK);
 			btnModificarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 			btnModificarProducto.setBackground(Color.LIGHT_GRAY);
-			btnModificarProducto.setBounds(65, 370, 145, 20);
+			btnModificarProducto.setBounds(949, 79, 145, 20);
 			panel.add(btnModificarProducto);
 		}
 		{
@@ -271,12 +295,29 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnConsultarProducto.setForeground(Color.BLACK);
 			btnConsultarProducto.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 			btnConsultarProducto.setBackground(Color.LIGHT_GRAY);
-			btnConsultarProducto.setBounds(65, 400, 145, 20);
+			btnConsultarProducto.setBounds(949, 109, 145, 20);
 			panel.add(btnConsultarProducto);
 		}
+		{
+			btnCargarImagen = new JButton("Cargar Imagen");
+			btnCargarImagen.addActionListener(this);
+			btnCargarImagen.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+			btnCargarImagen.setBackground(Color.LIGHT_GRAY);
+			btnCargarImagen.setBounds(387, 500, 145, 20);
+			panel.add(btnCargarImagen);
+		}
+		
 		Listar("");
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowOpened(java.awt.event.WindowEvent e) {
+				txtIdProducto.requestFocus();
+			}
+		});
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnCargarImagen) {
+			do_btnCargarImagen_actionPerformed(e);
+		}
 		if (e.getSource() == btnModificarProducto) {
 			do_btnModificarProducto_actionPerformed(e);
 		}
@@ -307,11 +348,12 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JTextField txtFechaVencimiento;
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_6;
-	private JTextField txtDescripcionProducto;
+	private JTextArea txtDescripcionProducto;
 	private JScrollPane scrollPane;
 	private JTable tbTable;
 	private JButton btnModificarProducto;
 	private JButton btnConsultarProducto;
+	private JButton btnCargarImagen;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
@@ -343,12 +385,8 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 				        ArrayProducto bdProducto = new ArrayProducto();
 			            bdProducto.Insertar(nuevo);
 				        
-				        ap.Adicionar(nuevo);
 				        Listar("");
 				        
-				        
-				       
-
 				        txtIdProducto.setText("");
 				        txtNombreProducto.setText("");
 				        cbBoxCategoria.setSelectedItem(0);
@@ -401,7 +439,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		ArrayProducto pro = new ArrayProducto();
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 		if (cod.length() == 0) 
-			lista = pro.Listar_Productos();
+			lista = pro.Listar_Productos_En_Tabla();
 		else 
 			lista= pro.Consultar_Producto(cod);
 		
@@ -430,17 +468,19 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			
 			i++;
 			
+			
 		}
 		tbTable.setModel(modelo);
 		
-		tbTable.getColumnModel().getColumn(0).setPreferredWidth(50);  
-	    tbTable.getColumnModel().getColumn(1).setPreferredWidth(160);  
-	    tbTable.getColumnModel().getColumn(2).setPreferredWidth(90);   
-	    tbTable.getColumnModel().getColumn(3).setPreferredWidth(220); 
-	    tbTable.getColumnModel().getColumn(4).setPreferredWidth(50);   
-	    tbTable.getColumnModel().getColumn(5).setPreferredWidth(50);  
-	    tbTable.getColumnModel().getColumn(6).setPreferredWidth(100); 
-	    tbTable.getColumnModel().getColumn(7).setPreferredWidth(100); 
+		
+		tbTable.getColumnModel().getColumn(0).setPreferredWidth(45);   
+		tbTable.getColumnModel().getColumn(1).setPreferredWidth(180);  
+		tbTable.getColumnModel().getColumn(2).setPreferredWidth(85);   
+		tbTable.getColumnModel().getColumn(3).setPreferredWidth(470);  
+		tbTable.getColumnModel().getColumn(4).setPreferredWidth(40);   
+		tbTable.getColumnModel().getColumn(5).setPreferredWidth(40);   
+		tbTable.getColumnModel().getColumn(6).setPreferredWidth(90);   
+		tbTable.getColumnModel().getColumn(7).setPreferredWidth(90);   
 	}
 	
 	
@@ -595,7 +635,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	    } 
 	    else {
 	        
-	        lista = bd.Listar_Productos();
+	        lista = bd.Listar_Productos_En_Tabla();
 	    }
 
 	    
@@ -625,6 +665,15 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	    }
 	    
 	    tbTable.setModel(modelo);
+	    tbTable.getColumnModel().getColumn(0).setPreferredWidth(45);   
+		tbTable.getColumnModel().getColumn(1).setPreferredWidth(180);  
+		tbTable.getColumnModel().getColumn(2).setPreferredWidth(85);   
+		tbTable.getColumnModel().getColumn(3).setPreferredWidth(470);  
+		tbTable.getColumnModel().getColumn(4).setPreferredWidth(40);   
+		tbTable.getColumnModel().getColumn(5).setPreferredWidth(40);   
+		tbTable.getColumnModel().getColumn(6).setPreferredWidth(90);   
+		tbTable.getColumnModel().getColumn(7).setPreferredWidth(90); 
+	    
 	}
 	protected void do_tbTable_mouseClicked(MouseEvent e) {
 
@@ -714,10 +763,23 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			}
         		
 			MensajeEmergente("¡Producto modificado correctamente!");
+			txtIdProducto.setText("");
+			txtNombreProducto.setText("");
+			cbBoxCategoria.setSelectedItem(0);
+			txtDescripcionProducto.setText("");
+			txtStockProducto.setText("");
+			txtPrecioProducto.setText("");
+			txtFechaProduccion.setText("");
+			txtFechaVencimiento.setText("");
+			
 
 			
 		} catch (Exception e2) {
 			MensajeEmergente("Sucedio un error"  + e2 + "\nIntentelo nuevamente");
 		}
+	}
+	protected void do_btnCargarImagen_actionPerformed(ActionEvent e) {
+		
+		
 	}
 }

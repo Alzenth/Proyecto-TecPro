@@ -14,6 +14,7 @@ public class ArregloEmpleado {
 		e = new ArrayList<Empleado>();
 		e.add(admin);
 	}
+	/*
 	public void Adicionar(Empleado x) {
 		e.add(x);
 	}
@@ -41,4 +42,5 @@ public class ArregloEmpleado {
 		}
 		return null;
 	}
+	*/
 }

@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.Dimension;
+import javax.swing.ImageIcon;
 
 public class TarjetaProducto extends JPanel {
 
@@ -26,41 +27,43 @@ public class TarjetaProducto extends JPanel {
         setBackground(new Color(255, 255, 255));
         setLayout(null);
         
-        this.setPreferredSize(new Dimension(380, 130));
+        this.setPreferredSize(new Dimension(380, 145));
 
         
-        lblTitulo = new JLabel(titulo);
+        lblTitulo = new JLabel("<html><body style='width: 180px;'>" + titulo + "</body></html>");
         lblTitulo.setForeground(new Color(44, 44, 44));
-        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblTitulo.setBounds(142, 10, 228, 22);
+        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblTitulo.setBounds(142, 10, 228, 36);
         add(lblTitulo);
 
        
         lblDescripcion = new JLabel("<html><body style='width: 210px;'>" + descripcion + "</body></html>");
         lblDescripcion.setForeground(new Color(44, 44, 44));
-        lblDescripcion.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblDescripcion.setBounds(142, 32, 228, 42);
+        lblDescripcion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblDescripcion.setBounds(142, 56, 228, 42);
         add(lblDescripcion);
 
         
         lblPrecio = new JLabel(precio);
         lblPrecio.setForeground(new Color(44, 44, 44));
-        lblPrecio.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblPrecio.setBounds(142, 84, 77, 22);
+        lblPrecio.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblPrecio.setBounds(142, 108, 77, 22);
         add(lblPrecio);
 
         
         btnNewButton = new JButton("Añadir");
         btnNewButton.setForeground(new Color(16, 95, 106));
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btnNewButton.setBounds(280, 84, 85, 25); 
+        btnNewButton.setBounds(280, 108, 85, 25); 
         add(btnNewButton);
 
         
         lblImagen = new JLabel("");
         lblImagen.setOpaque(true); 
         lblImagen.setBackground(new Color(188, 201, 205));
-        lblImagen.setBounds(21, 10, 100, 96);
+        lblImagen.setBounds(21, 21, 100, 100);
+        lblImagen.setHorizontalAlignment(JLabel.CENTER); 
+        lblImagen.setVerticalAlignment(JLabel.CENTER);   
         add(lblImagen);
         
         

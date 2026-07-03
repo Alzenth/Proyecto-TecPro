@@ -1,6 +1,8 @@
+
+
 package ventanas;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -236,6 +238,7 @@ public class V1 extends JFrame implements ActionListener {
 	private JButton btnModificar;
 	
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+		/*
 		if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() ||
 	            txtDNI.getText().isEmpty() || txtTelefono.getText().isEmpty() ||
 	            txtCorreo.getText().isEmpty()) {
@@ -292,9 +295,11 @@ public class V1 extends JFrame implements ActionListener {
 	    } catch (Exception ex) {
 	        javax.swing.JOptionPane.showMessageDialog(null, "Ocurrió un error en el registro", "Error", JOptionPane.ERROR_MESSAGE);
 	    }
+	    */
 	}
 	
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
+		
 		try {
 			txtS.setText(""); // limpiar el área
 			Encabezado();
@@ -312,6 +317,7 @@ public class V1 extends JFrame implements ActionListener {
 
 	}
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) { //BOTON ELIMINAR
+		/*
 		try {
 		Cliente c = a.Eliminar(txtDNI.getText());
 		if (c!=null) {
@@ -328,9 +334,12 @@ public class V1 extends JFrame implements ActionListener {
 		}catch (Exception ex) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado", "Error",JOptionPane.ERROR_MESSAGE);
 		}
+		*/
+		
 	}
 	
 	protected void do_btnNewButton_3_actionPerformed(ActionEvent e)  {
+		/*
 		txtS.setText("");
 		Encabezado();
 
@@ -346,8 +355,10 @@ public class V1 extends JFrame implements ActionListener {
 	    	javax.swing.JOptionPane.showMessageDialog(null, "Cliente no encontrado ");
 	    	
 	    }
+	    */
 	}
 	protected void do_btnNewButton_4_actionPerformed(ActionEvent e) {
+		/*
 		Cliente c = a.Buscar(txtDNI.getText());
 		if (c != null) {
 			c.setNombre(txtNombre.getText());
@@ -356,18 +367,21 @@ public class V1 extends JFrame implements ActionListener {
 			c.setNumero(txtTelefono.getText());
 			}
 		else javax.swing.JOptionPane.showMessageDialog(null, "No se encontró el cliente a modificar ");
+		*/
 		}
 	//Sobrecarga de métodos
 	void imprimir(String s) {
 	    txtS.append(s + "\n");
 	}
 	void imprimir(Cliente cte) {
+		/*
 		try {
 		 txtS.append(cte.getNombre() + "\t" +cte.getApellido() + "\t" +cte.getDni() + "\t" +
 				    cte.getNumero() + "\t" +cte.getCorreo() + "\n");
 		}catch (Exception ex) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Cliente eliminado", "Error",JOptionPane.ERROR_MESSAGE);
 		}
+		*/
 	}
 	void limpiartxt() 
 	{
@@ -386,6 +400,8 @@ public class V1 extends JFrame implements ActionListener {
 		ventana.setVisible(true);
 		
 	}
+	
 }
 	
+
 
