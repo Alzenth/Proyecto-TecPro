@@ -13,31 +13,7 @@ import constructores.Producto;
 
 public class ArrayProducto {
 	ConexionBD db = new ConexionBD();
-public ArrayList<Producto> Agregar_Producto(){
-		ArrayList<Producto> lista = new ArrayList<Producto>();
-	try {
-		
-		CallableStatement csta = db.conectar().prepareCall("CALL SP_Listar_Productos()"); 
-		ResultSet ra = csta.executeQuery();
-		Producto pro;
-		while (ra.next()) {
-			pro = new Producto(
-					ra.getString(1), 
-                    ra.getString(2), 
-                    ra.getString(3), 
-                    ra.getString(4), 
-                    ra.getInt(5),
-                    ra.getDouble(6),
-                    ra.getDate(7), 
-                    ra.getDate(8));
-			lista.add(pro);
-		}
-		
-	} catch (Exception e) {
-		System.out.println("Error al listar: " + e);
-	}
-	return lista;
-}
+
 
 public ArrayList<Producto> Listar_Productos_En_Tabla(){
 	ArrayList<Producto> listado=new ArrayList<Producto>();
@@ -180,9 +156,11 @@ public ArrayList<Producto> ListarPorCatalogo(String cat) {
         while (ra.next()) {
             
             pro = new Producto();
+            pro.setId_prod(ra.getString("ID_PRODUCTO"));
             pro.setNombre_prod(ra.getString("NOMBRE"));
             pro.setDescripcion_prod(ra.getString("DESCRIPCION"));
             pro.setPrecio_prod(ra.getDouble("PRECIO"));
+            pro.setFechaV_prod(ra.getDate("Fecha_Expiracion"));
             
             lista.add(pro);
         }

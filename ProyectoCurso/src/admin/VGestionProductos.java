@@ -775,6 +775,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 
 			
 		} catch (Exception e2) {
+			
 			MensajeEmergente("Sucedio un error"  + e2 + "\nIntentelo nuevamente");
 		}
 	}

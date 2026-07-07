@@ -1,26 +1,27 @@
 package cliente;
 
-import java.awt.EventQueue;
-import java.awt.Font;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import arraylist.ArrayProducto;
 import constructores.Producto;
-
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-
 import ventanas.Vlogin;
 
 public class Vcatalogo extends JFrame implements ActionListener {
@@ -29,7 +30,6 @@ public class Vcatalogo extends JFrame implements ActionListener {
     private JPanel contentPane;
     private JButton btnNewButton;
     private JButton btnNewButton_1;
-    
     
     private JPanel panel;
     private JComboBox<String> cmbBox;
@@ -52,83 +52,107 @@ public class Vcatalogo extends JFrame implements ActionListener {
         setForeground(new Color(227, 214, 196));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 880, 441);
+        
         contentPane = new JPanel();
         contentPane.setBackground(new Color(238, 230, 219));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+        contentPane.setLayout(new BorderLayout(10, 10)); 
         setContentPane(contentPane);
-        contentPane.setLayout(null);
         
-        btnNewButton = new JButton("Ir a Carrito");
-        btnNewButton.setForeground(new Color(255, 255, 255));
-        btnNewButton.setBackground(new Color(255, 104, 83));
-        btnNewButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnNewButton.addActionListener(this);
-        btnNewButton.setBounds(718, 365, 138, 29);
-        contentPane.add(btnNewButton);
+        JPanel panelSuperior = new JPanel(new BorderLayout());
+        panelSuperior.setOpaque(false);
+
+        
+        JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelFiltros.setOpaque(false);
+        
+        JLabel lblNewLabel_1 = new JLabel("CATÁLOGO");
+        lblNewLabel_1.setForeground(new Color(16, 95, 106));
+        lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 29));
+        
+        JLabel lblNewLabel_2 = new JLabel("Seleccione un tipo de producto:");
+        lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 14));
+        
+        cmbBox = new JComboBox<String>();
+        cmbBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una categoría", "Chocotejas", "Cuchareables"}));
+        cmbBox.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        cmbBox.addActionListener(this); 
+        
+        panelFiltros.add(lblNewLabel_1);
+        panelFiltros.add(lblNewLabel_2);
+        panelFiltros.add(cmbBox);
+
+        
+        JPanel panelSalir = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        panelSalir.setOpaque(false);
         
         btnNewButton_1 = new JButton("Cerrar Sesión");
         btnNewButton_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnNewButton_1.setForeground(new Color(255, 255, 255));
         btnNewButton_1.setBackground(new Color(16, 95, 106));
         btnNewButton_1.addActionListener(this);
-        btnNewButton_1.setBounds(707, 13, 138, 29);
-        contentPane.add(btnNewButton_1);
+        panelSalir.add(btnNewButton_1);
+
         
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(21, 84, 835, 271);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        contentPane.add(scrollPane); 
-        
-        
+        panelSuperior.add(panelFiltros, BorderLayout.WEST);
+        panelSuperior.add(panelSalir, BorderLayout.EAST);
+        contentPane.add(panelSuperior, BorderLayout.NORTH);
+
         panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 2, 15, 15));
+        panel.setLayout(new GridLayout(0, 2, 15, 15)); 
+        panel.setOpaque(false);
+
+        JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(panel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(null);
         
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelInferior.setOpaque(false);
         
-        cmbBox = new JComboBox<String>();
-        cmbBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una categoría", "Chocotejas", "Cuchareables"}));
-        cmbBox.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        cmbBox.setBounds(240, 53, 154, 22);
-        cmbBox.addActionListener(this); 
-        contentPane.add(cmbBox);
+        btnNewButton = new JButton("Ir a Carrito");
+        btnNewButton.setForeground(new Color(255, 255, 255));
+        btnNewButton.setBackground(new Color(255, 104, 83));
+        btnNewButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnNewButton.addActionListener(this);
         
-        JLabel lblNewLabel_1 = new JLabel("CATÁLOGO");
-        lblNewLabel_1.setForeground(new Color(16, 95, 106));
-        lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 29));
-        lblNewLabel_1.setBounds(21, 0, 161, 42);
-        contentPane.add(lblNewLabel_1);
-        
-        JLabel lblNewLabel_2 = new JLabel("Seleccione un tipo de producto:");
-        lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 14));
-        lblNewLabel_2.setBounds(21, 52, 209, 22);
-        contentPane.add(lblNewLabel_2);
+        panelInferior.add(btnNewButton);
+        contentPane.add(panelInferior, BorderLayout.SOUTH);
 
         cargarCatalogo();
     }
-    
     
     public void cargarCatalogo() {
         panel.removeAll();
         String cat = cmbBox.getSelectedItem().toString();
         
-        
         ArrayProducto ap = new ArrayProducto();
-        
         ArrayList<Producto> lista = ap.ListarPorCatalogo(cat);
         
-        
         for (Producto p : lista) {
-        	panel.add(new TarjetaProducto(
-        	        p.getId_prod(),
-        	        p.getNombre_prod(),
-        	        p.getDescripcion_prod(),
-        	        "S/ "+p.getPrecio_prod()
-
-        	));
+            panel.add(new TarjetaProducto(
+                    p.getId_prod(),
+                    p.getNombre_prod(),
+                    p.getDescripcion_prod(),
+                    "S/ " + p.getPrecio_prod(),
+                    fecha_Exp(p.getFechaV_prod()) 
+            ));
         }
         
         panel.revalidate();
         panel.repaint();
+    }
+
+    public String fecha_Exp(java.util.Date fecha) {
+        if (fecha == null) {
+            return "Sin fecha"; 
+        }
+        java.text.SimpleDateFormat formatoFecha = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        return formatoFecha.format(fecha);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -137,7 +161,6 @@ public class Vcatalogo extends JFrame implements ActionListener {
         } else if (e.getSource() == btnNewButton) {
             do_btnNewButton_actionPerformed(e);
         } else if (e.getSource() == cmbBox) {
-            
             cargarCatalogo();
         }
     }

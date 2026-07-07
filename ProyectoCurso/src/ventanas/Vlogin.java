@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import admin.VOpcion;
+import cliente.Vbienvenida;
 import cliente.Vcatalogo;
 import conexion.ConexionBD;
 import constructores.Cliente;
@@ -167,6 +168,7 @@ public class Vlogin extends JFrame implements ActionListener {
 		            ResultSet tabla_resultado_Cliente = plantillaCliente.executeQuery();
 		            
 		            if(tabla_resultado_Cliente.next()) {
+		            	Vbienvenida bienvenida = new Vbienvenida(usuario);
 		            	JOptionPane.showMessageDialog(this, "¡Bienvenido a tu cuentta!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
 	                    
 	                    Vcatalogo ventanacatalogo = new Vcatalogo();
