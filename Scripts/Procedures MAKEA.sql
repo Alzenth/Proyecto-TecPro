@@ -1,6 +1,10 @@
 ﻿USE MAKEA;
 GO
-CREATE PROCEDURE SP_Agregar_Admin(
+
+-- ====================================================
+-- PROCEDIMIENTOS DE ADMINISTRADOR Y CLIENTE
+-- ====================================================
+CREATE OR ALTER PROCEDURE SP_Agregar_Admin(
     @ID_ADMIN CHAR(4),
     @NOM VARCHAR(100),
     @APE VARCHAR(100),
@@ -9,16 +13,15 @@ CREATE PROCEDURE SP_Agregar_Admin(
     @DNI_ADMIN CHAR(8),
     @F_NAC DATE,
     @TELF VARCHAR(9)
-    )
+)
 AS  
-BEGIN --{
+BEGIN
     INSERT INTO ADMINISTRADOR(ID_ADMINISTRADOR, NOMBRES, APELLIDOS, EMAIL, CONTRASEÑA, DNI, FECHA_NACIMIENTO, TELEFONO) 
     VALUES (@ID_ADMIN, @NOM, @APE, @CORREO, @PASS, @DNI_ADMIN, @F_NAC, @TELF);
-END; --}
-Go
+END;
+GO
 
---Separación:
-CREATE PROCEDURE Sp_Agregar_Cliente(
+CREATE OR ALTER PROCEDURE Sp_Agregar_Cliente(
     @NOMBRES VARCHAR(100),
     @APELLIDOS VARCHAR(100),
     @DNI_CLIENTE CHAR(8),
@@ -28,32 +31,27 @@ CREATE PROCEDURE Sp_Agregar_Cliente(
 )
 AS 
 BEGIN
-    
     INSERT INTO CLIENTE(NOMBRES, APELLIDOS, DNI, CONTRASEÑA, EMAIL, TELEFONO)
     VALUES(@NOMBRES, @APELLIDOS, @DNI_CLIENTE, @CONTRASEÑA, @EMAIL, @TELEFONO);
 END;
-Go
+GO
 
---Separación - ADMIN:
-
-CREATE FUNCTION dbo.Fun_Retornador_ID_ADMIN(
+CREATE OR ALTER FUNCTION dbo.Fun_Retornador_ID_ADMIN(
     @DNI_Admin CHAR(8) 
 )
 RETURNS CHAR(4)
 AS 
 BEGIN 
     DECLARE @Id_admin_obtenida CHAR(4);
-    
-    SELECT @Id_admin_obtenida = ID_ADMINISTRADOR
-    FROM ADMINISTRADOR 
-    WHERE DNI = @DNI_Admin;
-
+    SELECT @Id_admin_obtenida = ID_ADMINISTRADOR FROM ADMINISTRADOR WHERE DNI = @DNI_Admin;
     RETURN @Id_admin_obtenida;
 END;
 GO
 
-
-CREATE PROCEDURE dbo.SP_Agregar_Producto(
+-- ====================================================
+-- PROCEDIMIENTOS DE PRODUCTOS
+-- ====================================================
+CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Producto(
     @ID_PROD CHAR(4),
     @NOM VARCHAR(100),
     @CAT VARCHAR(15),
@@ -65,18 +63,13 @@ CREATE PROCEDURE dbo.SP_Agregar_Producto(
 )
 AS 
 BEGIN
-    -- Variable para guardar el ID automático
     DECLARE @ID_ADMIN CHAR(4);
-
-    
     SET @ID_ADMIN = dbo.Fun_Retornador_ID_ADMIN(@DNI_ADMIN_LOGEADO);
-
    
     IF @ID_ADMIN IS NOT NULL
     BEGIN
         INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, CATEGORIA, DESCRIPCION, STOCK, PRECIO, Fecha_Creacion, Fecha_Expiracion, ID_ADMINISTRADOR) 
         VALUES (@ID_PROD, @NOM, @CAT, @DESCR, @STK, @PREC, GETDATE(), @F_EXP, @ID_ADMIN);
-        
         PRINT 'Producto agregado exitosamente por el administrador: ' + @ID_ADMIN;
     END
     ELSE
@@ -85,30 +78,25 @@ BEGIN
     END
 END;
 GO
---Separación:
-CREATE PROCEDURE SP_BuscaPorCategoria
+
+CREATE OR ALTER PROCEDURE SP_BuscaPorCategoria
     @CATEGORIA VARCHAR(50)
 AS 
 BEGIN
-    SELECT * FROM PRODUCTO 
-    WHERE CATEGORIA = @CATEGORIA;
+    SELECT * FROM PRODUCTO WHERE CATEGORIA = @CATEGORIA;
 END;
 GO
 
---Separación:
-Create Procedure SP_Consultar_Producto(
+CREATE OR ALTER PROCEDURE SP_Consultar_Producto(
 	@ID_PROD char(10)
-    )
+)
 AS
 BEGIN
-	SELECT * FROM dbo.PRODUCTO
-	WHERE ID_PRODUCTO = @ID_PROD;
+	SELECT * FROM dbo.PRODUCTO WHERE ID_PRODUCTO = @ID_PROD;
 END;
-Go
+GO
 
---Separación:
-
-CREATE PROCEDURE dbo.SP_Editar_Producto(
+CREATE OR ALTER PROCEDURE dbo.SP_Editar_Producto(
     @ID_PROD CHAR(4),          
     @NOM VARCHAR(100),
     @CAT VARCHAR(15),         
@@ -121,122 +109,97 @@ CREATE PROCEDURE dbo.SP_Editar_Producto(
 AS 
 BEGIN
     UPDATE PRODUCTO
-    SET 
-        NOMBRE = @NOM,
-        CATEGORIA = @CAT,
-        DESCRIPCION = @DESCR,
-        STOCK = @STK,
-        PRECIO = @PREC,
-        Fecha_Creacion = @F_CREA,
-        Fecha_Expiracion = @F_EXP
+    SET NOMBRE = @NOM, CATEGORIA = @CAT, DESCRIPCION = @DESCR, STOCK = @STK, 
+        PRECIO = @PREC, Fecha_Creacion = @F_CREA, Fecha_Expiracion = @F_EXP
     WHERE ID_PRODUCTO = @ID_PROD;
 END;
 GO
 
---Separación:
-Create Procedure SP_Eliminar_Producto(
+CREATE OR ALTER PROCEDURE SP_Eliminar_Producto(
 	@ID_PROD char(10)
-    )
-As
-Begin
-	DELETE FROM dbo.PRODUCTO
-	WHERE ID_PRODUCTO = @ID_PROD;
+)
+AS
+BEGIN
+	DELETE FROM dbo.PRODUCTO WHERE ID_PRODUCTO = @ID_PROD;
 END;
 GO 
 
--- Separación:
-CREATE PROCEDURE SP_Eliminar_Admin(
+-- ====================================================
+-- PROCEDIMIENTOS DE LISTADO Y ELIMINACIÓN
+-- ====================================================
+CREATE OR ALTER PROCEDURE SP_Eliminar_Admin(
     @ID_Admin char(4) 
-    )
+)
 AS
 BEGIN
-    DELETE FROM ADMINISTRADOR 
-    WHERE ID_ADMINISTRADOR = @ID_Admin;
-END
+    DELETE FROM ADMINISTRADOR WHERE ID_ADMINISTRADOR = @ID_Admin;
+END;
 GO
 
-
---Separación:
-Create PROCEDURE SP_Listar_Admin
+CREATE OR ALTER PROCEDURE SP_Listar_Admin
 AS 
 BEGIN
     SELECT * FROM ADMINISTRADOR;
 END;
-Go
+GO
 
---Separación:
-Create PROCEDURE SP_Listar_Clientes
+CREATE OR ALTER PROCEDURE SP_Listar_Clientes
 AS 
 BEGIN
     SELECT * FROM CLIENTE;
 END;
-Go
+GO
 
---Separación:
-Create PROCEDURE SP_Listar_Productos
+CREATE OR ALTER PROCEDURE SP_Listar_Productos
 AS 
 BEGIN
     SELECT * FROM PRODUCTO;
 END;
-Go
+GO
 
---Separación:
-CREATE PROCEDURE SP_Producto_Catalogo(
+CREATE OR ALTER PROCEDURE SP_Producto_Catalogo(
     @CATEGORIA varchar(50)
 )
 AS
 BEGIN
     SELECT ID_PRODUCTO, NOMBRE, DESCRIPCION, PRECIO, Fecha_Expiracion 
     FROM dbo.PRODUCTO
-    WHERE (@CATEGORIA = 'Seleccione una categoría') 
-       OR (CATEGORIA = @CATEGORIA);
+    WHERE (@CATEGORIA = 'Seleccione una categoría') OR (CATEGORIA = @CATEGORIA);
 END;
 GO
 
---Separación:
-
-CREATE FUNCTION dbo.FN_Obtener_ID_Cliente_Por_DNI(
+-- ====================================================
+-- PROCEDIMIENTOS DE CARRITO
+-- ====================================================
+CREATE OR ALTER FUNCTION dbo.FN_Obtener_ID_Cliente_Por_DNI(
     @DNI CHAR(8)
 )
 RETURNS CHAR(4)
 AS 
 BEGIN
     DECLARE @ID_Encontrado CHAR(4);
-
-    SELECT @ID_Encontrado = ID_CLIENTE 
-    FROM CLIENTE 
-    WHERE DNI = @DNI;
-
+    SELECT @ID_Encontrado = ID_CLIENTE FROM CLIENTE WHERE DNI = @DNI;
     RETURN @ID_Encontrado;
 END;
 GO
---Su PROCEDURE
-CREATE PROCEDURE dbo.SP_Agregar_Carrito_Por_Cliente (
+
+CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Carrito_Por_Cliente (
     @DNI_Ingresado CHAR(8)
 )
 AS 
 BEGIN
-    
     DECLARE @ID_Cliente CHAR(4);
-
-    
     SET @ID_Cliente = dbo.FN_Obtener_ID_Cliente_Por_DNI(@DNI_Ingresado);
 
-    -- Validamos que el cliente realmente exista
     IF @ID_Cliente IS NOT NULL
     BEGIN
-        -- Verificamos que NO exista ya un carrito para este cliente
         IF NOT EXISTS (SELECT 1 FROM Carrito WHERE ID_CLIENTE = @ID_Cliente)
         BEGIN
-            
-            INSERT INTO Carrito (ID_CLIENTE, Monto_Total, Cantidad_Productos)
-            VALUES (@ID_Cliente, 0.00, 0);
-            
+            INSERT INTO Carrito (ID_CLIENTE, Monto_Total, Cantidad_Productos) VALUES (@ID_Cliente, 0.00, 0);
             PRINT 'Carrito creado exitosamente para el cliente ' + @ID_Cliente;
         END
         ELSE
         BEGIN
-            
             PRINT 'El cliente ' + @ID_Cliente + ' ya tiene un carrito activo.';
         END
     END
@@ -247,59 +210,164 @@ BEGIN
 END;
 GO
 
--- Procedure para agregar detalle al Carrito
-CREATE PROCEDURE Sp_Agregar_Producto_a_DetalleCarrito
-(
-    @ID_CARRITO INT,
+CREATE OR ALTER PROCEDURE Sp_Agregar_Producto_a_DetalleCarrito (
+    @ID_CARRITO Char(6),
     @ID_PRODUCTO CHAR(4),
     @Cantidad INT
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-
     DECLARE @PrecioUnitario DECIMAL(10,2);
 
-    -- Obtener el precio del producto
-    SELECT @PrecioUnitario = Precio
-    FROM Producto
-    WHERE ID_PRODUCTO = @ID_PRODUCTO;
+    SELECT @PrecioUnitario = Precio FROM Producto WHERE ID_PRODUCTO = @ID_PRODUCTO;
 
-    -- Verificar si el producto ya está en el carrito
-    IF EXISTS (
-        SELECT 1
-        FROM Detalle_Carrito
-        WHERE ID_CARRITO = @ID_CARRITO
-          AND ID_PRODUCTO = @ID_PRODUCTO
-    )
+    IF EXISTS (SELECT 1 FROM Detalle_Carrito WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO)
     BEGIN
-        -- Actualizar cantidad y precio total
         UPDATE Detalle_Carrito
         SET Cantidad = Cantidad + @Cantidad,
             Precio = @PrecioUnitario * (Cantidad + @Cantidad)
-        WHERE ID_CARRITO = @ID_CARRITO
-          AND ID_PRODUCTO = @ID_PRODUCTO;
+        WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
     END
     ELSE
     BEGIN
-        -- Insertar nuevo detalle
-        INSERT INTO Detalle_Carrito
-        (
-            ID_CARRITO,
-            ID_PRODUCTO,
-            Cantidad,
-            Precio
-        )
-        VALUES
-        (
-            @ID_CARRITO,
-            @ID_PRODUCTO,
-            @Cantidad,
-            @PrecioUnitario * @Cantidad
-        );
+        INSERT INTO Detalle_Carrito (ID_CARRITO, ID_PRODUCTO, Cantidad, Precio)
+        VALUES (@ID_CARRITO, @ID_PRODUCTO, @Cantidad, @PrecioUnitario * @Cantidad);
     END
 END;
 GO
+
+CREATE OR ALTER PROCEDURE SP_Mostrar_Producto_a_Detalle(@Id_Carrito_Pro char(6))
+AS
+BEGIN
+    SELECT
+        pro.NOMBRE as 'Nombre de Producto',
+        DCAR.CANTIDAD as 'Cantidad Productos',
+        Pro.PRECIO as 'Precio Unitario',
+        dcar.PRECIO as 'Monto total'
+    FROM PRODUCTO as pro 
+    INNER JOIN DETALLE_CARRITO as DCAR ON pro.ID_PRODUCTO = DCAR.ID_PRODUCTO
+    WHERE DCAR.ID_CARRITO = @Id_Carrito_Pro; 
+END;
+GO
+
+-- ====================================================
+-- PROCEDIMIENTO DE VENTA FINAL (LA BOLETA)
+-- ====================================================
+CREATE OR ALTER PROCEDURE SP_Mostrar_Detalle_Venta(@ID_VENTA CHAR(4)) 
+AS
+BEGIN
+    SELECT
+        CLIE.DNI AS 'DNI del Cliente',
+        PRO.ID_PRODUCTO AS 'ID del Producto',
+        PRO.NOMBRE AS 'Nombre del Producto',
+        DCAR.CANTIDAD AS 'Cantidad Comprada',
+        DCAR.PRECIO_UNITARIO AS 'Precio Base Unitario',
+        
+        -- Subtotal individual de cada producto
+        (DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) AS 'SubTotal Producto',
+       
+        -- 1. Suma total base combinada
+        SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() AS 'Monto Total Base',
+        
+        -- 2. IGV Total (18%) calculado
+        CAST(SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() * 0.18 AS DECIMAL(10,2)) AS 'IGV Total (18%)',
+        
+        -- 3. Total General a Pagar
+        CAST(SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() * 1.18 AS DECIMAL(10,2)) AS 'Total General a Pagar'
+
+    FROM CLIENTE AS CLIE 
+    INNER JOIN VENTA AS V ON CLIE.ID_CLIENTE = V.ID_CLIENTE 
+    INNER JOIN DETALLE_VENTA AS DCAR ON V.ID_VENTA = DCAR.ID_VENTA 
+    INNER JOIN PRODUCTO AS PRO ON DCAR.ID_PRODUCTO = PRO.ID_PRODUCTO
+    
+    WHERE V.ID_VENTA = @ID_VENTA; 
+END;
+GO
+
+-- ====================================
+-- Ejecución de prueba:
+
+DELETE FROM DETALLE_VENTA;
+DELETE FROM DETALLE_CARRITO;
+DELETE FROM VENTA;
+DELETE FROM CARRITO;
+GO
+
+
+ALTER SEQUENCE Seq_CARRITO_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_DETALLE_CARRITO_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_VENTA_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_DETALLE_VENTA_ID RESTART WITH 0;
+GO
+
+
+
+EXEC SP_Agregar_Carrito_Por_Cliente '45236187';
+GO
+
+
+EXEC Sp_Agregar_Producto_a_DetalleCarrito 'CAR000', 'P110', 3;
+
+
+EXEC Sp_Agregar_Producto_a_DetalleCarrito 'CAR000', 'P220', 4;
+
+
+UPDATE CARRITO
+SET CANTIDAD_PRODUCTOS = (SELECT SUM(CANTIDAD) FROM DETALLE_CARRITO WHERE ID_CARRITO = 'CAR000'),
+    MONTO_TOTAL = (SELECT SUM(PRECIO) FROM DETALLE_CARRITO WHERE ID_CARRITO = 'CAR000')
+WHERE ID_CARRITO = 'CAR000';
+GO
+
+
+SELECT * FROM CARRITO;
+SELECT * FROM DETALLE_CARRITO;
+GO
+
+BEGIN
+    -- Declaramos las variables necesarias
+    DECLARE @IdVentaGenerada CHAR(4);
+    -- Obtenemos el ID del cliente Juan Carlos usando tu función
+    DECLARE @IdCliente CHAR(4) = dbo.FN_Obtener_ID_Cliente_Por_DNI('45236187'); 
+    DECLARE @IdCarrito CHAR(6) = 'CAR000';
+
+    -- 1. Generar la VENTA (Cabecera) con IGV
+    INSERT INTO VENTA (ID_CLIENTE, METODO_PAGO, IGV)
+    SELECT 
+        ID_CLIENTE, 
+        'Tarjeta', 
+        CAST(MONTO_TOTAL * 0.18 AS DECIMAL(10,2))
+    FROM CARRITO WHERE ID_CARRITO = @IdCarrito;
+
+    -- 2. Capturar el ID de la Venta (Será V000)
+    SELECT TOP 1 @IdVentaGenerada = ID_VENTA 
+    FROM VENTA WHERE ID_CLIENTE = @IdCliente ORDER BY FECHA_HORA DESC;
+
+    -- 3. Migrar los productos a DETALLE_VENTA
+    INSERT INTO DETALLE_VENTA (ID_VENTA, ID_PRODUCTO, CANTIDAD, PRECIO_UNITARIO, PRECIO)
+    SELECT 
+        @IdVentaGenerada, DC.ID_PRODUCTO, DC.CANTIDAD, P.PRECIO, DC.PRECIO        
+    FROM DETALLE_CARRITO AS DC
+    INNER JOIN PRODUCTO AS P ON DC.ID_PRODUCTO = P.ID_PRODUCTO
+    WHERE DC.ID_CARRITO = @IdCarrito;
+
+    -- 4. DESCONTAR EL STOCK (La magia del inventario)
+    UPDATE P
+    SET P.STOCK = P.STOCK - DC.CANTIDAD
+    FROM PRODUCTO AS P
+    INNER JOIN DETALLE_CARRITO AS DC ON P.ID_PRODUCTO = DC.ID_PRODUCTO
+    WHERE DC.ID_CARRITO = @IdCarrito;
+
+    -- 5. Vaciar el carrito (Juan Carlos ya pagó)
+    DELETE FROM DETALLE_CARRITO WHERE ID_CARRITO = @IdCarrito;
+    UPDATE CARRITO SET MONTO_TOTAL = 0.00, CANTIDAD_PRODUCTOS = 0 WHERE ID_CARRITO = @IdCarrito;
+
+    -- 6. Imprimir la boleta final
+    PRINT '===================== BOLETA DE VENTA GENERADA =====================';
+    EXEC SP_Mostrar_Detalle_Venta @ID_VENTA = @IdVentaGenerada;
+END;
+GO
+
 
 
 Exec SP_Agregar_Admin 'A001', 'Alexander Miguel', 'Bejar Centurión', 'alexanderBejar09@gmail.com', '12345678', 77062578, '2002-02-26','930286663'
