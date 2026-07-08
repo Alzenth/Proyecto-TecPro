@@ -21,7 +21,6 @@ public class VOpcion extends JDialog implements ActionListener {
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnNewButton;
 	private JButton btnGestionProductos;
-	private JButton btnGestionPedidos;
 
 	/**
 	 * Launch the application.
@@ -49,7 +48,7 @@ public class VOpcion extends JDialog implements ActionListener {
 		{
 			btnGestionProductos = new JButton("Gestión de Productos");
 			btnGestionProductos.addActionListener(this);
-			btnGestionProductos.setBounds(58, 38, 182, 33);
+			btnGestionProductos.setBounds(61, 123, 182, 33);
 			contentPanel.add(btnGestionProductos);
 		}
 		{
@@ -61,18 +60,9 @@ public class VOpcion extends JDialog implements ActionListener {
 			btnNewButton.setBounds(81, 189, 146, 23);
 			contentPanel.add(btnNewButton);
 		}
-		{
-			btnGestionPedidos = new JButton("Gestión de Pedidos");
-			btnGestionPedidos.addActionListener(this);
-			btnGestionPedidos.setBounds(58, 95, 182, 41);
-			contentPanel.add(btnGestionPedidos);
-		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnGestionPedidos) {
-			do_btnGestionPedidos_actionPerformed(e);
-		}
 		if (e.getSource() == btnGestionProductos) {
 			do_btnGestionProductos_actionPerformed(e);
 		}
@@ -81,26 +71,13 @@ public class VOpcion extends JDialog implements ActionListener {
 		}
 	}
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
-		Vlogin ventanaLogin = new Vlogin();
-	    ventanaLogin.setLocationRelativeTo(null); 
-	    ventanaLogin.setVisible(true);
-	    
-	    
-	    this.dispose();
-		
-	}
+			}
 	protected void do_btnGestionProductos_actionPerformed(ActionEvent e) {
 		VGestionProductos gPro = new VGestionProductos();
 		gPro.setLocationRelativeTo(null); 
 		gPro.setVisible(true);
 	    
 	    
-	    this.dispose();
-	}
-	protected void do_btnGestionPedidos_actionPerformed(ActionEvent e) {
-		VGestionPedidos gPed = new VGestionPedidos();
-		gPed.setLocationRelativeTo(null); 
-		gPed.setVisible(true);
 	    this.dispose();
 	}
 }

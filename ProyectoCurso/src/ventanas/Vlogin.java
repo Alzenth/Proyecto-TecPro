@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import admin.VGestionProductos;
 import admin.VOpcion;
 import cliente.Vbienvenida;
 import cliente.Vcatalogo;
@@ -156,9 +157,12 @@ public class Vlogin extends JFrame implements ActionListener {
 	            if (tabla_resultado.next()) {
 	            	JOptionPane.showMessageDialog(this, "¡Bienvenido Administrador!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
 	                
-	                VOpcion ventanaOpcion = new VOpcion();
-	                ventanaOpcion.setVisible(true);
-	                this.dispose(); 
+	            	
+	        		VGestionProductos gPro = new VGestionProductos();
+	        		gPro.setLocationRelativeTo(null); 
+	        		gPro.setVisible(true);
+	        	    
+	        	    this.dispose();
 	            } else {
 	            	String sqlCliente = "SELECT * FROM CLIENTE WHERE DNI = ? AND CONTRASEÑA = ?";
 	            	PreparedStatement plantillaCliente = conectar.prepareStatement(sqlCliente);

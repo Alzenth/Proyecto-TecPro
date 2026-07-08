@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import arraylist.ArrayProducto;
 import clases.ArregloProducto;
 import constructores.Producto;
+import ventanas.Vlogin;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,6 +47,8 @@ import java.awt.event.MouseEvent;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class VGestionProductos extends JFrame implements ActionListener, MouseListener {
 
@@ -243,15 +246,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			panel.add(txtFechaVencimiento);
 		}
 		{
-			btnNewButton = new JButton("Regresar");
-			btnNewButton.addActionListener(this);
-			btnNewButton.setForeground(Color.WHITE);
-			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-			btnNewButton.setBackground(Color.RED);
-			btnNewButton.setBounds(934, 498, 146, 23);
-			panel.add(btnNewButton);
-		}
-		{
 			lblNewLabel_6 = new JLabel("Descripción Producto:");
 			lblNewLabel_6.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 			lblNewLabel_6.setBounds(322, 22, 126, 14);
@@ -306,6 +300,15 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnCargarImagen.setBounds(387, 500, 145, 20);
 			panel.add(btnCargarImagen);
 		}
+		{
+			btnCerrarSesion = new JButton("Cerrar Sesión");
+			btnCerrarSesion.addActionListener(this);
+			btnCerrarSesion.setForeground(Color.WHITE);
+			btnCerrarSesion.setFont(new Font("Tahoma", Font.BOLD, 12));
+			btnCerrarSesion.setBackground(Color.RED);
+			btnCerrarSesion.setBounds(948, 498, 146, 23);
+			panel.add(btnCerrarSesion);
+		}
 		
 		Listar("");
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -313,8 +316,31 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 				txtIdProducto.requestFocus();
 			}
 		});
+		
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int ancho = getWidth();
+                int alto = getHeight();
+
+                panel.setBounds(0, 0, ancho, alto);
+
+                scrollPane.setBounds(20, 139, ancho - 55, alto - 240);
+
+                btnDescargarProductos.setBounds(30, alto - 83, 145, 20);
+                btnCargarProductos.setBounds(210, alto - 83, 145, 20);
+                btnCargarImagen.setBounds(387, alto - 83, 145, 20);
+
+                btnCerrarSesion.setBounds(ancho - 192, alto - 83, 146, 23);
+            }
+        });
+
+		
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnCerrarSesion) {
+			do_btnNewButton_1_actionPerformed(e);
+		}
 		if (e.getSource() == btnCargarImagen) {
 			do_btnCargarImagen_actionPerformed(e);
 		}
@@ -323,9 +349,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		}
 		if (e.getSource() == btnConsultarProducto) {
 			do_btnConsultarProducto_actionPerformed(e);
-		}
-		if (e.getSource() == btnNewButton) {
-			do_btnNewButton_actionPerformed(e);
 		}
 		if (e.getSource() == btnDescargarProductos) {
 			do_btnDescargarProductos_actionPerformed(e);
@@ -346,7 +369,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JLabel lblNewLabel_5;
 	private JTextField txtFechaProduccion;
 	private JTextField txtFechaVencimiento;
-	private JButton btnNewButton;
 	private JLabel lblNewLabel_6;
 	private JTextArea txtDescripcionProducto;
 	private JScrollPane scrollPane;
@@ -354,6 +376,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JButton btnModificarProducto;
 	private JButton btnConsultarProducto;
 	private JButton btnCargarImagen;
+	private JButton btnCerrarSesion;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 		try {
@@ -583,14 +606,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		
 		
 	}
-	
-		
-	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
-		VOpcion opcion  = new VOpcion();
-		opcion.setLocationRelativeTo(null); 
-		opcion.setVisible(true);
-		dispose();
-	}
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == tbTable) {
 			do_tbTable_mouseClicked(e);
@@ -812,5 +827,13 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	            JOptionPane.showMessageDialog(this, "Error al guardar la imagen: " + ex.getMessage());
 	        }
 	    }
+	}
+	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
+		Vlogin ventanaLogin = new Vlogin();
+	    ventanaLogin.setLocationRelativeTo(null); 
+	    ventanaLogin.setVisible(true);
+	    
+	    
+	    this.dispose();
 	}
 }
