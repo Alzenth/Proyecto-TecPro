@@ -271,6 +271,8 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			{
 				tbTable = new JTable();
 				tbTable.addMouseListener(this);
+				tbTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+				tbTable.setFillsViewportHeight(true);
 				scrollPane.setViewportView(tbTable);
 			}
 		}
@@ -332,6 +334,9 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
                 btnCargarImagen.setBounds(387, alto - 83, 145, 20);
 
                 btnCerrarSesion.setBounds(ancho - 192, alto - 83, 146, 23);
+                
+                scrollPane.revalidate();
+				scrollPane.repaint();
             }
         });
 
