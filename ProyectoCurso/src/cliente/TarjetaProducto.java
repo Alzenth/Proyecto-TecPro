@@ -3,6 +3,10 @@ package cliente;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+
+import arraylist.ArrayDetalle_Carrito;
+import clases.Intermediario;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
@@ -13,6 +17,8 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
 
 public class TarjetaProducto extends JPanel implements ActionListener {
@@ -105,7 +111,30 @@ public class TarjetaProducto extends JPanel implements ActionListener {
                 break;
             }
         }
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                CentrarContenido();
+                }
+            });
+        
     }
+    private void CentrarContenido() {
+        int ancho = getWidth();
+
+        int inicioX = (ancho - 420) / 2;
+
+        lblImagen.setBounds(inicioX + 20, 10, 100, 100);
+        lblTitulo.setBounds(inicioX + 131, 10, 239, 36);
+        lblDescripcion.setBounds(inicioX + 131, 44, 300, 73);
+        lblPrecio.setBounds(inicioX + 178, 121, 55, 22);
+        btnAñadir_a_Carrito.setBounds(inicioX + 284, 123, 86, 22);
+        lblId.setBounds(inicioX + 47, 111, 44, 12);
+        lblNewLabel.setBounds(inicioX + 10, 131, 44, 12);
+        lblFecha_exp.setBounds(inicioX + 57, 131, 70, 12);
+    }
+    
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAñadir_a_Carrito) {
 			do_btnAñadir_a_Carrito_actionPerformed(e);
@@ -113,6 +142,7 @@ public class TarjetaProducto extends JPanel implements ActionListener {
 	}
 	//Añadir:
 	protected void do_btnAñadir_a_Carrito_actionPerformed(ActionEvent e) {
-		
+		ArrayDetalle_Carrito adc = new ArrayDetalle_Carrito();
+		adc.Agregar_Detalle_a_Carrito(Intermediario.idCarritoActual, lblId.getText(), 1);
 	}
 }

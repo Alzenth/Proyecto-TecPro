@@ -103,26 +103,16 @@ CREATE OR ALTER PROCEDURE dbo.SP_Editar_Producto(
     @DESCR VARCHAR(255),
     @STK INT,
     @PREC DECIMAL(10, 2),     
-    @F_CREA DATE,
     @F_EXP DATE
 )
 AS 
 BEGIN
     UPDATE PRODUCTO
     SET NOMBRE = @NOM, CATEGORIA = @CAT, DESCRIPCION = @DESCR, STOCK = @STK, 
-        PRECIO = @PREC, Fecha_Creacion = @F_CREA, Fecha_Expiracion = @F_EXP
+        PRECIO = @PREC, Fecha_Expiracion = @F_EXP
     WHERE ID_PRODUCTO = @ID_PROD;
 END;
 GO
-
-CREATE OR ALTER PROCEDURE SP_Eliminar_Producto(
-	@ID_PROD char(10)
-)
-AS
-BEGIN
-	DELETE FROM dbo.PRODUCTO WHERE ID_PRODUCTO = @ID_PROD;
-END;
-GO 
 
 -- ====================================================
 -- PROCEDIMIENTOS DE LISTADO Y ELIMINACIÓN
@@ -210,6 +200,15 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE dbo.SP_Obtener_ID_Carrito (
+    @DNI_Ingresado CHAR(8)
+)
+AS
+BEGIN
+    SELECT C.ID_CARRITO FROM CARRITO C INNER JOIN CLIENTE CL
+    ON C.ID_CLIENTE = CL.ID_CLIENTE WHERE CL.DNI = @DNI_Ingresado;
+END;
+GO
 CREATE OR ALTER PROCEDURE Sp_Agregar_Producto_a_DetalleCarrito (
     @ID_CARRITO Char(6),
     @ID_PRODUCTO CHAR(4),
@@ -228,6 +227,7 @@ BEGIN
         SET Cantidad = Cantidad + @Cantidad,
             Precio = @PrecioUnitario * (Cantidad + @Cantidad)
         WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
+
     END
     ELSE
     BEGIN
@@ -250,6 +250,15 @@ BEGIN
     WHERE DCAR.ID_CARRITO = @Id_Carrito_Pro; 
 END;
 GO
+
+CREATE OR ALTER PROCEDURE SP_Eliminar_Producto_de_DetalleCarrito(
+	@ID_DC char(5)
+)
+AS
+BEGIN
+	DELETE FROM dbo.DETALLE_CARRITO WHERE ID_DETALLE_CARRITO = @ID_DC;
+END;
+GO 
 
 -- ====================================================
 -- PROCEDIMIENTO DE VENTA FINAL (LA BOLETA)
@@ -444,5 +453,20 @@ Exec SP_Agregar_Producto 'P235', 'Chocoteja de Pisco sour Maracuyá', 'Chocoteja
 Exec SP_Listar_Productos;
 -- Produtos de la Empresa
 
-Exec SP_Listar_Clientes;
 Exec SP_Listar_Admin;
+
+Exec SP_Listar_Clientes;
+Select * from CARRITO
+
+EXEC SP_Editar_Producto
+    @ID_PROD = 'P236',
+    @NOM = 'Prueba',
+    @CAT = 'Chocotejas',
+    @DESCR = 'Descripción',
+    @STK = 10,
+    @PREC = 5.50,
+    @F_EXP = '2026-12-31';
+
+EXEC SP_Mostrar_Producto_a_Detalle 'CAR000'
+
+EXEC SP_Eliminar_Producto_de_DetalleCarrito 'DC000'

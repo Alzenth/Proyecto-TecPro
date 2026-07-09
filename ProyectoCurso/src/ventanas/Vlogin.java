@@ -8,11 +8,16 @@ import javax.swing.border.EmptyBorder;
 
 import admin.VGestionProductos;
 import admin.VOpcion;
+import arraylist.ArrayCarrito;
+import clases.ArregloProducto;
+import clases.Intermediario;
 import cliente.Vbienvenida;
 import cliente.Vcatalogo;
 import conexion.ConexionBD;
+import constructores.Carrito;
 import constructores.Cliente;
 import constructores.Empleado;
+import constructores.Producto;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -35,6 +40,8 @@ public class Vlogin extends JFrame implements ActionListener {
 	private JTextField txtusuario;
 	private JButton btnRegis;
 
+
+	
 	/**
 	 * Launch the application.
 	 */
@@ -153,8 +160,9 @@ public class Vlogin extends JFrame implements ActionListener {
 	            plantilla.setString(2, contr);
 	            
 	            ResultSet tabla_resultado = plantilla.executeQuery();
-	            
+
 	            if (tabla_resultado.next()) {
+		            Intermediario.dniAdminActual = txtusuario.getText(); //Guardamos el DNI del administrador
 	            	JOptionPane.showMessageDialog(this, "¡Bienvenido Administrador!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
 	                
 	            	
@@ -173,7 +181,18 @@ public class Vlogin extends JFrame implements ActionListener {
 		            
 		            if(tabla_resultado_Cliente.next()) {
 		            	Vbienvenida bienvenida = new Vbienvenida(usuario);
-		            	JOptionPane.showMessageDialog(this, "¡Bienvenido a tu cuentta!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
+			            Intermediario.dniClienteActual = txtusuario.getText(); //Guardamos el DNI del cliente
+			            
+
+			        	ArrayCarrito ac = new ArrayCarrito();
+	        			ac.AgregarCarrito();
+	        			
+	        			String idCarrito = ac.ObtenerIDCarrito(Intermediario.dniClienteActual);
+	        			Intermediario.idCarritoActual = idCarrito;
+	        			
+	        			System.out.println("DNI de Cliente: " + Intermediario.dniClienteActual + "\nCarrito asignado: " + Intermediario.idCarritoActual);
+	        			
+		            	JOptionPane.showMessageDialog(this, "¡Bienvenido a tu cuenta!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
 	                    
 	                    Vcatalogo ventanacatalogo = new Vcatalogo();
 	                    ventanacatalogo.setVisible(true);

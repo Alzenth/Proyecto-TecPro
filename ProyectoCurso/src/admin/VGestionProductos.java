@@ -65,6 +65,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_1;
 	private JTextField txtPrecioProducto;
+	//Actualmente ArregloProducto no sirve, pero borrarlo generaría error porque se usa en Descargar y Cargar txt
 	private ArregloProducto ap = new ArregloProducto();
 	private JComboBox cbBoxCategoria;
 	private JLabel lblNewLabel_3;
@@ -220,29 +221,16 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		btnDescargarProductos.setBounds(30, 499, 145, 20);
 		panel.add(btnDescargarProductos);
 		{
-			lblNewLabel_4 = new JLabel("Fecha Producción:");
-			lblNewLabel_4.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-			lblNewLabel_4.setBounds(674, 80, 111, 14);
-			panel.add(lblNewLabel_4);
-		}
-		{
 			lblNewLabel_5 =new JLabel("Fecha Vencimiento:");
 			lblNewLabel_5.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-			lblNewLabel_5.setBounds(674, 112, 111, 14);
+			lblNewLabel_5.setBounds(674, 79, 111, 14);
 			panel.add(lblNewLabel_5);
-		}
-		{
-			txtFechaProduccion = new JTextField();
-			txtFechaProduccion.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-			txtFechaProduccion.setBounds(810, 77, 101, 20);
-			panel.add(txtFechaProduccion);
-			txtFechaProduccion.setColumns(10);
 		}
 		{
 			txtFechaVencimiento = new JTextField();
 			txtFechaVencimiento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 			txtFechaVencimiento.setColumns(10);
-			txtFechaVencimiento.setBounds(810, 109, 101, 20);
+			txtFechaVencimiento.setBounds(810, 76, 101, 20);
 			panel.add(txtFechaVencimiento);
 		}
 		{
@@ -370,9 +358,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	}
 	
 	ArregloProducto listado = new ArregloProducto();
-	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
-	private JTextField txtFechaProduccion;
 	private JTextField txtFechaVencimiento;
 	private JLabel lblNewLabel_6;
 	private JTextArea txtDescripcionProducto;
@@ -397,10 +383,8 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	        formatoFecha.setLenient(false);
 	        
-	        java.util.Date utilFechaP = formatoFecha.parse(txtFechaProduccion.getText());
 	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
 	        
-	        Date fechaP = new Date(utilFechaP.getTime());
 	        Date fechaV = new Date(utilFechaV.getTime());
 	        
 	        
@@ -408,7 +392,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	        if (!cat.equals("Seleccione una categoría")) {
 	        	if (stock >=0) {
 	        		if(precio >= 0) {
-	        			Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, fechaP, fechaV );
+	        			Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, null, fechaV );
 				        
 				        ArrayProducto bdProducto = new ArrayProducto();
 			            bdProducto.Insertar(nuevo);
@@ -422,7 +406,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 				        txtStockProducto.setText("");
 				        txtDescripcionProducto.setText("");
 				        txtPrecioProducto.setText("");
-				        txtFechaProduccion.setText("");
 				        txtFechaVencimiento.setText("");
 				        txtIdProducto.requestFocus();
 				        
@@ -705,8 +688,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		txtDescripcionProducto.setText(String.valueOf(tbTable.getValueAt(fila, 3)));
 		txtStockProducto.setText(String.valueOf(tbTable.getValueAt(fila, 4)));
 		txtPrecioProducto.setText(String.valueOf(tbTable.getValueAt(fila, 5)));
-		txtFechaProduccion.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
-		txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 7)));
+		txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
 		
 		try {
 			SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy");
@@ -716,12 +698,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			String fechaVStr = String.valueOf(tbTable.getValueAt(fila, 7));
 			
 			
-			if (fechaPStr.contains("-")) {
-				txtFechaProduccion.setText(formatoSalida.format(formatoEntrada.parse(fechaPStr)));
-			} else {
-				
-				txtFechaProduccion.setText(fechaPStr);
-			}
+
 			
 			
 			if (fechaVStr.contains("-")) {
@@ -732,8 +709,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			
 		} catch (Exception ex) {
 			
-			txtFechaProduccion.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
-			txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 7)));
+			txtFechaVencimiento.setText(String.valueOf(tbTable.getValueAt(fila, 6)));
 		}
 		
 		
@@ -746,11 +722,9 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			formatoFecha.setLenient(false); 
 
 			
-			java.util.Date utilFechaP = formatoFecha.parse(txtFechaProduccion.getText());
 			java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
 
 			
-			java.sql.Date fechaP = new java.sql.Date(utilFechaP.getTime());
 			java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
 			
 			Producto pro = new Producto(
@@ -760,7 +734,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 					txtDescripcionProducto.getText(),
 					Integer.parseInt(txtStockProducto.getText()),
 					Double.parseDouble(txtPrecioProducto.getText()),
-					fechaP, fechaV
+					null, fechaV
 					);
 			
 			
@@ -789,7 +763,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			txtDescripcionProducto.setText("");
 			txtStockProducto.setText("");
 			txtPrecioProducto.setText("");
-			txtFechaProduccion.setText("");
 			txtFechaVencimiento.setText("");
 			
 

@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-
+import clases.Intermediario;
 import conexion.ConexionBD;
 import constructores.Producto;
 
@@ -13,7 +13,6 @@ import constructores.Producto;
 
 public class ArrayProducto {
 	ConexionBD db = new ConexionBD();
-
 
 public ArrayList<Producto> Listar_Productos_En_Tabla(){
 	ArrayList<Producto> listado=new ArrayList<Producto>();
@@ -47,8 +46,8 @@ public void Insertar(Producto pro) {
 		csta.setString(4,pro.getDescripcion_prod());
 		csta.setInt(5, pro.getStock_prod()); 
 		csta.setDouble(6,pro.getPrecio_prod());
-		csta.setDate(7,pro.getFechaP_prod());
-		csta.setDate(8,pro.getFechaV_prod());
+		csta.setDate(7,pro.getFechaV_prod());
+		csta.setString(8, Intermediario.dniAdminActual);
 		
 		
 		csta.executeUpdate();
@@ -72,15 +71,14 @@ public void Eliminar(String cod) {
 public void Editar(Producto pro) {
 	try {
 		Connection cnx =db.conectar();
-		CallableStatement csta = cnx.prepareCall("{CALL SP_Editar_Producto(?,?,?,?,?,?,?,?)}");
+		CallableStatement csta = cnx.prepareCall("{CALL SP_Editar_Producto(?,?,?,?,?,?,?)}");
 		csta.setString(1, pro.getId_prod());
 		csta.setString(2, pro.getNombre_prod());
 		csta.setString(3, pro.getCategoria_prod());
 		csta.setString(4, pro.getDescripcion_prod());
 		csta.setInt(5, pro.getStock_prod());
 		csta.setDouble(6, pro.getPrecio_prod());
-		csta.setDate(7, pro.getFechaP_prod());
-		csta.setDate(8, pro.getFechaV_prod());
+		csta.setDate(7, pro.getFechaV_prod());
 		csta.executeUpdate();
 		
 	} catch (Exception e) {
