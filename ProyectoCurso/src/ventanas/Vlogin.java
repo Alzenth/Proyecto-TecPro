@@ -138,7 +138,7 @@ public class Vlogin extends JFrame implements ActionListener {
 
 	    Timer timer = new Timer(TIEMPO_BLOQUEO * 1000, e -> {
 	        btnIngresar.setEnabled(true);
-	        intentosFallidos = 0; // Reinicia los intentos
+	        intentosFallidos = 0; 
 	        JOptionPane.showMessageDialog(this,
 	                "Ya puedes volver a intentar iniciar sesión.");
 	    });

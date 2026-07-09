@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import arraylist.ArrayProducto;
+import clases.Intermediario;
 import constructores.Producto;
 import ventanas.Vlogin;
 
@@ -28,7 +29,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JButton btnNewButton;
+    private JButton btnIr_a_Carrito;
     private JButton btnNewButton_1;
     
     private JPanel panel;
@@ -114,13 +115,13 @@ public class Vcatalogo extends JFrame implements ActionListener {
         JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelInferior.setOpaque(false);
         
-        btnNewButton = new JButton("Ir a Carrito");
-        btnNewButton.setForeground(new Color(255, 255, 255));
-        btnNewButton.setBackground(new Color(255, 104, 83));
-        btnNewButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnNewButton.addActionListener(this);
+        btnIr_a_Carrito = new JButton("Ir a Carrito");
+        btnIr_a_Carrito.setForeground(new Color(255, 255, 255));
+        btnIr_a_Carrito.setBackground(new Color(255, 104, 83));
+        btnIr_a_Carrito.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnIr_a_Carrito.addActionListener(this);
         
-        panelInferior.add(btnNewButton);
+        panelInferior.add(btnIr_a_Carrito);
         contentPane.add(panelInferior, BorderLayout.SOUTH);
 
         cargarCatalogo();
@@ -158,7 +159,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnNewButton_1) {
             do_btnNewButton_1_actionPerformed(e);
-        } else if (e.getSource() == btnNewButton) {
+        } else if (e.getSource() == btnIr_a_Carrito) {
             do_btnNewButton_actionPerformed(e);
         } else if (e.getSource() == cmbBox) {
             cargarCatalogo();
@@ -170,6 +171,7 @@ public class Vcatalogo extends JFrame implements ActionListener {
         ventanacarrito.setLocationRelativeTo(null); 
         ventanacarrito.setVisible(true);
         this.dispose(); 
+        
     }
     
     protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {

@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import arraylist.ArrayDetalle_Carrito;
 import arraylist.ArrayProducto;
+import clases.ArrayDetalle_Venta;
 import clases.Intermediario;
 import constructores.Detalle_Carrito;
 import constructores.Producto;
@@ -38,7 +39,7 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 	private JTable tbTable;
 	private JLabel lblNewLabel;
 	private JButton btnRemoverProducto;
-	private JTextField txtIdProducto;
+	private JButton btnNewButton_1;
 
 	/**
 	 * Launch the application.
@@ -73,7 +74,8 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 			contentPane.add(btnNewButton);
 		}
 		
-		JButton btnNewButton_1 = new JButton("Comprar");
+		btnNewButton_1 = new JButton("Comprar");
+		btnNewButton_1.addActionListener(this);
 		btnNewButton_1.setBounds(10, 286, 89, 23);
 		contentPane.add(btnNewButton_1);
 		{
@@ -99,22 +101,17 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 					btnRemoverProducto.setBounds(542, 13, 145, 20);
 					contentPane.add(btnRemoverProducto);
 				}
-				{
-					txtIdProducto = new JTextField();
-					txtIdProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-					txtIdProducto.setColumns(10);
-					txtIdProducto.setBounds(218, 12, 34, 20);
-					contentPane.add(txtIdProducto);
-				}
 				tbTable.addMouseListener(this);
 			}
 		}
-		
-		txtIdProducto.setVisible(false);
+		Listar(Intermediario.idCarritoActual);
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton_1) {
+			do_btnNewButton_1_actionPerformed(e);
+		}
 		if (e.getSource() == btnRemoverProducto) {
 			do_btnRemoverProducto_actionPerformed(e);
 		}
@@ -151,7 +148,7 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 	}
 	protected void do_btnRemoverProducto_actionPerformed(ActionEvent e) {
 
-			Listar(Intermediario.idCarritoActual);
+		
 
 	}
 	void MensajeEmergente(String s) {
@@ -167,20 +164,21 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 		Iterator it = lista.iterator();
 		
 		
-		modelo.addColumn("Código");
+		
 		modelo.addColumn("Producto");
 		modelo.addColumn("Cantidad");
 		modelo.addColumn("Precio Unitario");	
 		modelo.addColumn("Subtotal");
+		
 		int i=0;
 		while (it.hasNext()) {
 			Object obj = it.next();
 			Detalle_Carrito dcar= (Detalle_Carrito)obj;
-			modelo.setValueAt(dcar.getIdDetalleCarrito(), i, 0);
-			modelo.setValueAt(dcar.getNombreProducto(), i, 1);
-			modelo.setValueAt(dcar.getCantidad(), i, 2);
-			modelo.setValueAt(dcar.getPrecioUnitario(), i, 3);
-			modelo.setValueAt(dcar.getSubtotal(), i, 4);
+			
+			modelo.setValueAt(dcar.getNombreProducto(), i, 0);
+			modelo.setValueAt(dcar.getCantidad(), i, 1);
+			modelo.setValueAt(dcar.getPrecioUnitario(), i, 2);
+			modelo.setValueAt(dcar.getSubtotal(), i, 3);
 			
 			i++;
 			
@@ -189,11 +187,32 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 		tbTable.setModel(modelo);
 		
 		
-		tbTable.getColumnModel().getColumn(0).setPreferredWidth(45);   
+		tbTable.getColumnModel().getColumn(0).setPreferredWidth(85); 
 		tbTable.getColumnModel().getColumn(1).setPreferredWidth(280);  
 		tbTable.getColumnModel().getColumn(2).setPreferredWidth(85);   
 		tbTable.getColumnModel().getColumn(3).setPreferredWidth(85);  
-		tbTable.getColumnModel().getColumn(4).setPreferredWidth(85);   
+		  
+		
+	}
+	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
+		ArrayDetalle_Venta adv = new ArrayDetalle_Venta();
+		
+		
+		String miTicket = adv.Procesar_Venta_Final(); 
+
+		if (miTicket != null) {
+		    JOptionPane.showMessageDialog(this, "¡Compra exitosa! Su ticket es: " + miTicket);
+		    
+		    
+		    VOpcionPago method = new VOpcionPago(miTicket);
+		    method.setLocationRelativeTo(null); 
+		    method.setVisible(true);
+		    
+		    this.dispose();
+		    
+		} else {
+		    JOptionPane.showMessageDialog(this, "Hubo un error al procesar la compra.");
+		}
 		
 	}
 }

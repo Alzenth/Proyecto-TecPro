@@ -291,29 +291,16 @@ CREATE OR ALTER PROCEDURE SP_Mostrar_Detalle_Venta(@ID_VENTA CHAR(4))
 AS
 BEGIN
     SELECT
-        CLIE.DNI AS 'DNI del Cliente',
-        PRO.ID_PRODUCTO AS 'ID del Producto',
-        PRO.NOMBRE AS 'Nombre del Producto',
-        DCAR.CANTIDAD AS 'Cantidad Comprada',
-        DCAR.PRECIO_UNITARIO AS 'Precio Base Unitario',
-        
-        -- Subtotal individual de cada producto
-        (DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) AS 'SubTotal Producto',
-       
-        -- 1. Suma total base combinada
-        SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() AS 'Monto Total Base',
-        
-        -- 2. IGV Total (18%) calculado
-        CAST(SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() * 0.18 AS DECIMAL(10,2)) AS 'IGV Total (18%)',
-        
-        -- 3. Total General a Pagar
-        CAST(SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() * 1.18 AS DECIMAL(10,2)) AS 'Total General a Pagar'
-
+        V.ID_VENTA AS 'Ticket', V.FECHA_HORA AS 'Fecha', CLIE.DNI AS 'DNI',
+        (CLIE.NOMBRES + ' ' + CLIE.APELLIDOS) AS 'Cliente', PRO.NOMBRE AS 'Producto',
+        DCAR.CANTIDAD AS 'Cantidad', (DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) AS 'Subtotal',
+        SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() AS 'OpGravada',
+        V.IGV AS 'IGV',
+        (SUM(DCAR.CANTIDAD * DCAR.PRECIO_UNITARIO) OVER() + V.IGV) AS 'Total'
     FROM CLIENTE AS CLIE 
     INNER JOIN VENTA AS V ON CLIE.ID_CLIENTE = V.ID_CLIENTE 
     INNER JOIN DETALLE_VENTA AS DCAR ON V.ID_VENTA = DCAR.ID_VENTA 
     INNER JOIN PRODUCTO AS PRO ON DCAR.ID_PRODUCTO = PRO.ID_PRODUCTO
-    
     WHERE V.ID_VENTA = @ID_VENTA; 
 END;
 GO
@@ -336,71 +323,42 @@ GO
 
 
 
-EXEC SP_Agregar_Carrito_Por_Cliente '45236187';
-GO
 
-
-EXEC Sp_Agregar_Producto_a_DetalleCarrito 'CAR000', 'P110', 3;
-
-
-EXEC Sp_Agregar_Producto_a_DetalleCarrito 'CAR000', 'P220', 4;
-
-
-UPDATE CARRITO
-SET CANTIDAD_PRODUCTOS = (SELECT SUM(CANTIDAD) FROM DETALLE_CARRITO WHERE ID_CARRITO = 'CAR000'),
-    MONTO_TOTAL = (SELECT SUM(PRECIO) FROM DETALLE_CARRITO WHERE ID_CARRITO = 'CAR000')
-WHERE ID_CARRITO = 'CAR000';
-GO
-
-
-SELECT * FROM CARRITO;
-SELECT * FROM DETALLE_CARRITO;
-GO
-
+CREATE OR ALTER PROCEDURE SP_Generar_Venta_Completa (
+    @DNI_CLIENTE CHAR(8),     
+    @ID_CARRITO CHAR(6)
+)
+AS
 BEGIN
-    -- Declaramos las variables necesarias
+    SET NOCOUNT ON;
     DECLARE @IdVentaGenerada CHAR(4);
-    -- Obtenemos el ID del cliente Juan Carlos usando tu función
-    DECLARE @IdCliente CHAR(4) = dbo.FN_Obtener_ID_Cliente_Por_DNI('45236187'); 
-    DECLARE @IdCarrito CHAR(6) = 'CAR000';
+    DECLARE @ID_CLIENTE CHAR(4);
 
-    -- 1. Generar la VENTA (Cabecera) con IGV
-    INSERT INTO VENTA (ID_CLIENTE, METODO_PAGO, IGV)
-    SELECT 
-        ID_CLIENTE, 
-        'Tarjeta', 
-        CAST(MONTO_TOTAL * 0.18 AS DECIMAL(10,2))
-    FROM CARRITO WHERE ID_CARRITO = @IdCarrito;
+    SET @ID_CLIENTE = dbo.FN_Obtener_ID_Cliente_Por_DNI(@DNI_CLIENTE);
 
-    -- 2. Capturar el ID de la Venta (Será V000)
-    SELECT TOP 1 @IdVentaGenerada = ID_VENTA 
-    FROM VENTA WHERE ID_CLIENTE = @IdCliente ORDER BY FECHA_HORA DESC;
+    IF @ID_CLIENTE IS NULL BEGIN RETURN; END
 
-    -- 3. Migrar los productos a DETALLE_VENTA
+    INSERT INTO VENTA (ID_CLIENTE, IGV) VALUES (@ID_CLIENTE, 0.00);
+
+    SELECT TOP 1 @IdVentaGenerada = ID_VENTA FROM VENTA WHERE ID_CLIENTE = @ID_CLIENTE ORDER BY FECHA_HORA DESC;
+
     INSERT INTO DETALLE_VENTA (ID_VENTA, ID_PRODUCTO, CANTIDAD, PRECIO_UNITARIO, PRECIO)
-    SELECT 
-        @IdVentaGenerada, DC.ID_PRODUCTO, DC.CANTIDAD, P.PRECIO, DC.PRECIO        
-    FROM DETALLE_CARRITO AS DC
-    INNER JOIN PRODUCTO AS P ON DC.ID_PRODUCTO = P.ID_PRODUCTO
-    WHERE DC.ID_CARRITO = @IdCarrito;
+    SELECT @IdVentaGenerada, DC.ID_PRODUCTO, DC.CANTIDAD, P.PRECIO, DC.PRECIO        
+    FROM DETALLE_CARRITO AS DC INNER JOIN PRODUCTO AS P ON DC.ID_PRODUCTO = P.ID_PRODUCTO
+    WHERE DC.ID_CARRITO = @ID_CARRITO;
 
-    -- 4. DESCONTAR EL STOCK (La magia del inventario)
-    UPDATE P
-    SET P.STOCK = P.STOCK - DC.CANTIDAD
-    FROM PRODUCTO AS P
-    INNER JOIN DETALLE_CARRITO AS DC ON P.ID_PRODUCTO = DC.ID_PRODUCTO
-    WHERE DC.ID_CARRITO = @IdCarrito;
+    UPDATE VENTA SET IGV = CAST((SELECT ISNULL(SUM(PRECIO), 0) FROM DETALLE_VENTA WHERE ID_VENTA = @IdVentaGenerada) * 0.18 AS DECIMAL(10,2))
+    WHERE ID_VENTA = @IdVentaGenerada;
 
-    -- 5. Vaciar el carrito (Juan Carlos ya pagó)
-    DELETE FROM DETALLE_CARRITO WHERE ID_CARRITO = @IdCarrito;
-    UPDATE CARRITO SET MONTO_TOTAL = 0.00, CANTIDAD_PRODUCTOS = 0 WHERE ID_CARRITO = @IdCarrito;
+    UPDATE P SET P.STOCK = P.STOCK - DC.CANTIDAD FROM PRODUCTO AS P INNER JOIN DETALLE_CARRITO AS DC ON P.ID_PRODUCTO = DC.ID_PRODUCTO
+    WHERE DC.ID_CARRITO = @ID_CARRITO;
 
-    -- 6. Imprimir la boleta final
-    PRINT '===================== BOLETA DE VENTA GENERADA =====================';
-    EXEC SP_Mostrar_Detalle_Venta @ID_VENTA = @IdVentaGenerada;
+    DELETE FROM DETALLE_CARRITO WHERE ID_CARRITO = @ID_CARRITO;
+    UPDATE CARRITO SET MONTO_TOTAL = 0.00, CANTIDAD_PRODUCTOS = 0 WHERE ID_CARRITO = @ID_CARRITO;
+
+    SELECT @IdVentaGenerada AS 'ID_VENTA_GENERADA';
 END;
 GO
-
 
 
 Exec SP_Agregar_Admin 'A001', 'Alexander Miguel', 'Bejar Centurión', 'alexanderBejar09@gmail.com', '12345678', 77062578, '2002-02-26','930286663'
@@ -447,9 +405,7 @@ Exec SP_Agregar_Producto 'P112', 'Cuchareable de Menta', 'Cuchareables', 'Sabor 
 Exec SP_Agregar_Producto 'P113', 'Cuchareable de Oreo', 'Cuchareables', 'Capas de crema suave mezcladas con galleta Oreo troceada y crujiente.', 45, 6.00, '2026-07-16', 77062578;
 Exec SP_Agregar_Producto 'P114', 'Cuchareable de Guanábana', 'Cuchareables', 'El inconfundible sabor exótico y delicado de la guanábana fresca.', 25, 6.50, '2026-07-16', 77062578;
 Exec SP_Agregar_Producto 'P115', 'Cuchareable de Pistacho', 'Cuchareables', 'Suave y cremoso postre con el sabor intenso y elegante del pistacho puro, coronado con trocitos tostados para un toque crujiente.', 30, 8.00, '2026-07-16', 77062578;
-Exec SP_Listar_Productos;
 
- 
 -- Registro de productos - Chocotejas =================================================================================================================================================================
 
 Exec SP_Agregar_Producto 'P215', 'Chocoteja de Pecana', 'Chocotejas', 'La tradicional chocoteja rellena con mitades de pecana crujiente y abundante manjar blanco.', 40, 2.00, '2026-07-16', 60995119;
@@ -493,4 +449,6 @@ EXEC SP_Editar_Producto
 
 EXEC SP_Mostrar_Producto_a_Detalle 'CAR000'
 
-EXEC SP_Eliminar_Producto_de_DetalleCarrito 'DC000'
+EXEC SP_Eliminar_Producto_de_DetalleCarrito 'DC002'
+
+Select * From detalle_carrito;

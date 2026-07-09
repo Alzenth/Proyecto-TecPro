@@ -8,30 +8,37 @@ import java.util.ArrayList;
 import clases.Intermediario;
 import conexion.ConexionBD;
 import constructores.Detalle_Carrito;
-import constructores.Producto;
 
 public class ArrayDetalle_Carrito {
 	ConexionBD db = new ConexionBD();
+	
 	public void Agregar_Detalle_a_Carrito(String id_carrito, String id_producto, int cantidad) {
 		try {
-			Connection cnx=db.conectar();
-			CallableStatement csta=cnx.prepareCall("{CALL Sp_Agregar_Producto_a_DetalleCarrito(?,?,?)}");
+			Connection cnx = db.conectar();
+			CallableStatement csta = cnx.prepareCall("{CALL Sp_Agregar_Producto_a_DetalleCarrito(?,?,?)}");
+			
 			
 			csta.setString(1, Intermediario.idCarritoActual);
 			csta.setString(2, id_producto);
 			csta.setInt(3, cantidad);
 
 			csta.executeUpdate();
+			
+			csta.close();
+			cnx.close();
 		} catch (Exception e) {
+			
+			System.out.println("Error al agregar detalle al carrito: " + e.getMessage());
 		}
 	}
-	public ArrayList<Detalle_Carrito> Mostrar_En_Carrito(){ //Lista los productos en VCarrito
+	
+	public ArrayList<Detalle_Carrito> Mostrar_En_Carrito(){ 
 		ArrayList<Detalle_Carrito> listado = new ArrayList<>();
 		
-	    Connection cnx = null;
-	    CallableStatement csta = null;
-	    ResultSet rs = null;
-	    
+		Connection cnx = null;
+		CallableStatement csta = null;
+		ResultSet rs = null;
+		
 		try {
 			cnx = db.conectar();
 			csta = cnx.prepareCall("{CALL SP_Mostrar_Producto_a_Detalle(?)}");
@@ -51,7 +58,7 @@ public class ArrayDetalle_Carrito {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("ERROR" +e);
+			System.out.println("Error al mostrar el carrito: " + e.getMessage());
 		} 
 		finally {
 			try {
@@ -60,10 +67,9 @@ public class ArrayDetalle_Carrito {
 				if (cnx != null) cnx.close();
 
 			} catch (Exception e) {
-	            e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		return listado;
 	}
-
 }
