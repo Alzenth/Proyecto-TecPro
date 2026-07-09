@@ -22,7 +22,7 @@ import constructores.Producto;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
+import javax.swing.Timer;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -41,6 +41,9 @@ public class Vlogin extends JFrame implements ActionListener {
 	private JButton btnRegis;
 
 
+	private int intentosFallidos = 0;
+	private final int MAX_INTENTOS = 3;
+	private final int TIEMPO_BLOQUEO = 15;
 	
 	/**
 	 * Launch the application.
@@ -129,6 +132,26 @@ public class Vlogin extends JFrame implements ActionListener {
 		
 		return;
 	}
+	
+	private void bloquearBoton() {
+	    btnIngresar.setEnabled(false);
+
+	    Timer timer = new Timer(TIEMPO_BLOQUEO * 1000, e -> {
+	        btnIngresar.setEnabled(true);
+	        intentosFallidos = 0; // Reinicia los intentos
+	        JOptionPane.showMessageDialog(this,
+	                "Ya puedes volver a intentar iniciar sesión.");
+	    });
+
+	    timer.setRepeats(false);
+	    timer.start();
+
+	    JOptionPane.showMessageDialog(this,
+	            "Has alcanzado el máximo de intentos.\n"
+	            + "El botón estará deshabilitado durante "
+	            + TIEMPO_BLOQUEO + " segundos.");
+	}
+	
 	protected void do_btnIngresar_actionPerformed(ActionEvent e) {
 		
 		String usuario = txtusuario.getText();
@@ -198,7 +221,19 @@ public class Vlogin extends JFrame implements ActionListener {
 	                    ventanacatalogo.setVisible(true);
 	                    this.dispose();
 		            } else {
-		            	JOptionPane.showMessageDialog(this, "DNI o contraseña incorrectos.", "Error de Acceso", JOptionPane.ERROR_MESSAGE);
+		            	intentosFallidos++;
+
+		            	if (intentosFallidos >= MAX_INTENTOS) {
+		            	    bloquearBoton();
+		            	} else {
+		            	    JOptionPane.showMessageDialog(this,
+		            	            "DNI o contraseña incorrectos.\n"
+		            	            + "Intento " + intentosFallidos + " de " + MAX_INTENTOS + ".",
+		            	            "Error de Acceso",
+		            	            JOptionPane.ERROR_MESSAGE);
+		            	}
+		            	
+		            	
 		            }
 		            
 		            tabla_resultado_Cliente.close();
@@ -220,46 +255,6 @@ public class Vlogin extends JFrame implements ActionListener {
 	    	
 	    } else {
 	        JOptionPane.showMessageDialog(this, "No se pudo conectar a la BD.", "Error", JOptionPane.ERROR_MESSAGE);
-	    }
-	    
-	    
-	    /*
-	    if (txtusuario.getText().isEmpty()||txtcontra.getText().isEmpty())
-	    {
-	    	JOptionPane.showMessageDialog(null,"Todos los campos deben estar llenos!");
-	    }
-	    else {
-	    	
-
-	        Constructores.Cliente cli = c.Buscar(usuario);
-
-	        if (cli != null && cli.getContraseña().equals(contr)) {
 	        }
-
-	        Constructores.Empleado emp = em.Buscar(usuario);
-
-	        if (emp != null && emp.getContraseña().equals(contr)) {
-	        }
-	        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos!");
 	    }
-	  }
-	public boolean verificardni(String dni) {
-		for(int i = 0; i < dni.length(); i++) {
-		    if(!Character.isDigit(dni.charAt(i))) {
-		        return true;
-		        }
-	}
-		return false;
-}
-	public boolean verificartelef(String telef) {
-		for(int i = 0; i < telef.length(); i++) {
-		    if(!Character.isDigit(telef.charAt(i))) {
-		        return true;
-		        }
-		    }
-		return false;
-		*/
-	    
-	    
-		}
 }

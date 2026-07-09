@@ -1,26 +1,30 @@
 package constructores;
 
 public class Detalle_Carrito {
-	private String id_detalle_carrito;
-	private Producto pro;
-	private int cantidad;
-	public Detalle_Carrito(String id_detalle_carrito, Producto pro, int cantidad) {
-		
-		this.id_detalle_carrito = id_detalle_carrito;
-		this.pro = pro;
+	private String idDetalleCarrito;
+    private String nombreProducto;
+    private int cantidad;
+    private double precioUnitario;
+    private double subtotal;
+	public Detalle_Carrito(String idDetalleCarrito, String nombreProducto, int cantidad, double precioUnitario,
+			double subtotal) {
+		this.idDetalleCarrito = idDetalleCarrito;
+		this.nombreProducto = nombreProducto;
 		this.cantidad = cantidad;
+		this.precioUnitario = precioUnitario;
+		this.subtotal = subtotal;
 	}
-	public String getId_detalle_carrito() {
-		return id_detalle_carrito;
+	public String getIdDetalleCarrito() {
+		return idDetalleCarrito;
 	}
-	public void setId_detalle_carrito(String id_detalle_carrito) {
-		this.id_detalle_carrito = id_detalle_carrito;
+	public void setIdDetalleCarrito(String idDetalleCarrito) {
+		this.idDetalleCarrito = idDetalleCarrito;
 	}
-	public Producto getPro() {
-		return pro;
+	public String getNombreProducto() {
+		return nombreProducto;
 	}
-	public void setPro(Producto pro) {
-		this.pro = pro;
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
 	}
 	public int getCantidad() {
 		return cantidad;
@@ -28,10 +32,18 @@ public class Detalle_Carrito {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-	public void Agregar_a_Carrito() {
-		
+	public double getPrecioUnitario() {
+		return precioUnitario;
 	}
-	
-	
-	
+	public void setPrecioUnitario(double precioUnitario) {
+		this.precioUnitario = precioUnitario;
+	}
+	public double getSubtotal() {
+		return subtotal;
+	}
+	public void setSubtotal(double subtotal) {
+		this.subtotal = subtotal;
+	}
+
+    
 }

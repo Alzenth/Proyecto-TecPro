@@ -210,41 +210,65 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE Sp_Agregar_Producto_a_DetalleCarrito (
-    @ID_CARRITO Char(6),
+    @ID_CARRITO CHAR(6),
     @ID_PRODUCTO CHAR(4),
     @Cantidad INT
 )
 AS
 BEGIN
     SET NOCOUNT ON;
+
     DECLARE @PrecioUnitario DECIMAL(10,2);
 
-    SELECT @PrecioUnitario = Precio FROM Producto WHERE ID_PRODUCTO = @ID_PRODUCTO;
+    SELECT @PrecioUnitario = PRECIO
+    FROM PRODUCTO
+    WHERE ID_PRODUCTO = @ID_PRODUCTO;
 
-    IF EXISTS (SELECT 1 FROM Detalle_Carrito WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO)
+    IF EXISTS (
+        SELECT 1
+        FROM DETALLE_CARRITO
+        WHERE ID_CARRITO = @ID_CARRITO
+          AND ID_PRODUCTO = @ID_PRODUCTO
+    )
     BEGIN
-        UPDATE Detalle_Carrito
-        SET Cantidad = Cantidad + @Cantidad,
-            Precio = @PrecioUnitario * (Cantidad + @Cantidad)
-        WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
-
+        UPDATE DETALLE_CARRITO
+        SET CANTIDAD = CANTIDAD + @Cantidad,
+            PRECIO = @PrecioUnitario * (CANTIDAD + @Cantidad)
+        WHERE ID_CARRITO = @ID_CARRITO
+          AND ID_PRODUCTO = @ID_PRODUCTO;
     END
     ELSE
     BEGIN
-        INSERT INTO Detalle_Carrito (ID_CARRITO, ID_PRODUCTO, Cantidad, Precio)
-        VALUES (@ID_CARRITO, @ID_PRODUCTO, @Cantidad, @PrecioUnitario * @Cantidad);
+        INSERT INTO DETALLE_CARRITO
+            (ID_CARRITO, ID_PRODUCTO, CANTIDAD, PRECIO)
+        VALUES
+            (@ID_CARRITO, @ID_PRODUCTO, @Cantidad, @PrecioUnitario * @Cantidad);
     END
+
+    UPDATE CARRITO
+    SET CANTIDAD_PRODUCTOS = (
+            SELECT ISNULL(SUM(CANTIDAD), 0)
+            FROM DETALLE_CARRITO
+            WHERE ID_CARRITO = @ID_CARRITO
+        ),
+        MONTO_TOTAL = (
+            SELECT ISNULL(SUM(PRECIO), 0)
+            FROM DETALLE_CARRITO
+            WHERE ID_CARRITO = @ID_CARRITO
+        )
+    WHERE ID_CARRITO = @ID_CARRITO;
+
 END;
 GO
-
 CREATE OR ALTER PROCEDURE SP_Mostrar_Producto_a_Detalle(@Id_Carrito_Pro char(6))
 AS
 BEGIN
     SELECT
-        pro.NOMBRE as 'Nombre de Producto',
-        DCAR.CANTIDAD as 'Cantidad Productos',
-        Pro.PRECIO as 'Precio Unitario',
-        dcar.PRECIO as 'Monto total'
+        DCAR.ID_DETALLE_CARRITO,
+        pro.NOMBRE,
+        DCAR.CANTIDAD,
+        Pro.PRECIO as 'PRECIO_UNITARIO',
+        dcar.PRECIO as 'SUBTOTAL'
     FROM PRODUCTO as pro 
     INNER JOIN DETALLE_CARRITO as DCAR ON pro.ID_PRODUCTO = DCAR.ID_PRODUCTO
     WHERE DCAR.ID_CARRITO = @Id_Carrito_Pro; 

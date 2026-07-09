@@ -7,7 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import arraylist.ArrayDetalle_Carrito;
 import arraylist.ArrayProducto;
+import clases.Intermediario;
+import constructores.Detalle_Carrito;
 import constructores.Producto;
 
 import javax.swing.JButton;
@@ -147,48 +150,37 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 	
 	}
 	protected void do_btnRemoverProducto_actionPerformed(ActionEvent e) {
-		try {
-			ArrayProducto eli = new ArrayProducto();
-			eli.Eliminar(txtIdProducto.getText());
-			Listar("");
-			}catch (Exception ex) {
-				MensajeEmergente("Error al eliminar producto!");
-			}
+
+			Listar(Intermediario.idCarritoActual);
+
 	}
 	void MensajeEmergente(String s) {
 		JOptionPane.showMessageDialog(this, s);
 	}
 	public void Listar(String cod) {
 		DefaultTableModel modelo = new DefaultTableModel();
-		ArrayProducto pro = new ArrayProducto();
-		ArrayList<Producto> lista = new ArrayList<Producto>();
-		if (cod.length() == 0) 
-			lista = pro.Listar_Productos_En_Tabla();
-		else 
-			lista= pro.Consultar_Producto(cod);
+		ArrayDetalle_Carrito adc = new ArrayDetalle_Carrito();
+		ArrayList<Detalle_Carrito> lista = new ArrayList<Detalle_Carrito>();
+			lista = adc.Mostrar_En_Carrito();
 		
 		modelo.setRowCount(lista.size());
 		Iterator it = lista.iterator();
+		
+		
 		modelo.addColumn("Código");
-		modelo.addColumn("Nombre");
-		modelo.addColumn("Categoría");
-		modelo.addColumn("Descripción");	
-		modelo.addColumn("Stock");
-		modelo.addColumn("Precio");
-		modelo.addColumn("Fecha de Producción");
-		modelo.addColumn("Fecha de Expiración");
+		modelo.addColumn("Producto");
+		modelo.addColumn("Cantidad");
+		modelo.addColumn("Precio Unitario");	
+		modelo.addColumn("Subtotal");
 		int i=0;
 		while (it.hasNext()) {
 			Object obj = it.next();
-			Producto prod= (Producto)obj;
-			modelo.setValueAt(prod.getId_prod(), i, 0);
-			modelo.setValueAt(prod.getNombre_prod(), i, 1);
-			modelo.setValueAt(prod.getCategoria_prod(), i, 2);
-			modelo.setValueAt(prod.getDescripcion_prod(), i, 3);
-			modelo.setValueAt(prod.getStock_prod(), i, 4);
-			modelo.setValueAt(prod.getPrecio_prod(), i, 5);
-			modelo.setValueAt(prod.getFechaP_prod(), i, 6);
-			modelo.setValueAt(prod.getFechaV_prod(), i, 7);
+			Detalle_Carrito dcar= (Detalle_Carrito)obj;
+			modelo.setValueAt(dcar.getIdDetalleCarrito(), i, 0);
+			modelo.setValueAt(dcar.getNombreProducto(), i, 1);
+			modelo.setValueAt(dcar.getCantidad(), i, 2);
+			modelo.setValueAt(dcar.getPrecioUnitario(), i, 3);
+			modelo.setValueAt(dcar.getSubtotal(), i, 4);
 			
 			i++;
 			
@@ -198,14 +190,10 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 		
 		
 		tbTable.getColumnModel().getColumn(0).setPreferredWidth(45);   
-		tbTable.getColumnModel().getColumn(1).setPreferredWidth(180);  
+		tbTable.getColumnModel().getColumn(1).setPreferredWidth(280);  
 		tbTable.getColumnModel().getColumn(2).setPreferredWidth(85);   
-		tbTable.getColumnModel().getColumn(3).setPreferredWidth(470);  
-		tbTable.getColumnModel().getColumn(4).setPreferredWidth(40);   
-		tbTable.getColumnModel().getColumn(5).setPreferredWidth(40);   
-		tbTable.getColumnModel().getColumn(6).setPreferredWidth(90);   
-		tbTable.getColumnModel().getColumn(7).setPreferredWidth(90); 
-		
+		tbTable.getColumnModel().getColumn(3).setPreferredWidth(85);  
+		tbTable.getColumnModel().getColumn(4).setPreferredWidth(85);   
 		
 	}
 }
