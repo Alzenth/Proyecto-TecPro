@@ -124,24 +124,28 @@ public class VRegistro extends JFrame implements ActionListener{
 		contentPane.add(lblcontra2);
 		
 		JLabel lblNewLabel = new JLabel("¿Tienes cuenta?");
-		lblNewLabel.setBounds(176, 313, 114, 14);
+		lblNewLabel.setBounds(169, 330, 114, 14);
 		contentPane.add(lblNewLabel);
 		{
 			btnNewButton_1 = new JButton("Iniciar sesión");
 			btnNewButton_1.addActionListener(this);
-			btnNewButton_1.setBounds(156, 338, 122, 35);
+			btnNewButton_1.setBounds(149, 355, 122, 35);
 			contentPane.add(btnNewButton_1);
 		}
 		
 		btnNewButton_2 = new JButton("Crear cuenta");
 		btnNewButton_2.addActionListener(this);
-		btnNewButton_2.setBounds(156, 255, 122, 35);
+		btnNewButton_2.setBounds(149, 285, 122, 35);
 		contentPane.add(btnNewButton_2);
 		{
 			txtPassWord = new JPasswordField();
 			txtPassWord.setBounds(129, 225, 174, 18);
 			contentPane.add(txtPassWord);
 		}
+		
+		lblNewLabel_1 = new JLabel("(Deben ser 8 caracteres)");
+		lblNewLabel_1.setBounds(129, 248, 154, 12);
+		contentPane.add(lblNewLabel_1);
 	}
 	public boolean verificardni(String dni) {
 		for(int i = 0; i < dni.length(); i++) {
@@ -169,43 +173,64 @@ public class VRegistro extends JFrame implements ActionListener{
 	clases.ArregloCliente c=new clases.ArregloCliente();
 	private JButton btnNewButton_2;
 	private JPasswordField txtPassWord;
+	private JLabel lblNewLabel_1;
 	
 	
 	
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
 	    try {
-	    
-	    String nom = txtnombre.getText().trim();
-	    String ape = txtapellido.getText().trim();
-	    String dni = txtdni.getText().trim();
-	    String tel = txttele.getText().trim();
-	    String cor = txtcorreo.getText().trim();
-	    char[] password = txtPassWord.getPassword();
-		String contr = new String(password);
+	        String nom = txtnombre.getText().trim();
+	        String ape = txtapellido.getText().trim();
+	        String dni = txtdni.getText().trim();
+	        String tel = txttele.getText().trim();
+	        String cor = txtcorreo.getText().trim();
+	        char[] password = txtPassWord.getPassword();
+	        String contr = new String(password);
 
-		if (dni.length() == 8) {
-			if (tel.length() == 9) {
-				if (contr.length() == 8) {
-					
-					Cliente cli = new Cliente( nom,ape , dni,contr,cor, tel);
-			        
-			        ArrayCliente bdCliente = new ArrayCliente();
-			        bdCliente.Insertar(cli);
-			        
-			        JOptionPane.showMessageDialog(this, "¡Usted se registro correctamente!");
-			        Vlogin ventanaLogin = new Vlogin();
-			        ventanaLogin.setLocationRelativeTo(null); 
-			        ventanaLogin.setVisible(true);
-			        this.dispose();
-			        
-				} else MensajeEmergente("¡Ingrese una contraseña válida de 8 dígitos!");
-			} else MensajeEmergente("¡Ingrese un número telefónico válido!");
-		} else MensajeEmergente("¡Ingrese un dni válido!");
+	        if (dni.length() == 8) {
+	            if (tel.length() == 9) {
+	                if (contr.length() == 8) {
+	                    
+	                    Cliente cli = new Cliente(nom, ape, dni, contr, cor, tel);
+	                    ArrayCliente bdCliente = new ArrayCliente();
+	                    
+	                    
+	                    bdCliente.Insertar(cli);
+	                    
+	                    JOptionPane.showMessageDialog(this, "¡Usted se registro correctamente!");
+	                    Vlogin ventanaLogin = new Vlogin();
+	                    ventanaLogin.setLocationRelativeTo(null); 
+	                    ventanaLogin.setVisible(true);
+	                    this.dispose();
+
+	                } else MensajeEmergente("¡Ingrese una contraseña válida de 8 dígitos!");
+	            } else MensajeEmergente("¡Ingrese un número telefónico válido!");
+	        } else MensajeEmergente("¡Ingrese un dni válido!");
+	        
 	    
-		
-	 }catch (Exception ex) {
-			MensajeEmergente("Error: Revisa los campos");
-			}
+	    } catch (java.sql.SQLException ex) {
+	        if (ex.getMessage().contains("El DNI ya se encuentra registrado como administrador")) {
+	            JOptionPane.showMessageDialog(this, 
+	                "El registro ha fallado: " + ex.getMessage(), 
+	                "Acceso Denegado", 
+	                JOptionPane.ERROR_MESSAGE);
+	                
+	        
+	        } else if (ex.getMessage().contains("Este número telefónico ya se encuentra registrado")) {
+	            JOptionPane.showMessageDialog(this, 
+	                "El registro ha fallado: " + ex.getMessage(), 
+	                "Teléfono Duplicado", 
+	                JOptionPane.ERROR_MESSAGE);
+	                
+	        } else {
+	            JOptionPane.showMessageDialog(this, 
+	                "Error de Base de Datos: " + ex.getMessage(), 
+	                "Error", 
+	                JOptionPane.ERROR_MESSAGE);
+	        }
+	    } catch (Exception ex) {
+	        MensajeEmergente("Error: Revisa los campos");
+	    }
 	}
 	
 	void MensajeEmergente(String s) {

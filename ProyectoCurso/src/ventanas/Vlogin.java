@@ -111,12 +111,22 @@ public class Vlogin extends JFrame implements ActionListener {
 			txtPassWord.setBounds(224, 129, 96, 20);
 			contentPane.add(txtPassWord);
 		}
+		{
+			btnNewButton = new JButton("Programadores");
+			btnNewButton.addActionListener(this);
+			btnNewButton.setBounds(10, 228, 122, 20);
+			contentPane.add(btnNewButton);
+		}
 
 	}
 	clases.ArregloCliente c = new clases.ArregloCliente();
 	clases.ArregloEmpleado em=new clases.ArregloEmpleado();
 	private JPasswordField txtPassWord;
+	private JButton btnNewButton;
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton) {
+			do_btnNewButton_actionPerformed(e);
+		}
 		if (e.getSource() == btnIngresar) {
 			do_btnIngresar_actionPerformed(e);
 		}
@@ -257,4 +267,10 @@ public class Vlogin extends JFrame implements ActionListener {
 	        JOptionPane.showMessageDialog(this, "No se pudo conectar a la BD.", "Error", JOptionPane.ERROR_MESSAGE);
 	        }
 	    }
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+		Creadores creadoress = new Creadores();
+		creadoress.setVisible(true);
+        
+		
+	}
 }

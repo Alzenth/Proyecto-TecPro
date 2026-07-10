@@ -16,6 +16,11 @@ CREATE OR ALTER PROCEDURE SP_Agregar_Admin(
 )
 AS  
 BEGIN
+    IF EXISTS(SELECT 1 FROM CLIENTE AS C WHERE C.DNI = @DNI_ADMIN)
+    BEGIN
+        RAISERROR('El DNI ya se encuentra registrado como cliente', 16,2)
+        RETURN;
+    END
     INSERT INTO ADMINISTRADOR(ID_ADMINISTRADOR, NOMBRES, APELLIDOS, EMAIL, CONTRASEÑA, DNI, FECHA_NACIMIENTO, TELEFONO) 
     VALUES (@ID_ADMIN, @NOM, @APE, @CORREO, @PASS, @DNI_ADMIN, @F_NAC, @TELF);
 END;
@@ -29,11 +34,25 @@ CREATE OR ALTER PROCEDURE Sp_Agregar_Cliente(
     @EMAIL VARCHAR(100),
     @TELEFONO CHAR(9)
 )
-AS 
+AS
+
 BEGIN
+    IF EXISTS(SELECT 1 FROM ADMINISTRADOR WHERE DNI = @DNI_CLIENTE)
+    BEGIN
+        RAISERROR('El DNI ya se encuentra registrado como administrador', 16,2)
+        RETURN;
+    END
+    IF EXISTS(SELECT 1 FROM CLIENTE WHERE TELEFONO = @TELEFONO)
+    BEGIN
+        RAISERROR('Este número telefónico ya se encuentra registrado por otro cliente', 16,2)
+        RETURN;
+    END
+    
     INSERT INTO CLIENTE(NOMBRES, APELLIDOS, DNI, CONTRASEÑA, EMAIL, TELEFONO)
     VALUES(@NOMBRES, @APELLIDOS, @DNI_CLIENTE, @CONTRASEÑA, @EMAIL, @TELEFONO);
+     
 END;
+
 GO
 
 CREATE OR ALTER FUNCTION dbo.Fun_Retornador_ID_ADMIN(
@@ -386,6 +405,8 @@ Go
 
 Exec SP_Listar_Clientes;
 Go
+
+
 
 
 -- Registro de prodcutos - Cuchareables

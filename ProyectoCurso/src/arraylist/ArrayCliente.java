@@ -2,7 +2,7 @@ package arraylist;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-
+import java.sql.SQLException;
 
 import conexion.ConexionBD;
 import constructores.Cliente;
@@ -11,7 +11,7 @@ import constructores.Cliente;
 public class ArrayCliente {
 	
 	ConexionBD db = new ConexionBD();
-	public void Insertar(Cliente pro) {
+	public void Insertar(Cliente pro) throws SQLException {
 		try {
 			Connection cnx=db.conectar();
 			CallableStatement csta=cnx.prepareCall("{CALL Sp_Agregar_Cliente(?,?,?,?,?,?)}");
@@ -23,11 +23,11 @@ public class ArrayCliente {
 			csta.setString(5,pro.getCorreo());
 			csta.setString(6,pro.getNumero());
 			
-			
 			csta.executeUpdate();
 			
-		} catch (Exception e) {
-			System.out.println("ERROR" +e);
+		} catch (SQLException e) {
+			
+			throw e; 
 		}
 	}
 }
