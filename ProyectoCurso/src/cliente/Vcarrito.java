@@ -252,6 +252,11 @@ public class Vcarrito extends JFrame implements ActionListener, MouseListener {
 		
 		if (miTicket != null) {
 		    JOptionPane.showMessageDialog(this, "¡Compra exitosa! Su ticket es: " + miTicket);
+			
+			VOpcionPago method = new VOpcionPago(miTicket);
+		    method.setLocationRelativeTo(null); 
+		    method.setVisible(true);
+
 		    this.dispose();
 		} else {
 		    JOptionPane.showMessageDialog(this, "Hubo un error al procesar la compra.");
