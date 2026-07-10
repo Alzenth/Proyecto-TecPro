@@ -427,6 +427,56 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE Sp_Remover_Cantidad_DetalleCarrito (
+    @ID_CARRITO CHAR(6),
+    @ID_PRODUCTO CHAR(5),
+    @Cantidad_A_Remover INT
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @CantidadActual INT;
+    DECLARE @PrecioUnitario DECIMAL(10,2);
+    SELECT @CantidadActual = CANTIDAD
+    FROM DETALLE_CARRITO 
+    WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
+
+    SELECT @PrecioUnitario = PRECIO 
+    FROM PRODUCTO 
+    WHERE ID_PRODUCTO = @ID_PRODUCTO;
+
+    IF @CantidadActual IS NOT NULL
+    BEGIN
+        IF (@CantidadActual - @Cantidad_A_Remover) <= 0
+        BEGIN
+            DELETE FROM DETALLE_CARRITO
+            WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
+        END
+        ELSE
+        BEGIN
+            UPDATE DETALLE_CARRITO
+            SET CANTIDAD = CANTIDAD - @Cantidad_A_Remover,
+                PRECIO = @PrecioUnitario * (CANTIDAD - @Cantidad_A_Remover)
+            WHERE ID_CARRITO = @ID_CARRITO AND ID_PRODUCTO = @ID_PRODUCTO;
+        END
+
+        UPDATE CARRITO
+        SET CANTIDAD_PRODUCTOS = (
+                SELECT ISNULL(SUM(CANTIDAD), 0)
+                FROM DETALLE_CARRITO
+                WHERE ID_CARRITO = @ID_CARRITO
+            ),
+            MONTO_TOTAL = (
+                SELECT ISNULL(SUM(PRECIO), 0)
+                FROM DETALLE_CARRITO
+                WHERE ID_CARRITO = @ID_CARRITO
+            )
+        WHERE ID_CARRITO = @ID_CARRITO;
+    END
+END;
+GO
+
 
 
 DELETE FROM DETALLE_VENTA;

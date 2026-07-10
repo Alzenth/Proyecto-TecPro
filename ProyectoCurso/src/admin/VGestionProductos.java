@@ -67,7 +67,6 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_1;
 	private JTextField txtPrecioProducto;
-	//Actualmente ArregloProducto no sirve, pero borrarlo generaría error porque se usa en Descargar y Cargar txt
 	private ArregloProducto ap = new ArregloProducto();
 	private JComboBox cbBoxCategoria;
 	private JLabel lblNewLabel_3;
@@ -291,7 +290,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnCargarImagen.addActionListener(this);
 			btnCargarImagen.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 			btnCargarImagen.setBackground(Color.LIGHT_GRAY);
-			btnCargarImagen.setBounds(387, 500, 145, 20);
+			btnCargarImagen.setBounds(775, 499, 145, 20);
 			panel.add(btnCargarImagen);
 		}
 		{
@@ -303,6 +302,16 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			btnCerrarSesion.setBounds(948, 498, 146, 23);
 			panel.add(btnCerrarSesion);
 		}
+		{
+			btnLimpiador = new JButton("Limpiar Campos");
+			btnLimpiador.addActionListener(this);
+			btnLimpiador.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
+			btnLimpiador.setBackground(Color.LIGHT_GRAY);
+			btnLimpiador.setBounds(720, 109, 145, 20);
+			panel.add(btnLimpiador);
+		}
+		btnDescargarProductos.setVisible(false);
+		btnCargarProductos.setVisible(false);
 		
 		Listar("");
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -335,6 +344,9 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnLimpiador) {
+			do_btnLimpiador_actionPerformed(e);
+		}
 		if (e.getSource() == btnCerrarSesion) {
 			do_btnNewButton_1_actionPerformed(e);
 		}
@@ -372,6 +384,7 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JButton btnConsultarProducto;
 	private JButton btnCargarImagen;
 	private JButton btnCerrarSesion;
+	private JButton btnLimpiador;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
 	    try {
@@ -902,5 +915,14 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	    
 	    
 	    this.dispose();
+	}
+	protected void do_btnLimpiador_actionPerformed(ActionEvent e) {
+		txtIdProducto.setText("");
+        txtNombreProducto.setText("");
+        txtDescripcionProducto.setText("");
+        txtStockProducto.setText("");
+        txtPrecioProducto.setText("");
+        txtFechaVencimiento.setText("");
+
 	}
 }

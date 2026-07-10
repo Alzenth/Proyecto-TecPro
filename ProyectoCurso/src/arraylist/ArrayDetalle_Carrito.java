@@ -74,4 +74,20 @@ public class ArrayDetalle_Carrito {
 		}
 		return listado;
 	}
+	public void Remover_Cantidad_Carrito(String idCarrito, String idProducto, int cantidad) {
+	    try {
+	        Connection cnx = db.conectar();
+	        CallableStatement csta = cnx.prepareCall("{CALL Sp_Remover_Cantidad_DetalleCarrito(?,?,?)}");
+	        
+	        csta.setString(1, idCarrito);
+	        csta.setString(2, idProducto);
+	        csta.setInt(3, cantidad);
+	        
+	        csta.executeUpdate();
+	    } catch (Exception e) {
+	        System.out.println("Error al remover cantidad: " + e);
+	    }
+	}
+	
+	
 }

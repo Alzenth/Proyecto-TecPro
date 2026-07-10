@@ -168,4 +168,24 @@ public ArrayList<Producto> ListarPorCatalogo(String cat) {
 }
 
 
+public int ObtenerStockProducto(String id_producto) {
+    int stock = 0;
+    try {
+        Connection cnx = db.conectar();
+        String sql = "SELECT STOCK FROM PRODUCTO WHERE ID_PRODUCTO = ?";
+        java.sql.PreparedStatement pst = cnx.prepareStatement(sql);
+        
+        pst.setString(1, id_producto);
+        ResultSet rs = pst.executeQuery();
+        
+        if(rs.next()) {
+            stock = rs.getInt("STOCK");
+        }
+    } catch (Exception e) {
+        System.out.println("Error al obtener stock: " + e);
+    }
+    return stock;
+}
+
+
 }

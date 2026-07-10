@@ -40,7 +40,7 @@ public class VOpcion extends JDialog implements ActionListener {
 	 */
 	public VOpcion() {
 		setTitle("Seleccione lo que quiere hacer:");
-		setBounds(100, 100, 317, 290);
+		setBounds(100, 100, 317, 165);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -48,7 +48,7 @@ public class VOpcion extends JDialog implements ActionListener {
 		{
 			btnGestionProductos = new JButton("Gestión de Productos");
 			btnGestionProductos.addActionListener(this);
-			btnGestionProductos.setBounds(61, 123, 182, 33);
+			btnGestionProductos.setBounds(62, 20, 182, 33);
 			contentPanel.add(btnGestionProductos);
 		}
 		{
@@ -57,7 +57,7 @@ public class VOpcion extends JDialog implements ActionListener {
 			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 			btnNewButton.setBackground(Color.RED);
 			btnNewButton.setForeground(Color.WHITE);
-			btnNewButton.setBounds(81, 189, 146, 23);
+			btnNewButton.setBounds(82, 86, 146, 23);
 			contentPanel.add(btnNewButton);
 		}
 	}

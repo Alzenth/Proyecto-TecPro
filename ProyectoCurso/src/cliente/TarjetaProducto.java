@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 
 import arraylist.ArrayDetalle_Carrito;
+import arraylist.ArrayProducto;
 import clases.Intermediario;
 
 import javax.swing.JLabel;
@@ -158,18 +159,34 @@ public class TarjetaProducto extends JPanel implements ActionListener {
     protected void do_btnAñadir_a_Carrito_actionPerformed(ActionEvent e) {
 
         int cantidadSpinner = (Integer) spCantidad.getValue();
-
+        
         if (cantidadSpinner < 1) {
             JOptionPane.showMessageDialog(this,
                     "La cantidad debe ser mayor a cero.");
             return;
         }
 
+        String idProducto = lblId.getText().trim();
+        ArrayProducto ap = new ArrayProducto();
+        int stockDisponible = ap.ObtenerStockProducto(idProducto);
+
+        if (cantidadSpinner > stockDisponible) {
+            JOptionPane.showMessageDialog(this, 
+                "¡Stock insuficiente! Solo hay " + stockDisponible + " unidades en stock.", 
+                "Límite de stock alcanzado", 
+                JOptionPane.WARNING_MESSAGE);
+            return; 
+        }
+        
+
+       
         ArrayDetalle_Carrito adc = new ArrayDetalle_Carrito();
         adc.Agregar_Detalle_a_Carrito(
                 Intermediario.idCarritoActual,
-                lblId.getText(),
+                idProducto,
                 cantidadSpinner
         );
+        
+        JOptionPane.showMessageDialog(this, "Producto añadido al carrito correctamente.");
     }
 }
