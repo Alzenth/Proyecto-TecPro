@@ -3,6 +3,7 @@ package arraylist;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import clases.Intermediario;
@@ -36,26 +37,24 @@ public ArrayList<Producto> Listar_Productos_En_Tabla(){
 }
 
 
-public void Insertar(Producto pro) {
+public void Insertar(Producto pro) throws SQLException{
 	try {
 		Connection cnx=db.conectar();
-		CallableStatement csta=cnx.prepareCall("{CALL SP_Agregar_Producto(?,?,?,?,?,?,?,?)}");
-		csta.setString(1,pro.getId_prod());
-		csta.setString(2,pro.getNombre_prod());
-		csta.setString(3,pro.getCategoria_prod());
-		csta.setString(4,pro.getDescripcion_prod());
-		csta.setInt(5, pro.getStock_prod()); 
-		csta.setDouble(6,pro.getPrecio_prod());
-		csta.setDate(7,pro.getFechaV_prod());
-		csta.setString(8, Intermediario.dniAdminActual);
-		
-		
+		CallableStatement csta=cnx.prepareCall("{CALL SP_Agregar_Producto(?,?,?,?,?,?,?)}");
+		csta.setString(1,pro.getNombre_prod());
+		csta.setString(2,pro.getCategoria_prod());
+		csta.setString(3,pro.getDescripcion_prod());
+		csta.setInt(4, pro.getStock_prod()); 
+		csta.setDouble(5,pro.getPrecio_prod());
+		csta.setDate(6,pro.getFechaV_prod());
+		csta.setString(7, Intermediario.dniAdminActual);
+			
 		csta.executeUpdate();
 		
-	} catch (Exception e) {
-		System.out.println("ERROR" +e);
+	} catch (SQLException e) {
+	    throw e;
 	}
-}
+	}
 
 public void Eliminar(String cod) {
 	try {
@@ -68,7 +67,7 @@ public void Eliminar(String cod) {
 	}
 }
 
-public void Editar(Producto pro) {
+public void Editar(Producto pro) throws SQLException{
 	try {
 		Connection cnx =db.conectar();
 		CallableStatement csta = cnx.prepareCall("{CALL SP_Editar_Producto(?,?,?,?,?,?,?)}");
@@ -81,8 +80,8 @@ public void Editar(Producto pro) {
 		csta.setDate(7, pro.getFechaV_prod());
 		csta.executeUpdate();
 		
-	} catch (Exception e) {
-		System.out.println("ERROR" + e);
+	} catch (SQLException e) {
+	    throw e;
 	}
 }
 

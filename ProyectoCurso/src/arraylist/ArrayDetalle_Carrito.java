@@ -12,6 +12,8 @@ import constructores.Detalle_Carrito;
 public class ArrayDetalle_Carrito {
 	ConexionBD db = new ConexionBD();
 	
+	
+	
 	public void Agregar_Detalle_a_Carrito(String id_carrito, String id_producto, int cantidad) {
 		try {
 			Connection cnx = db.conectar();

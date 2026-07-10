@@ -36,6 +36,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -372,63 +374,110 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 	private JButton btnCerrarSesion;
 	
 	protected void do_btnAgregarProducto_actionPerformed(ActionEvent e) {
-		try {
-			
-			String id = txtIdProducto.getText();    
-	        String nom = txtNombreProducto.getText();   
-	        String cat = cbBoxCategoria.getSelectedItem().toString();
-	        String desc = txtDescripcionProducto.getText();   
+	    try {
 
-	        int stock = Integer.parseInt(txtStockProducto.getText()); 
-	        double precio = Double.parseDouble(txtPrecioProducto.getText()); 
-	        
+	        String nom = txtNombreProducto.getText();
+	        String cat = cbBoxCategoria.getSelectedItem().toString();
+	        String desc = txtDescripcionProducto.getText();
+
+	        int stock = Integer.parseInt(txtStockProducto.getText());
+	        double precio = Double.parseDouble(txtPrecioProducto.getText());
+
 	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	        formatoFecha.setLenient(false);
-	        
-	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
-	        
-	        Date fechaV = new Date(utilFechaV.getTime());
-	        
-	        
-	        
-	        if (!cat.equals("Seleccione una categoría")) {
-	        	if (stock >=0) {
-	        		if(precio >= 0) {
-	        			Producto nuevo = new Producto(id, nom, cat,  desc, stock,precio, null, fechaV );
-				        
-				        ArrayProducto bdProducto = new ArrayProducto();
-			            bdProducto.Insertar(nuevo);
-				        
-				        Listar("");
-				        
-				        txtIdProducto.setText("");
-				        txtNombreProducto.setText("");
-				        cbBoxCategoria.setSelectedItem(0);
-				        cbBoxCategoria.setSelectedItem("");
-				        txtStockProducto.setText("");
-				        txtDescripcionProducto.setText("");
-				        txtPrecioProducto.setText("");
-				        txtFechaVencimiento.setText("");
-				        txtIdProducto.requestFocus();
-				        
-				        if(stock <= 5){
-				            JOptionPane.showMessageDialog(null,"Queda poco stock del producto: " + id );
-				            }
-				        JOptionPane.showMessageDialog(this, "¡Producto registrado correctamente!");
-				        
-	        		}else MensajeEmergente("Ingrese un precio valido");
-	        		
-	        	}else MensajeEmergente("Debe ingresar un Stock válido");
-	        	
-	        	
-	        } else MensajeEmergente("Seleccione una categoría válida");
-	        
-	        
-	        }catch (Exception ex) {
-			MensajeEmergente("Error: Revisa los campos");
-			}
-	}
 
+	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText().trim());
+	        Date fechaV = new Date(utilFechaV.getTime());
+
+	        if (cat.equals("Seleccione una categoría")) {
+	            MensajeEmergente("Seleccione una categoría válida");
+	            return;
+	        }
+
+	        if (stock < 0) {
+	            MensajeEmergente("Debe ingresar un Stock válido");
+	            return;
+	        }
+
+	        if (precio < 0) {
+	            MensajeEmergente("Ingrese un precio válido");
+	            return;
+	        }
+
+	        Producto nuevo = new Producto(
+	                null,
+	                nom,
+	                cat,
+	                desc,
+	                stock,
+	                precio,
+	                null,
+	                fechaV
+	        );
+
+	        ArrayProducto bdProducto = new ArrayProducto();
+	        bdProducto.Insertar(nuevo);
+
+	        Listar("");
+
+	        txtIdProducto.setText("");
+	        txtNombreProducto.setText("");
+	        cbBoxCategoria.setSelectedIndex(0);
+	        txtStockProducto.setText("");
+	        txtDescripcionProducto.setText("");
+	        txtPrecioProducto.setText("");
+	        txtFechaVencimiento.setText("");
+	        txtIdProducto.requestFocus();
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "¡Producto registrado correctamente!"
+	        );
+
+	    }
+	    catch (ParseException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "La fecha debe tener el formato dd/MM/yyyy.",
+	                "Formato de fecha incorrecto",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (NumberFormatException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "El stock y el precio deben ser valores numéricos.",
+	                "Dato inválido",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (SQLException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                ex.getMessage(),
+	                "Error al registrar el producto",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (Exception ex) {
+
+	        ex.printStackTrace();
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "Ha ocurrido un error inesperado.",
+	                "Error",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	}
 	
 	
 	void MensajeEmergente(String s) {
@@ -719,61 +768,99 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 		
 	}
 	protected void do_btnModificarProducto_actionPerformed(ActionEvent e) {
-		try {
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-			formatoFecha.setLenient(false); 
+	    try {
 
-			
-			java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText());
+	        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+	        formatoFecha.setLenient(false);
 
-			
-			java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
-			
-			Producto pro = new Producto(
-					txtIdProducto.getText(),
-					txtNombreProducto.getText(), 
-					cbBoxCategoria.getSelectedItem().toString(), 
-					txtDescripcionProducto.getText(),
-					Integer.parseInt(txtStockProducto.getText()),
-					Double.parseDouble(txtPrecioProducto.getText()),
-					null, fechaV
-					);
-			
-			
-				ArrayProducto m = new ArrayProducto();
-				m.Editar(pro);
-				Listar("");
-			
-			
-			if (cbBoxCategoria.getSelectedItem().toString().equals("Seleccione una categoría")) {
-				MensajeEmergente("Por favor, seleccione una categoría válida.");
-				return; 
-			}
-			if (Integer.parseInt(txtStockProducto.getText()) <= 0) {
-				MensajeEmergente("Debe ingresar un Stock válido.");
-				return;
-			}
-			if (Double.parseDouble(txtPrecioProducto.getText())< 0) {
-				MensajeEmergente("Ingrese un precio válido.");
-				return;
-			}
-        		
-			MensajeEmergente("¡Producto modificado correctamente!");
-			txtIdProducto.setText("");
-			txtNombreProducto.setText("");
-			cbBoxCategoria.setSelectedItem(0);
-			txtDescripcionProducto.setText("");
-			txtStockProducto.setText("");
-			txtPrecioProducto.setText("");
-			txtFechaVencimiento.setText("");
-			
+	        java.util.Date utilFechaV = formatoFecha.parse(txtFechaVencimiento.getText().trim());
+	        java.sql.Date fechaV = new java.sql.Date(utilFechaV.getTime());
 
-			
-		} catch (Exception e2) {
-			
-			MensajeEmergente("Sucedio un error"  + e2 + "\nIntentelo nuevamente");
-		}
-	}
+	        if (cbBoxCategoria.getSelectedItem().toString().equals("Seleccione una categoría")) {
+	            MensajeEmergente("Por favor, seleccione una categoría válida.");
+	            return;
+	        }
+
+	        if (Integer.parseInt(txtStockProducto.getText()) < 0) {
+	            MensajeEmergente("Debe ingresar un Stock válido.");
+	            return;
+	        }
+
+	        if (Double.parseDouble(txtPrecioProducto.getText()) < 0) {
+	            MensajeEmergente("Ingrese un precio válido.");
+	            return;
+	        }
+
+	        Producto pro = new Producto(
+	                txtIdProducto.getText(),
+	                txtNombreProducto.getText(),
+	                cbBoxCategoria.getSelectedItem().toString(),
+	                txtDescripcionProducto.getText(),
+	                Integer.parseInt(txtStockProducto.getText()),
+	                Double.parseDouble(txtPrecioProducto.getText()),
+	                null,
+	                fechaV
+	        );
+
+	        ArrayProducto m = new ArrayProducto();
+	        m.Editar(pro);
+
+	        Listar("");
+
+	        MensajeEmergente("¡Producto modificado correctamente!");
+
+	        txtIdProducto.setText("");
+	        txtNombreProducto.setText("");
+	        cbBoxCategoria.setSelectedIndex(0);
+	        txtDescripcionProducto.setText("");
+	        txtStockProducto.setText("");
+	        txtPrecioProducto.setText("");
+	        txtFechaVencimiento.setText("");
+
+	    }
+	    catch (ParseException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "La fecha debe tener el formato dd/MM/yyyy.",
+	                "Formato de fecha incorrecto",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (SQLException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                ex.getMessage(),
+	                "Error al modificar el producto",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (NumberFormatException ex) {
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "El stock y el precio deben ser valores numéricos.",
+	                "Dato inválido",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	    catch (Exception ex) {
+
+	        ex.printStackTrace();
+
+	        JOptionPane.showMessageDialog(
+	                this,
+	                "Ha ocurrido un error inesperado.",
+	                "Error",
+	                JOptionPane.ERROR_MESSAGE
+	        );
+
+	    }
+	}	
 	protected void do_btnCargarImagen_actionPerformed(ActionEvent e) {
 	    
 	    if(txtIdProducto.getText().trim().isEmpty()) {

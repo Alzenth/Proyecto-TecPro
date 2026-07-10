@@ -61,18 +61,20 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Producto(
+CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Producto
+(
     @NOM VARCHAR(100),
     @CAT VARCHAR(15),
     @DESCR VARCHAR(255),
     @STK INT,
     @PREC DECIMAL(10,2),
     @F_EXP DATE,
-    @DNI_ADMIN_LOGEADO CHAR(8) 
+    @DNI_ADMIN_LOGEADO CHAR(8)
 )
-AS 
+AS
 BEGIN
-    
+    SET NOCOUNT ON;
+
     IF @F_EXP <= CAST(GETDATE() AS DATE)
     BEGIN
         RAISERROR('Error: La fecha de expiración debe ser posterior a la fecha actual.', 16, 1);
@@ -81,25 +83,37 @@ BEGIN
 
     DECLARE @ID_ADMIN CHAR(4);
     DECLARE @Nuevo_ID CHAR(5);
+    DECLARE @UltimoID CHAR(5);
     DECLARE @SiguienteNumero INT;
+    DECLARE @Prefijo CHAR(2);
 
     SET @ID_ADMIN = dbo.Fun_Retornador_ID_ADMIN(@DNI_ADMIN_LOGEADO);
-   
+
     IF @ID_ADMIN IS NULL
     BEGIN
         RAISERROR('Error: No se encontró ningún administrador con ese DNI.', 16, 1);
         RETURN;
     END
 
-    IF @CAT = 'Chocotejas' 
+    IF @CAT = 'Chocotejas'
     BEGIN
-        SET @SiguienteNumero = NEXT VALUE FOR Seq_Chocotejas;
-        SET @Nuevo_ID = 'CH' + RIGHT('000' + CAST(@SiguienteNumero AS VARCHAR(3)), 3);
+        SET @Prefijo = 'CH';
+
+        IF @NOM NOT LIKE '%Chocoteja%'
+        BEGIN
+            RAISERROR('Error: El nombre del producto debe contener la palabra "Chocoteja".', 16, 1);
+            RETURN;
+        END
     END
-    ELSE IF @CAT = 'Cuchareables' 
+    ELSE IF @CAT = 'Cuchareables'
     BEGIN
-        SET @SiguienteNumero = NEXT VALUE FOR Seq_Cuchareables;
-        SET @Nuevo_ID = 'CU' + RIGHT('000' + CAST(@SiguienteNumero AS VARCHAR(3)), 3);
+        SET @Prefijo = 'CU';
+
+        IF @NOM NOT LIKE '%Cuchareable%'
+        BEGIN
+            RAISERROR('Error: El nombre del producto debe contener la palabra "Cuchareable".', 16, 1);
+            RETURN;
+        END
     END
     ELSE
     BEGIN
@@ -107,9 +121,20 @@ BEGIN
         RETURN;
     END
 
-    INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, CATEGORIA, DESCRIPCION, STOCK, PRECIO, Fecha_Creacion, Fecha_Expiracion, ID_ADMINISTRADOR) 
+    SELECT @UltimoID = MAX(ID_PRODUCTO)
+    FROM PRODUCTO
+    WHERE CATEGORIA = @CAT;
+
+    IF @UltimoID IS NULL
+        SET @SiguienteNumero = 1;
+    ELSE
+        SET @SiguienteNumero = CAST(RIGHT(@UltimoID, 3) AS INT) + 1;
+
+    SET @Nuevo_ID = @Prefijo + RIGHT('000' + CAST(@SiguienteNumero AS VARCHAR(3)), 3);
+
+    INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, CATEGORIA, DESCRIPCION, STOCK, PRECIO, Fecha_Creacion, Fecha_Expiracion, ID_ADMINISTRADOR)
     VALUES (@Nuevo_ID, @NOM, @CAT, @DESCR, @STK, @PREC, GETDATE(), @F_EXP, @ID_ADMIN);
-    
+
     PRINT 'Producto agregado exitosamente con el ID: ' + @Nuevo_ID + ' por el administrador: ' + @ID_ADMIN;
 END;
 GO
