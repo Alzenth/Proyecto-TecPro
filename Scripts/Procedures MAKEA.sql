@@ -1,9 +1,6 @@
 ﻿USE MAKEA;
 GO
 
--- ====================================================
--- PROCEDIMIENTOS DE ADMINISTRADOR Y CLIENTE
--- ====================================================
 CREATE OR ALTER PROCEDURE SP_Agregar_Admin(
     @ID_ADMIN CHAR(4),
     @NOM VARCHAR(100),
@@ -35,7 +32,6 @@ CREATE OR ALTER PROCEDURE Sp_Agregar_Cliente(
     @TELEFONO CHAR(9)
 )
 AS
-
 BEGIN
     IF EXISTS(SELECT 1 FROM ADMINISTRADOR WHERE DNI = @DNI_CLIENTE)
     BEGIN
@@ -50,9 +46,7 @@ BEGIN
     
     INSERT INTO CLIENTE(NOMBRES, APELLIDOS, DNI, CONTRASEÑA, EMAIL, TELEFONO)
     VALUES(@NOMBRES, @APELLIDOS, @DNI_CLIENTE, @CONTRASEÑA, @EMAIL, @TELEFONO);
-     
 END;
-
 GO
 
 CREATE OR ALTER FUNCTION dbo.Fun_Retornador_ID_ADMIN(
@@ -67,11 +61,7 @@ BEGIN
 END;
 GO
 
--- ====================================================
--- PROCEDIMIENTOS DE PRODUCTOS
--- ====================================================
 CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Producto(
-    @ID_PROD CHAR(4),
     @NOM VARCHAR(100),
     @CAT VARCHAR(15),
     @DESCR VARCHAR(255),
@@ -82,19 +72,45 @@ CREATE OR ALTER PROCEDURE dbo.SP_Agregar_Producto(
 )
 AS 
 BEGIN
+    
+    IF @F_EXP <= CAST(GETDATE() AS DATE)
+    BEGIN
+        RAISERROR('Error: La fecha de expiración debe ser posterior a la fecha actual.', 16, 1);
+        RETURN;
+    END
+
     DECLARE @ID_ADMIN CHAR(4);
+    DECLARE @Nuevo_ID CHAR(5);
+    DECLARE @SiguienteNumero INT;
+
     SET @ID_ADMIN = dbo.Fun_Retornador_ID_ADMIN(@DNI_ADMIN_LOGEADO);
    
-    IF @ID_ADMIN IS NOT NULL
+    IF @ID_ADMIN IS NULL
     BEGIN
-        INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, CATEGORIA, DESCRIPCION, STOCK, PRECIO, Fecha_Creacion, Fecha_Expiracion, ID_ADMINISTRADOR) 
-        VALUES (@ID_PROD, @NOM, @CAT, @DESCR, @STK, @PREC, GETDATE(), @F_EXP, @ID_ADMIN);
-        PRINT 'Producto agregado exitosamente por el administrador: ' + @ID_ADMIN;
+        RAISERROR('Error: No se encontró ningún administrador con ese DNI.', 16, 1);
+        RETURN;
+    END
+
+    IF @CAT = 'Chocotejas' 
+    BEGIN
+        SET @SiguienteNumero = NEXT VALUE FOR Seq_Chocotejas;
+        SET @Nuevo_ID = 'CH' + RIGHT('000' + CAST(@SiguienteNumero AS VARCHAR(3)), 3);
+    END
+    ELSE IF @CAT = 'Cuchareables' 
+    BEGIN
+        SET @SiguienteNumero = NEXT VALUE FOR Seq_Cuchareables;
+        SET @Nuevo_ID = 'CU' + RIGHT('000' + CAST(@SiguienteNumero AS VARCHAR(3)), 3);
     END
     ELSE
     BEGIN
-        PRINT 'Error: No se encontró ningún administrador con ese DNI.';
+        RAISERROR('Error: Categoría no válida.', 16, 1);
+        RETURN;
     END
+
+    INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, CATEGORIA, DESCRIPCION, STOCK, PRECIO, Fecha_Creacion, Fecha_Expiracion, ID_ADMINISTRADOR) 
+    VALUES (@Nuevo_ID, @NOM, @CAT, @DESCR, @STK, @PREC, GETDATE(), @F_EXP, @ID_ADMIN);
+    
+    PRINT 'Producto agregado exitosamente con el ID: ' + @Nuevo_ID + ' por el administrador: ' + @ID_ADMIN;
 END;
 GO
 
@@ -107,7 +123,7 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE SP_Consultar_Producto(
-	@ID_PROD char(10)
+	@ID_PROD CHAR(5)
 )
 AS
 BEGIN
@@ -115,8 +131,8 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Editar_Producto(
-    @ID_PROD CHAR(4),          
+CREATE OR ALTER PROCEDURE SP_Editar_Producto(
+    @ID_PROD CHAR(5), 
     @NOM VARCHAR(100),
     @CAT VARCHAR(15),         
     @DESCR VARCHAR(255),
@@ -126,16 +142,39 @@ CREATE OR ALTER PROCEDURE dbo.SP_Editar_Producto(
 )
 AS 
 BEGIN
+    
+    DECLARE @Fecha_Creacion_Existente DATE;
+    SELECT @Fecha_Creacion_Existente = Fecha_Creacion 
+    FROM PRODUCTO 
+    WHERE ID_PRODUCTO = @ID_PROD;
+
+    IF @Fecha_Creacion_Existente IS NULL
+    BEGIN
+        RAISERROR('Error: El producto que intenta editar no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF @F_EXP <= @Fecha_Creacion_Existente
+    BEGIN
+        RAISERROR('Error: La fecha de expiración no puede ser menor o igual a la fecha de creación del producto.', 16, 1);
+        RETURN;
+    END
+
+    IF @F_EXP <= CAST(GETDATE() AS DATE)
+    BEGIN
+        RAISERROR('Error: La fecha de expiración debe ser una fecha futura válida.', 16, 1);
+        RETURN;
+    END
+
     UPDATE PRODUCTO
     SET NOMBRE = @NOM, CATEGORIA = @CAT, DESCRIPCION = @DESCR, STOCK = @STK, 
         PRECIO = @PREC, Fecha_Expiracion = @F_EXP
     WHERE ID_PRODUCTO = @ID_PROD;
+    
+    PRINT 'Producto actualizado correctamente.';
 END;
 GO
 
--- ====================================================
--- PROCEDIMIENTOS DE LISTADO Y ELIMINACIÓN
--- ====================================================
 CREATE OR ALTER PROCEDURE SP_Eliminar_Admin(
     @ID_Admin char(4) 
 )
@@ -177,9 +216,6 @@ BEGIN
 END;
 GO
 
--- ====================================================
--- PROCEDIMIENTOS DE CARRITO
--- ====================================================
 CREATE OR ALTER FUNCTION dbo.FN_Obtener_ID_Cliente_Por_DNI(
     @DNI CHAR(8)
 )
@@ -228,9 +264,10 @@ BEGIN
     ON C.ID_CLIENTE = CL.ID_CLIENTE WHERE CL.DNI = @DNI_Ingresado;
 END;
 GO
+
 CREATE OR ALTER PROCEDURE Sp_Agregar_Producto_a_DetalleCarrito (
     @ID_CARRITO CHAR(6),
-    @ID_PRODUCTO CHAR(4),
+    @ID_PRODUCTO CHAR(5),
     @Cantidad INT
 )
 AS
@@ -279,6 +316,7 @@ BEGIN
 
 END;
 GO
+
 CREATE OR ALTER PROCEDURE SP_Mostrar_Producto_a_Detalle(@Id_Carrito_Pro char(6))
 AS
 BEGIN
@@ -302,10 +340,14 @@ BEGIN
 	DELETE FROM dbo.DETALLE_CARRITO WHERE ID_DETALLE_CARRITO = @ID_DC;
 END;
 GO 
+CREATE OR ALTER   PROCEDURE SP_Eliminar_Producto(
+	@ID_PROD char(5)
+)
+AS
+BEGIN
+	DELETE FROM dbo.PRODUCTO WHERE ID_PRODUCTO = @ID_PROD;
+END;
 
--- ====================================================
--- PROCEDIMIENTO DE VENTA FINAL (LA BOLETA)
--- ====================================================
 CREATE OR ALTER PROCEDURE SP_Mostrar_Detalle_Venta(@ID_VENTA CHAR(4)) 
 AS
 BEGIN
@@ -323,25 +365,6 @@ BEGIN
     WHERE V.ID_VENTA = @ID_VENTA; 
 END;
 GO
-
--- ====================================
--- Ejecución de prueba:
-
-DELETE FROM DETALLE_VENTA;
-DELETE FROM DETALLE_CARRITO;
-DELETE FROM VENTA;
-DELETE FROM CARRITO;
-GO
-
-
-ALTER SEQUENCE Seq_CARRITO_ID RESTART WITH 0;
-ALTER SEQUENCE Seq_DETALLE_CARRITO_ID RESTART WITH 0;
-ALTER SEQUENCE Seq_VENTA_ID RESTART WITH 0;
-ALTER SEQUENCE Seq_DETALLE_VENTA_ID RESTART WITH 0;
-GO
-
-
-
 
 CREATE OR ALTER PROCEDURE SP_Generar_Venta_Completa (
     @DNI_CLIENTE CHAR(8),     
@@ -380,96 +403,89 @@ END;
 GO
 
 
-Exec SP_Agregar_Admin 'A001', 'Alexander Miguel', 'Bejar Centurión', 'alexanderBejar09@gmail.com', '12345678', 77062578, '2002-02-26','930286663'
-Exec SP_Agregar_Admin 'A002', 'Angello Fabrizio', 'Camacho Campoverde', 'angellocamacho553@gmail.com','26262626',60995119,'2007-02-02', '965193521'
-Exec SP_Listar_Admin;
+
+DELETE FROM DETALLE_VENTA;
+DELETE FROM DETALLE_CARRITO;
+DELETE FROM VENTA;
+DELETE FROM CARRITO;
 GO
 
+ALTER SEQUENCE Seq_CARRITO_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_DETALLE_CARRITO_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_VENTA_ID RESTART WITH 0;
+ALTER SEQUENCE Seq_DETALLE_VENTA_ID RESTART WITH 0;
+
+-- Reiniciamos las secuencias de productos por si quieres probar de cero
+ALTER SEQUENCE Seq_Chocotejas RESTART WITH 1;
+ALTER SEQUENCE Seq_Cuchareables RESTART WITH 1;
+GO
+
+Exec SP_Agregar_Admin 'A001', 'Alexander Miguel', 'Bejar Centurión', 'alexanderBejar09@gmail.com', '12345678', '77062578', '2002-02-26','930286663';
+Exec SP_Agregar_Admin 'A002', 'Angello Fabrizio', 'Camacho Campoverde', 'angellocamacho553@gmail.com','26262626','60995119','2007-02-02', '965193521';
+Exec SP_Listar_Admin;
+GO
 
 Exec Sp_Agregar_Cliente 'Juan Carlos', 'Perez Ruiz', '45236187', 'contra23', 'juancitoruiz89@gmail.com', '987654321';
 Exec Sp_Agregar_Cliente 'Maria Elena', 'Gomez Fernandez', '76543210', 'pass8765', 'mariagomez.1@gmail.com', '912345670';
 Exec Sp_Agregar_Cliente 'Luis Alberto', 'Sanchez Torres', '12345678', 'luis1234', 'luissanchez.t@gmail.com', '998877665';
 Exec Sp_Agregar_Cliente 'Ana Paula', 'Vargas Castro', '87654321', 'ana_p456', 'anavargas.c@gmail.com', '923456789';
 Exec Sp_Agregar_Cliente 'Carlos Eduardo', 'Mendoza Diaz', '45678901', 'carlos99', 'carlosmendoza88@gmail.com', '934567812';
-Exec Sp_Agregar_Cliente 'Rosa', 'Chavez Huaman', '74185296', 'rosa2026', 'rosachavez.h@gmail.com', '945612378';
-Exec Sp_Agregar_Cliente 'Jorge', 'Rojas Quispe', '96325874', 'jorge777', 'jorgerojas.q@gmail.com', '956789123';
-Exec Sp_Agregar_Cliente 'Carmen', 'Flores Silva', '15975346', 'carmenfs', 'carmenflores.s@gmail.com', '967890234';
-Exec Sp_Agregar_Cliente 'Diego', 'Gutierrez Romero', '35715928', 'diego_gr', 'diegogutierrez.r@gmail.com', '978901345';
-Exec Sp_Agregar_Cliente 'Lucia', 'Ramos Castillo', '85296374', 'lucia_rc', 'luciaramos.c@gmail.com', '989012456';
-Exec Sp_Agregar_Cliente 'Pedro', 'Navarro', '11223344', 'pedro111', 'pedronavarro@gmail.com', '900111222';
-Exec Sp_Agregar_Cliente 'Sofia', 'Linares', '55667788', 'sofilin8', 'sofialinares@gmail.com', '900333444';
-Exec Sp_Agregar_Cliente 'Miguel', 'Cordova', '99001122', 'miguel99', 'miguelcordova@gmail.com', '900555666';
-Exec Sp_Agregar_Cliente 'Valeria', 'Paredes', '33445566', 'valeria3', 'valeriaparedes@gmail.com', '900777888';
-Exec Sp_Agregar_Cliente 'Fernando', 'Salas', '77889900', 'fer_2026', 'fernandosalas@gmail.com', '900999000';
 Go
 
 Exec SP_Listar_Clientes;
 Go
 
 
+Exec SP_Agregar_Producto 'Cuchareable de Pudín Chocolate', 'Cuchareables', 'Suave pudín de chocolate oscuro en un formato súper cremoso.', 40, 6.00, '2026-07-31', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Torta Chocolate', 'Cuchareables', 'Torta húmeda de chocolate con full fudge lista para disfrutar.', 40, 6.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Café', 'Cuchareables', 'El intenso y clásico aroma del café en un postre sedoso.', 30, 6.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Lúcuma', 'Cuchareables', 'Auténtica crema de lúcuma peruana, dulce y aterciopelada.', 35, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Manzana', 'Cuchareables', 'El clásico postre de manzana con toques de canela y crema.', 30, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Fresa', 'Cuchareables', 'Capas suaves intercaladas con dulce de fresa natural.', 35, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Frutos rojos', 'Cuchareables', 'Un equilibrio perfecto entre lo dulce y el ácido de los frutos rojos.', 30, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Maracuyá', 'Cuchareables', 'Frescura cítrica y tropical de puro maracuyá en cada cucharada.', 30, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Maracumango', 'Cuchareables', 'La vibrante y deliciosa fusión caribeña de mango dulce y maracuyá.', 25, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Tres leches Pistacho', 'Cuchareables', 'Esponjoso tres leches elevado con el sabor premium del pistacho.', 20, 10.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Tres leches', 'Cuchareables', 'El clásico bizcocho mojadito en nuestra receta especial de tres leches.', 25, 6.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Menta', 'Cuchareables', 'Sabor dulce y muy refrescante a menta para limpiar el paladar.', 20, 6.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Oreo', 'Cuchareables', 'Capas de crema suave mezcladas con galleta Oreo troceada y crujiente.', 45, 6.00, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Guanábana', 'Cuchareables', 'El inconfundible sabor exótico y delicado de la guanábana fresca.', 25, 6.50, '2026-07-16', '77062578';
+Exec SP_Agregar_Producto 'Cuchareable de Pistacho', 'Cuchareables', 'Suave y cremoso postre con el sabor intenso y elegante del pistacho puro.', 30, 8.00, '2026-07-16', '77062578';
 
-
--- Registro de prodcutos - Cuchareables
-
-Exec SP_Agregar_Producto 'P101', 'Cuchareable de Pudín Chocolate', 'Cuchareables', 'Suave pudín de chocolate oscuro en un formato súper cremoso.', 40, 6.00, '2026-07-31', 77062578;
-Exec SP_Agregar_Producto 'P102', 'Cuchareable de Torta Chocolate', 'Cuchareables', 'Torta húmeda de chocolate con full fudge lista para disfrutar.', 40, 6.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P103', 'Cuchareable de Café', 'Cuchareables', 'El intenso y clásico aroma del café en un postre sedoso.', 30, 6.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P104', 'Cuchareable de Lúcuma', 'Cuchareables', 'Auténtica crema de lúcuma peruana, dulce y aterciopelada.', 35, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P105', 'Cuchareable de Manzana', 'Cuchareables', 'El clásico postre de manzana con toques de canela y crema.', 30, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P106', 'Cuchareable de Fresa', 'Cuchareables', 'Capas suaves intercaladas con dulce de fresa natural.', 35, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P107', 'Cuchareable de Frutos rojos', 'Cuchareables', 'Un equilibrio perfecto entre lo dulce y el ácido de los frutos rojos.', 30, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P108', 'Cuchareable de Maracuyá', 'Cuchareables', 'Frescura cítrica y tropical de puro maracuyá en cada cucharada.', 30, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P109', 'Cuchareable de Maracumango', 'Cuchareables', 'La vibrante y deliciosa fusión caribeña de mango dulce y maracuyá.', 25, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P110', 'Cuchareable de Tres leches Pistacho', 'Cuchareables', 'Esponjoso tres leches elevado con el sabor premium del pistacho.', 20, 10.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P111', 'Cuchareable de Tres leches', 'Cuchareables', 'El clásico bizcocho mojadito en nuestra receta especial de tres leches.', 25, 6.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P112', 'Cuchareable de Menta', 'Cuchareables', 'Sabor dulce y muy refrescante a menta para limpiar el paladar.', 20, 6.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P113', 'Cuchareable de Oreo', 'Cuchareables', 'Capas de crema suave mezcladas con galleta Oreo troceada y crujiente.', 45, 6.00, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P114', 'Cuchareable de Guanábana', 'Cuchareables', 'El inconfundible sabor exótico y delicado de la guanábana fresca.', 25, 6.50, '2026-07-16', 77062578;
-Exec SP_Agregar_Producto 'P115', 'Cuchareable de Pistacho', 'Cuchareables', 'Suave y cremoso postre con el sabor intenso y elegante del pistacho puro, coronado con trocitos tostados para un toque crujiente.', 30, 8.00, '2026-07-16', 77062578;
-
--- Registro de productos - Chocotejas =================================================================================================================================================================
-
-Exec SP_Agregar_Producto 'P215', 'Chocoteja de Pecana', 'Chocotejas', 'La tradicional chocoteja rellena con mitades de pecana crujiente y abundante manjar blanco.', 40, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P216', 'Chocoteja de Maní', 'Chocotejas', 'El toque salado y crujiente del maní tostado envuelto en dulce manjar y chocolate.', 35, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P217', 'Chocoteja de Pasas', 'Chocotejas', 'Dulces pasas morenas combinadas a la perfección con nuestro suave manjar blanco.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P218', 'Chocoteja de Higo', 'Chocotejas', 'Un exquisito relleno de higo seco que aporta una textura y dulzor únicos al paladar.', 25, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P219', 'Chocoteja de Coco', 'Chocotejas', 'Relleno de coco rallado para un sabor suave, delicado y ligeramente tropical.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P220', 'Chocoteja de Oreo', 'Chocotejas', 'Para los más golosos: manjar blanco con trocitos súper crujientes de galleta Oreo.', 45, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P221', 'Chocoteja de Ole ole', 'Chocotejas', 'El sabor divertido y nostálgico del dulce Ole Ole bañado en nuestra cobertura.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P222', 'Chocoteja de Chin chin', 'Chocotejas', 'Una explosión de color y sabor con las clásicas grageas Chin Chin de chocolate por dentro.', 35, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P223', 'Chocoteja de Gomitas', 'Chocotejas', 'Una sorpresa dulce, frutal y masticable de gomitas en el centro de tu chocoteja.', 25, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P224', 'Chocoteja de Marshmello', 'Chocotejas', 'Relleno súper esponjoso y suave de marshmello que se derrite en la boca.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P225', 'Chocoteja de Café', 'Chocotejas', 'Un intenso y aromático relleno de crema de café, ideal para despertar los sentidos.', 35, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P226', 'Chocoteja de Maracuyá', 'Chocotejas', 'El toque cítrico perfecto de maracuyá que equilibra deliciosamente el dulzor del chocolate.', 40, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P227', 'Chocoteja de Pye de Limón', 'Chocotejas', 'Toda la experiencia de un pye de limón encapsulada en una rica cobertura de chocolate.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P228', 'Chocoteja de Frutos Rojos', 'Chocotejas', 'Una irresistible mezcla dulce y ácida de frutos rojos tipo cheesecake.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P229', 'Chocoteja de Fresa', 'Chocotejas', 'Suave crema de fresa con un perfil de sabor fresco, frutal y veraniego.', 35, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P230', 'Chocoteja de Lúcuma', 'Chocotejas', 'El sabor peruano por excelencia en un cremoso relleno de lúcuma fresca.', 40, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P231', 'Chocoteja de Piña', 'Chocotejas', 'Un pedacito del trópico con el sabor jugoso, refrescante y dulce de la piña.', 25, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P232', 'Chocoteja de Menta', 'Chocotejas', 'La combinación infalible y elegante de chocolate crujiente y relleno fresco de menta.', 30, 2.00, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P233', 'Chocoteja de Pasas borrachas', 'Chocotejas', 'Pasas pacientemente maceradas en licor para un toque intenso, adulto y atrevido.', 30, 2.50, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P234', 'Chocoteja de Pisco Sour', 'Chocotejas', 'Nuestro cóctel bandera transformado en un exquisito relleno cremoso con carácter.', 35, 2.50, '2026-07-16', 60995119;
-Exec SP_Agregar_Producto 'P235', 'Chocoteja de Pisco sour Maracuyá', 'Chocotejas', 'La variante cítrica del pisco sour combinada con el exótico sabor del maracuyá.', 25, 2.50, '2026-07-16', 60995119;
+-- Registro de productos - Chocotejas (Autogenerando CH001, CH002, etc.)
+Exec SP_Agregar_Producto 'Chocoteja de Pecana', 'Chocotejas', 'La tradicional chocoteja rellena con mitades de pecana crujiente y abundante manjar blanco.', 40, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Maní', 'Chocotejas', 'El toque salado y crujiente del maní tostado envuelto en dulce manjar y chocolate.', 35, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Pasas', 'Chocotejas', 'Dulces pasas morenas combinadas a la perfección con nuestro suave manjar blanco.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Higo', 'Chocotejas', 'Un exquisito relleno de higo seco que aporta una textura y dulzor únicos al paladar.', 25, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Coco', 'Chocotejas', 'Relleno de coco rallado para un sabor suave, delicado y ligeramente tropical.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Oreo', 'Chocotejas', 'Para los más golosos: manjar blanco con trocitos súper crujientes de galleta Oreo.', 45, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Ole ole', 'Chocotejas', 'El sabor divertido y nostálgico del dulce Ole Ole bañado en nuestra cobertura.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Chin chin', 'Chocotejas', 'Una explosión de color y sabor con las clásicas grageas Chin Chin de chocolate por dentro.', 35, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Gomitas', 'Chocotejas', 'Una sorpresa dulce, frutal y masticable de gomitas en el centro de tu chocoteja.', 25, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Marshmello', 'Chocotejas', 'Relleno súper esponjoso y suave de marshmello que se derrite en la boca.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Café', 'Chocotejas', 'Un intenso y aromático relleno de crema de café, ideal para despertar los sentidos.', 35, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Maracuyá', 'Chocotejas', 'El toque cítrico perfecto de maracuyá que equilibra deliciosamente el dulzor del chocolate.', 40, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Pye de Limón', 'Chocotejas', 'Toda la experiencia de un pye de limón encapsulada en una rica cobertura de chocolate.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Frutos Rojos', 'Chocotejas', 'Una irresistible mezcla dulce y ácida de frutos rojos tipo cheesecake.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Fresa', 'Chocotejas', 'Suave crema de fresa con un perfil de sabor fresco, frutal y veraniego.', 35, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Lúcuma', 'Chocotejas', 'El sabor peruano por excelencia en un cremoso relleno de lúcuma fresca.', 40, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Piña', 'Chocotejas', 'Un pedacito del trópico con el sabor jugoso, refrescante y dulce de la piña.', 25, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Menta', 'Chocotejas', 'La combinación infalible y elegante de chocolate crujiente y relleno fresco de menta.', 30, 2.00, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Pasas borrachas', 'Chocotejas', 'Pasas pacientemente maceradas en licor para un toque intenso, adulto y atrevido.', 30, 2.50, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Pisco Sour', 'Chocotejas', 'Nuestro cóctel bandera transformado en un exquisito relleno cremoso con carácter.', 35, 2.50, '2026-07-16', '60995119';
+Exec SP_Agregar_Producto 'Chocoteja de Pisco sour Maracuyá', 'Chocotejas', 'La variante cítrica del pisco sour combinada con el exótico sabor del maracuyá.', 25, 2.50, '2026-07-16', '60995119';
 
 Exec SP_Listar_Productos;
--- Produtos de la Empresa
 
 Exec SP_Listar_Admin;
-
 Exec SP_Listar_Clientes;
-Select * from CARRITO
 
-EXEC SP_Editar_Producto
-    @ID_PROD = 'P236',
-    @NOM = 'Prueba',
-    @CAT = 'Chocotejas',
-    @DESCR = 'Descripción',
-    @STK = 10,
-    @PREC = 5.50,
-    @F_EXP = '2026-12-31';
+-- Probando editar (asumiendo que CH001 existe)
+EXEC SP_Editar_Producto 'CH001', 'Prueba editada', 'Chocotejas', 'Descripción', 10, 5.50, '2020-12-31';
 
-EXEC SP_Mostrar_Producto_a_Detalle 'CAR000'
 
-EXEC SP_Eliminar_Producto_de_DetalleCarrito 'DC002'
 
-Select * From detalle_carrito;
+-- Puedes descomentar estas lineas cuando ya tengas un carrito creado:
+-- EXEC SP_Mostrar_Producto_a_Detalle 'CAR000'
+-- EXEC SP_Eliminar_Producto_de_DetalleCarrito 'DC002'
+-- Select * From detalle_carrito;

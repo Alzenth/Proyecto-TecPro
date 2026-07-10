@@ -122,6 +122,8 @@ public class VGestionProductos extends JFrame implements ActionListener, MouseLi
 			}
 			{
 				txtIdProducto = new JTextField();
+				txtIdProducto.setEnabled(false);
+				txtIdProducto.setEditable(false);
 				txtIdProducto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 				txtIdProducto.setBounds(156, 35, 121, 20);
 				panel.add(txtIdProducto);
