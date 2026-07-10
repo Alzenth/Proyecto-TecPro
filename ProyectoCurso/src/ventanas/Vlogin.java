@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 
 public class Vlogin extends JFrame implements ActionListener {
 
@@ -69,53 +70,59 @@ public class Vlogin extends JFrame implements ActionListener {
 	 */
 	public Vlogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 405);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		txtusuario = new JTextField();
-		txtusuario.setBounds(224, 99, 97, 20);
+		txtusuario.setBounds(223, 206, 97, 20);
 		contentPane.add(txtusuario);
 		txtusuario.setColumns(10);
 		
 		lblUsuario = new JLabel("Usuario");
-		lblUsuario.setBounds(134, 102, 68, 14);
+		lblUsuario.setBounds(133, 209, 68, 14);
 		contentPane.add(lblUsuario);
 		
 		lblContra = new JLabel("Contraseña");
-		lblContra.setBounds(134, 133, 68, 14);
+		lblContra.setBounds(133, 240, 68, 14);
 		contentPane.add(lblContra);
 		
 		lblinicia = new JLabel("Iniciar Sesión");
 		lblinicia.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblinicia.setBounds(123, 11, 198, 68);
+		lblinicia.setBounds(122, 118, 198, 68);
 		contentPane.add(lblinicia);
 		
 		btnIngresar = new JButton("Ingresar");
 		btnIngresar.addActionListener(this);
-		btnIngresar.setBounds(175, 161, 96, 23);
+		btnIngresar.setBounds(175, 269, 96, 23);
 		contentPane.add(btnIngresar);
 		
 		btnRegis = new JButton("Registrarse");
 		btnRegis.addActionListener(this);
-		btnRegis.setBounds(159, 227, 129, 23);
+		btnRegis.setBounds(159, 335, 129, 23);
 		contentPane.add(btnRegis);
 		
 		JLabel lblNewLabel = new JLabel("¿No tienes cuenta?");
-		lblNewLabel.setBounds(175, 205, 110, 14); 
+		lblNewLabel.setBounds(175, 313, 110, 14); 
 		contentPane.add(lblNewLabel);
 		{
 			txtPassWord = new JPasswordField();
-			txtPassWord.setBounds(224, 129, 96, 20);
+			txtPassWord.setBounds(224, 237, 96, 20);
 			contentPane.add(txtPassWord);
 		}
 		{
 			btnNewButton = new JButton("Programadores");
 			btnNewButton.addActionListener(this);
-			btnNewButton.setBounds(10, 228, 122, 20);
+			btnNewButton.setBounds(10, 336, 122, 20);
 			contentPane.add(btnNewButton);
+		}
+		{
+			lblNewLabel_1 = new JLabel("");
+			lblNewLabel_1.setIcon(new ImageIcon(Vlogin.class.getResource("/Fotos/logo MAKEA.jpeg")));
+			lblNewLabel_1.setBounds(159, 27, 100, 100);
+			contentPane.add(lblNewLabel_1);
 		}
 
 	}
@@ -123,6 +130,7 @@ public class Vlogin extends JFrame implements ActionListener {
 	clases.ArregloEmpleado em=new clases.ArregloEmpleado();
 	private JPasswordField txtPassWord;
 	private JButton btnNewButton;
+	private JLabel lblNewLabel_1;
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNewButton) {
 			do_btnNewButton_actionPerformed(e);
